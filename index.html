@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>ИмбаБанк | Кликер</title>
+    <title>ИмбаБанк | Кликер с друзьями</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Сброс и базовые стили */
@@ -50,7 +50,7 @@
             padding: 0;
         }
 
-        /* Шапка */
+        /* Шапка с аватаркой Telegram */
         .header {
             background: var(--darker);
             padding: 12px 16px;
@@ -67,26 +67,62 @@
             align-items: center;
         }
 
-        .logo {
+        .user-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 12px;
+            flex: 1;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--accent);
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
             font-size: 1.2rem;
-            font-weight: 700;
         }
 
-        .logo i {
-            color: var(--accent);
-            font-size: 1.4rem;
+        .user-details {
+            flex: 1;
         }
 
-        .user-balance {
+        .user-name {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 2px;
+        }
+
+        .user-id {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .balance-display {
             font-size: 1.1rem;
             font-weight: 600;
             background: var(--primary);
             padding: 6px 12px;
             border-radius: 20px;
             color: white;
+            white-space: nowrap;
         }
 
         /* Основной контент */
@@ -196,82 +232,240 @@
             opacity: 0.8;
         }
 
-        /* Улучшения */
-        .upgrades-container {
+        /* Лидерборд */
+        .leaderboard-container {
             background: var(--card-bg);
             border-radius: 16px;
             padding: 20px;
             border: 1px solid var(--border);
         }
 
-        .upgrades-title {
+        .leaderboard-title {
             font-size: 1.2rem;
             font-weight: 600;
             margin-bottom: 16px;
             color: var(--light);
-        }
-
-        .upgrades-grid {
-            display: grid;
-            gap: 12px;
-        }
-
-        .upgrade-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        .leaderboard-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .leaderboard-tab {
+            flex: 1;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .leaderboard-tab.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .leaderboard-item.me {
+            background: rgba(159, 122, 234, 0.1);
+            border-color: var(--accent);
+        }
+
+        .rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .rank-1 { background: #FFD700; color: #000; }
+        .rank-2 { background: #C0C0C0; color: #000; }
+        .rank-3 { background: #CD7F32; color: #000; }
+        .rank-other { background: var(--gray-dark); color: white; }
+
+        .leaderboard-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .leaderboard-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .leaderboard-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .leaderboard-level {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .leaderboard-score {
+            font-weight: 700;
+            color: var(--warning);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* Список друзей */
+        .friends-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .friends-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .friends-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .friends-search {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            color: var(--light);
+            font-size: 0.9rem;
+            width: 100%;
+            margin-bottom: 16px;
+        }
+
+        .friends-search:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .friend-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .friend-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .friend-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .friend-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .friend-balance {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .friend-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             transition: all 0.2s;
             touch-action: manipulation;
         }
 
-        .upgrade-card:active {
-            background: rgba(159, 122, 234, 0.1);
-            transform: scale(0.98);
+        .friend-btn:active {
+            transform: scale(0.9);
         }
 
-        .upgrade-card.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
+        .friend-btn.send {
+            background: var(--success);
+            color: white;
         }
 
-        .upgrade-card.disabled:active {
-            transform: none;
-            background: rgba(255, 255, 255, 0.03);
-        }
-
-        .upgrade-info {
-            flex: 1;
-        }
-
-        .upgrade-name {
-            font-weight: 600;
-            margin-bottom: 4px;
-            color: var(--light);
-        }
-
-        .upgrade-desc {
-            font-size: 0.85rem;
-            color: var(--gray);
-            margin-bottom: 6px;
-        }
-
-        .upgrade-price {
-            font-size: 0.9rem;
-            color: var(--warning);
-            font-weight: 600;
-        }
-
-        .upgrade-owned {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            color: var(--success);
-            font-size: 0.85rem;
+        .friend-btn.request {
+            background: var(--warning);
+            color: var(--dark);
         }
 
         /* Карты */
@@ -362,6 +556,172 @@
             background: var(--primary-dark);
         }
 
+        .action-btn.wide {
+            grid-column: 1 / -1;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 1px solid var(--border);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--light);
+        }
+
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--gray);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--gray);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 1rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        /* Запросы в долг */
+        .requests-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .request-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+        }
+
+        .request-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .request-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .request-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
+
+        .request-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .request-name {
+            font-weight: 600;
+        }
+
+        .request-amount {
+            font-weight: 700;
+            color: var(--warning);
+            font-size: 1.1rem;
+        }
+
+        .request-message {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .request-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .request-btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .request-btn.accept {
+            background: var(--success);
+            color: white;
+        }
+
+        .request-btn.reject {
+            background: var(--error);
+            color: white;
+        }
+
         /* Боттом-бар навигации */
         .bottom-nav {
             background: var(--darker);
@@ -374,7 +734,7 @@
 
         .nav-tabs {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(5, 1fr);
             gap: 8px;
         }
 
@@ -382,7 +742,7 @@
             background: transparent;
             border: none;
             color: var(--gray);
-            padding: 12px;
+            padding: 12px 8px;
             border-radius: 12px;
             display: flex;
             flex-direction: column;
@@ -408,6 +768,22 @@
             font-size: 1.2rem;
         }
 
+        .tab-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: var(--error);
+            color: white;
+            font-size: 0.7rem;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 4px;
+        }
+
         /* Страницы */
         .page {
             display: none;
@@ -423,50 +799,82 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Списки */
-        .transactions-list,
-        .notifications-list {
-            display: flex;
-            flex-direction: column;
+        /* Улучшения */
+        .upgrades-container {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .upgrades-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--light);
+        }
+
+        .upgrades-grid {
+            display: grid;
             gap: 12px;
         }
 
-        .transaction-item,
-        .notification-item {
+        .upgrade-card {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            touch-action: manipulation;
         }
 
-        .transaction-amount {
-            font-weight: 700;
-            margin-top: 4px;
+        .upgrade-card:active {
+            background: rgba(159, 122, 234, 0.1);
+            transform: scale(0.98);
         }
 
-        .transaction-amount.positive {
-            color: var(--success);
+        .upgrade-card.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
-        .transaction-amount.negative {
-            color: var(--error);
+        .upgrade-card.disabled:active {
+            transform: none;
+            background: rgba(255, 255, 255, 0.03);
         }
 
-        /* Уведомления */
-        .notification-badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: var(--error);
-            color: white;
-            font-size: 0.7rem;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 9px;
+        .upgrade-info {
+            flex: 1;
+        }
+
+        .upgrade-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+            color: var(--light);
+        }
+
+        .upgrade-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 6px;
+        }
+
+        .upgrade-price {
+            font-size: 0.9rem;
+            color: var(--warning);
+            font-weight: 600;
+        }
+
+        .upgrade-owned {
             display: flex;
             align-items: center;
-            justify-content: center;
-            padding: 0 4px;
+            gap: 6px;
+            color: var(--success);
+            font-size: 0.85rem;
         }
 
         /* Адаптивность */
@@ -509,14 +917,19 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Шапка -->
+        <!-- Шапка с Telegram данными -->
         <header class="header">
             <div class="header-content">
-                <div class="logo">
-                    <i class="fas fa-coins"></i>
-                    <span>ИмбаБанк</span>
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">
+                        <div class="avatar-placeholder" id="avatarPlaceholder">ТГ</div>
+                    </div>
+                    <div class="user-details">
+                        <div class="user-name" id="userName">Пользователь</div>
+                        <div class="user-id" id="userId">ID: 0</div>
+                    </div>
                 </div>
-                <div class="user-balance" id="userBalance">0 ИК</div>
+                <div class="balance-display" id="userBalance">0 ИК</div>
             </div>
         </header>
 
@@ -565,7 +978,53 @@
                 </div>
             </div>
 
-            <!-- Страница карт -->
+            <!-- Лидерборд -->
+            <div id="leaderboardPage" class="page">
+                <div class="leaderboard-container">
+                    <div class="leaderboard-title">
+                        <span>Топ игроков</span>
+                        <span class="text-warning" id="playerRank">#0</span>
+                    </div>
+                    
+                    <div class="leaderboard-tabs">
+                        <button class="leaderboard-tab active" data-tab="balance">По балансу</button>
+                        <button class="leaderboard-tab" data-tab="clicks">По кликам</button>
+                        <button class="leaderboard-tab" data-tab="friends">По друзьям</button>
+                    </div>
+                    
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <!-- Лидерборд загружается динамически -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Друзья -->
+            <div id="friendsPage" class="page">
+                <div class="friends-container">
+                    <div class="friends-header">
+                        <div class="friends-title">Друзья</div>
+                        <button class="action-btn" onclick="app.openAddFriendModal()">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Добавить</span>
+                        </button>
+                    </div>
+                    
+                    <input type="text" class="friends-search" placeholder="Поиск друзей..." id="friendsSearch">
+                    
+                    <div class="friends-list" id="friendsList">
+                        <!-- Друзья загружаются динамически -->
+                    </div>
+                </div>
+                
+                <div class="requests-container">
+                    <div class="friends-title mb-2">Запросы в долг</div>
+                    <div class="requests-list" id="requestsList">
+                        <!-- Запросы загружаются динамически -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Карты -->
             <div id="cardsPage" class="page">
                 <div class="cards-container">
                     <h2 class="cards-title">Виртуальные карты</h2>
@@ -574,11 +1033,11 @@
                     </div>
                     
                     <div class="actions-container mt-3">
-                        <button class="action-btn" onclick="createCard()">
+                        <button class="action-btn" onclick="app.createCard()">
                             <i class="fas fa-plus"></i>
                             <span>Новая карта</span>
                         </button>
-                        <button class="action-btn" onclick="showTransferForm()">
+                        <button class="action-btn" onclick="app.openTransferModal()">
                             <i class="fas fa-exchange-alt"></i>
                             <span>Перевести</span>
                         </button>
@@ -586,17 +1045,7 @@
                 </div>
             </div>
 
-            <!-- Страница транзакций -->
-            <div id="transactionsPage" class="page">
-                <div class="cards-container">
-                    <h2 class="cards-title">История операций</h2>
-                    <div class="transactions-list" id="transactionsList">
-                        <!-- Транзакции загружаются динамически -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Страница профиля -->
+            <!-- Профиль -->
             <div id="profilePage" class="page">
                 <div class="cards-container">
                     <h2 class="cards-title">Профиль</h2>
@@ -620,24 +1069,122 @@
                             <div class="stat-label">Карт</div>
                         </div>
                         <div class="stat-item">
-                            <div class="stat-value" id="profileUpgrades">0</div>
-                            <div class="stat-label">Улучшений</div>
+                            <div class="stat-value" id="profileFriends">0</div>
+                            <div class="stat-label">Друзей</div>
                         </div>
                     </div>
                     
                     <div class="actions-container mt-3">
-                        <button class="action-btn" onclick="resetProgress()">
+                        <button class="action-btn" onclick="app.resetProgress()">
                             <i class="fas fa-redo"></i>
                             <span>Сбросить</span>
                         </button>
-                        <button class="action-btn" onclick="saveToTelegram()">
-                            <i class="fab fa-telegram"></i>
-                            <span>Сохранить</span>
+                        <button class="action-btn wide" onclick="app.shareProfile()">
+                            <i class="fas fa-share-alt"></i>
+                            <span>Поделиться профилем</span>
                         </button>
                     </div>
                 </div>
             </div>
         </main>
+
+        <!-- Модальные окна -->
+        <div id="addFriendModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Добавить друга</h2>
+                    <button class="close-btn" onclick="app.closeModal('addFriendModal')">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">ID пользователя</label>
+                    <input type="number" class="form-input" id="friendIdInput" placeholder="Введите ID пользователя">
+                </div>
+                <button class="action-btn wide" onclick="app.addFriend()">Добавить друга</button>
+                <div class="mt-3 text-center text-muted">
+                    <small>ID можно узнать в профиле пользователя</small>
+                </div>
+            </div>
+        </div>
+
+        <div id="transferModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Перевод другу</h2>
+                    <button class="close-btn" onclick="app.closeModal('transferModal')">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Выберите друга</label>
+                    <select class="form-input" id="transferFriendSelect">
+                        <!-- Друзья загружаются динамически -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сумма перевода</label>
+                    <input type="number" class="form-input" id="transferAmount" placeholder="Введите сумму">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сообщение (необязательно)</label>
+                    <input type="text" class="form-input" id="transferMessage" placeholder="На подарок">
+                </div>
+                <button class="action-btn wide" onclick="app.sendTransfer()">Отправить перевод</button>
+            </div>
+        </div>
+
+        <div id="loanRequestModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Запрос в долг</h2>
+                    <button class="close-btn" onclick="app.closeModal('loanRequestModal')">&times;</button>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Выберите друга</label>
+                    <select class="form-input" id="loanFriendSelect">
+                        <!-- Друзья загружаются динамически -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сумма займа</label>
+                    <input type="number" class="form-input" id="loanAmount" placeholder="Введите сумму">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сообщение для друга</label>
+                    <input type="text" class="form-input" id="loanMessage" placeholder="Объясните, зачем вам нужны деньги">
+                </div>
+                <button class="action-btn wide" onclick="app.sendLoanRequest()">Отправить запрос</button>
+            </div>
+        </div>
+
+        <div id="friendDetailsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="friendDetailsName">Друг</h2>
+                    <button class="close-btn" onclick="app.closeModal('friendDetailsModal')">&times;</button>
+                </div>
+                <div class="text-center mb-3">
+                    <div class="leaderboard-avatar" id="friendDetailsAvatar">
+                        <div class="avatar-placeholder">Д</div>
+                    </div>
+                    <div class="mt-2">
+                        <div class="text-muted">Баланс:</div>
+                        <div class="balance-amount" id="friendDetailsBalance">0</div>
+                    </div>
+                </div>
+                <div class="actions-container">
+                    <button class="action-btn" onclick="app.sendMoneyToSelectedFriend()">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>Перевести</span>
+                    </button>
+                    <button class="action-btn" onclick="app.requestLoanFromSelectedFriend()">
+                        <i class="fas fa-hand-holding-usd"></i>
+                        <span>Попросить в долг</span>
+                    </button>
+                </div>
+                <button class="action-btn wide mt-3" onclick="app.removeSelectedFriend()">
+                    <i class="fas fa-user-times"></i>
+                    <span>Удалить из друзей</span>
+                </button>
+            </div>
+        </div>
 
         <!-- Навигация -->
         <nav class="bottom-nav">
@@ -646,13 +1193,18 @@
                     <i class="fas fa-coins"></i>
                     <span>Кликер</span>
                 </button>
+                <button class="nav-tab" data-page="leaderboard">
+                    <i class="fas fa-trophy"></i>
+                    <span>Топ</span>
+                </button>
+                <button class="nav-tab" data-page="friends">
+                    <i class="fas fa-users"></i>
+                    <span>Друзья</span>
+                    <span class="tab-badge" id="requestsBadge" style="display: none;">0</span>
+                </button>
                 <button class="nav-tab" data-page="cards">
                     <i class="fas fa-credit-card"></i>
                     <span>Карты</span>
-                </button>
-                <button class="nav-tab" data-page="transactions">
-                    <i class="fas fa-history"></i>
-                    <span>Операции</span>
                 </button>
                 <button class="nav-tab" data-page="profile">
                     <i class="fas fa-user"></i>
@@ -671,7 +1223,20 @@
             onEvent: (event, handler) => console.log('Event:', event),
             offEvent: (event, handler) => console.log('Off event:', event),
             initData: '',
-            initDataUnsafe: {}
+            initDataUnsafe: {
+                user: {
+                    id: Math.floor(Math.random() * 1000000),
+                    first_name: 'Тестовый',
+                    last_name: 'Пользователь',
+                    username: 'test_user',
+                    photo_url: null
+                }
+            },
+            showAlert: (msg) => alert(msg),
+            showConfirm: (msg, callback) => {
+                const result = confirm(msg);
+                if (callback) callback(result);
+            }
         };
 
         // Инициализация Telegram WebApp
@@ -682,6 +1247,22 @@
         class UserData {
             constructor() {
                 this.data = this.loadData();
+                this.initTelegramData();
+            }
+
+            initTelegramData() {
+                const tgUser = TelegramWebApp.initDataUnsafe.user;
+                if (tgUser && !this.data.telegramData) {
+                    this.data.telegramData = {
+                        id: tgUser.id,
+                        firstName: tgUser.first_name || '',
+                        lastName: tgUser.last_name || '',
+                        username: tgUser.username || '',
+                        photoUrl: tgUser.photo_url || null,
+                        languageCode: tgUser.language_code || 'ru'
+                    };
+                    this.save();
+                }
             }
 
             loadData() {
@@ -695,13 +1276,16 @@
                     balance: 1000,
                     clicks: 0,
                     earned: 0,
+                    friends: [],
+                    outgoingRequests: [],
+                    incomingRequests: [],
                     cards: [
                         {
                             id: 1,
                             number: '0228 4455 6677 8899',
                             balance: 1000,
                             name: 'Основная карта',
-                            created: new Date().toLocaleDateString()
+                            created: new Date().toISOString()
                         }
                     ],
                     upgrades: [],
@@ -711,10 +1295,11 @@
                             type: 'income',
                             amount: 1000,
                             description: 'Начальный бонус',
-                            date: new Date().toLocaleDateString(),
-                            time: new Date().toLocaleTimeString()
+                            date: new Date().toISOString(),
+                            time: Date.now()
                         }
-                    ]
+                    ],
+                    telegramData: null
                 };
             }
 
@@ -726,9 +1311,11 @@
             updateTelegram() {
                 // Отправляем данные в Telegram
                 TelegramWebApp.sendData(JSON.stringify({
+                    action: 'update',
                     balance: this.data.balance,
                     clicks: this.data.clicks,
-                    earned: this.data.earned
+                    earned: this.data.earned,
+                    friends: this.data.friends.length
                 }));
             }
 
@@ -736,9 +1323,13 @@
             get balance() { return this.data.balance; }
             get clicks() { return this.data.clicks; }
             get earned() { return this.data.earned; }
+            get friends() { return this.data.friends; }
+            get outgoingRequests() { return this.data.outgoingRequests; }
+            get incomingRequests() { return this.data.incomingRequests; }
             get cards() { return this.data.cards; }
             get upgrades() { return this.data.upgrades; }
             get transactions() { return this.data.transactions; }
+            get telegramData() { return this.data.telegramData; }
 
             // Методы для работы с данными
             addBalance(amount) {
@@ -782,6 +1373,58 @@
                     this.data.upgrades.push(upgradeId);
                     this.save();
                 }
+            }
+
+            // Методы для друзей
+            addFriend(friendData) {
+                if (!this.data.friends.some(f => f.id === friendData.id)) {
+                    this.data.friends.push(friendData);
+                    this.save();
+                    return true;
+                }
+                return false;
+            }
+
+            removeFriend(friendId) {
+                const index = this.data.friends.findIndex(f => f.id === friendId);
+                if (index !== -1) {
+                    this.data.friends.splice(index, 1);
+                    this.save();
+                    return true;
+                }
+                return false;
+            }
+
+            sendLoanRequest(friendId, amount, message) {
+                const request = {
+                    id: Date.now(),
+                    fromUserId: this.telegramData?.id || 0,
+                    toUserId: friendId,
+                    amount: amount,
+                    message: message,
+                    status: 'pending',
+                    date: new Date().toISOString()
+                };
+                this.data.outgoingRequests.push(request);
+                this.save();
+                return request;
+            }
+
+            receiveLoanRequest(request) {
+                this.data.incomingRequests.push(request);
+                this.save();
+            }
+
+            respondToLoanRequest(requestId, accepted) {
+                const index = this.data.incomingRequests.findIndex(r => r.id === requestId);
+                if (index !== -1) {
+                    const request = this.data.incomingRequests[index];
+                    request.status = accepted ? 'accepted' : 'rejected';
+                    request.respondedAt = new Date().toISOString();
+                    this.save();
+                    return request;
+                }
+                return null;
             }
 
             reset() {
@@ -837,6 +1480,14 @@
                         price: 15000,
                         effect: { autoClicker: true },
                         icon: 'fa-robot'
+                    },
+                    {
+                        id: 'friendBonus',
+                        name: 'Бонус за друзей',
+                        description: '+1% за каждого друга',
+                        price: 20000,
+                        effect: { friendMultiplier: 0.01 },
+                        icon: 'fa-users'
                     }
                 ];
             }
@@ -853,6 +1504,117 @@
             }
         }
 
+        // Глобальная система пользователей (симуляция сервера)
+        class GlobalUsers {
+            static users = new Map();
+            
+            static init() {
+                // Загружаем из localStorage или создаем тестовых пользователей
+                const saved = localStorage.getItem('imbabank_global_users');
+                if (saved) {
+                    const users = JSON.parse(saved);
+                    users.forEach(user => this.users.set(user.id, user));
+                } else {
+                    // Создаем тестовых пользователей
+                    const testUsers = [
+                        {
+                            id: 111111,
+                            firstName: 'Алексей',
+                            lastName: 'Иванов',
+                            username: 'alexey_ivanov',
+                            balance: 15000,
+                            clicks: 5000,
+                            earned: 20000,
+                            friends: [],
+                            photoUrl: null
+                        },
+                        {
+                            id: 222222,
+                            firstName: 'Мария',
+                            lastName: 'Петрова',
+                            username: 'maria_petrova',
+                            balance: 25000,
+                            clicks: 8000,
+                            earned: 35000,
+                            friends: [],
+                            photoUrl: null
+                        },
+                        {
+                            id: 333333,
+                            firstName: 'Дмитрий',
+                            lastName: 'Сидоров',
+                            username: 'dmitry_sidorov',
+                            balance: 18000,
+                            clicks: 6000,
+                            earned: 22000,
+                            friends: [],
+                            photoUrl: null
+                        },
+                        {
+                            id: 444444,
+                            firstName: 'Елена',
+                            lastName: 'Кузнецова',
+                            username: 'elena_kuznetsova',
+                            balance: 32000,
+                            clicks: 10000,
+                            earned: 45000,
+                            friends: [],
+                            photoUrl: null
+                        },
+                        {
+                            id: 555555,
+                            firstName: 'Иван',
+                            lastName: 'Смирнов',
+                            username: 'ivan_smirnov',
+                            balance: 12000,
+                            clicks: 4000,
+                            earned: 15000,
+                            friends: [],
+                            photoUrl: null
+                        }
+                    ];
+                    
+                    testUsers.forEach(user => this.users.set(user.id, user));
+                    this.save();
+                }
+            }
+            
+            static getUser(id) {
+                return this.users.get(id);
+            }
+            
+            static addUser(user) {
+                this.users.set(user.id, user);
+                this.save();
+            }
+            
+            static updateUser(id, updates) {
+                const user = this.users.get(id);
+                if (user) {
+                    Object.assign(user, updates);
+                    this.save();
+                }
+            }
+            
+            static getAllUsers() {
+                return Array.from(this.users.values());
+            }
+            
+            static getTopUsers(limit = 10, sortBy = 'balance') {
+                const users = this.getAllUsers();
+                return users
+                    .sort((a, b) => b[sortBy] - a[sortBy])
+                    .slice(0, limit);
+            }
+            
+            static save() {
+                localStorage.setItem('imbabank_global_users', JSON.stringify(this.getAllUsers()));
+            }
+        }
+
+        // Инициализация глобальных пользователей
+        GlobalUsers.init();
+
         // Основное приложение
         class ImbaBankApp {
             constructor() {
@@ -861,8 +1623,12 @@
                 this.clickerStats = {
                     perClick: 10,
                     multiplier: 1.0,
-                    autoClicker: false
+                    autoClicker: false,
+                    friendMultiplier: 0
                 };
+                
+                this.selectedFriend = null;
+                this.currentLeaderboardTab = 'balance';
                 
                 this.isClicking = false;
                 this.autoClickerInterval = null;
@@ -875,6 +1641,9 @@
                 this.updateUI();
                 this.setupEventListeners();
                 this.startAutoClicker();
+                
+                // Обновляем данные пользователя в глобальной системе
+                this.updateGlobalUser();
             }
 
             loadUserStats() {
@@ -891,11 +1660,22 @@
                         if (upgrade.effect.autoClicker) {
                             this.clickerStats.autoClicker = true;
                         }
+                        if (upgrade.effect.friendMultiplier) {
+                            this.clickerStats.friendMultiplier += upgrade.effect.friendMultiplier;
+                        }
                     }
                 });
+                
+                // Применяем бонус за друзей
+                if (this.userData.friends.length > 0 && this.clickerStats.friendMultiplier > 0) {
+                    this.clickerStats.multiplier += this.userData.friends.length * this.clickerStats.friendMultiplier;
+                }
             }
 
             updateUI() {
+                // Обновляем Telegram данные
+                this.updateTelegramData();
+                
                 // Обновляем баланс
                 document.getElementById('userBalance').textContent = 
                     `${this.userData.balance.toLocaleString('ru-RU')} ИК`;
@@ -921,8 +1701,8 @@
                     this.userData.earned.toLocaleString('ru-RU');
                 document.getElementById('profileCards').textContent = 
                     this.userData.cards.length;
-                document.getElementById('profileUpgrades').textContent = 
-                    this.userData.upgrades.length;
+                document.getElementById('profileFriends').textContent = 
+                    this.userData.friends.length;
 
                 // Обновляем улучшения
                 this.updateUpgradesList();
@@ -930,8 +1710,58 @@
                 // Обновляем карты
                 this.updateCardsList();
 
-                // Обновляем транзакции
-                this.updateTransactionsList();
+                // Обновляем лидерборд
+                this.updateLeaderboard();
+
+                // Обновляем друзей
+                this.updateFriendsList();
+
+                // Обновляем запросы
+                this.updateRequestsList();
+
+                // Обновляем бейдж запросов
+                this.updateRequestsBadge();
+            }
+
+            updateTelegramData() {
+                const tgData = this.userData.telegramData;
+                if (tgData) {
+                    // Обновляем имя
+                    const fullName = `${tgData.firstName} ${tgData.lastName || ''}`.trim();
+                    document.getElementById('userName').textContent = fullName || tgData.username || 'Пользователь';
+                    document.getElementById('userId').textContent = `ID: ${tgData.id}`;
+                    
+                    // Обновляем аватар
+                    const avatarContainer = document.getElementById('userAvatar');
+                    const placeholder = document.getElementById('avatarPlaceholder');
+                    
+                    if (tgData.photoUrl) {
+                        avatarContainer.innerHTML = `<img src="${tgData.photoUrl}" alt="Аватар">`;
+                    } else if (placeholder) {
+                        const initials = tgData.firstName ? tgData.firstName[0] : 
+                                       tgData.lastName ? tgData.lastName[0] : 
+                                       tgData.username ? tgData.username[0] : 'Т';
+                        placeholder.textContent = initials.toUpperCase();
+                    }
+                }
+            }
+
+            updateGlobalUser() {
+                const tgData = this.userData.telegramData;
+                if (tgData) {
+                    const globalUser = GlobalUsers.getUser(tgData.id) || {};
+                    GlobalUsers.updateUser(tgData.id, {
+                        id: tgData.id,
+                        firstName: tgData.firstName,
+                        lastName: tgData.lastName,
+                        username: tgData.username,
+                        photoUrl: tgData.photoUrl,
+                        balance: this.userData.balance,
+                        clicks: this.userData.clicks,
+                        earned: this.userData.earned,
+                        friends: this.userData.friends.map(f => f.id)
+                    });
+                }
             }
 
             updateUpgradesList() {
@@ -980,19 +1810,146 @@
                 `).join('');
             }
 
-            updateTransactionsList() {
-                const container = document.getElementById('transactionsList');
-                const recentTransactions = this.userData.transactions.slice(0, 10);
+            updateLeaderboard() {
+                const container = document.getElementById('leaderboardList');
+                const topUsers = GlobalUsers.getTopUsers(10, this.currentLeaderboardTab);
+                const currentUserId = this.userData.telegramData?.id;
                 
-                container.innerHTML = recentTransactions.map(transaction => `
-                    <div class="transaction-item">
-                        <div style="font-weight: 600;">${transaction.description}</div>
-                        <div class="text-muted" style="font-size: 0.85rem;">${transaction.date} ${transaction.time}</div>
-                        <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
-                            ${transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString('ru-RU')} ИК
+                // Находим позицию текущего пользователя
+                const allUsers = GlobalUsers.getAllUsers();
+                allUsers.sort((a, b) => b[this.currentLeaderboardTab] - a[this.currentLeaderboardTab]);
+                const userRank = allUsers.findIndex(u => u.id === currentUserId) + 1;
+                
+                document.getElementById('playerRank').textContent = userRank ? `#${userRank}` : 'Не в топе';
+                
+                container.innerHTML = topUsers.map((user, index) => {
+                    const rank = index + 1;
+                    const isMe = user.id === currentUserId;
+                    const name = `${user.firstName} ${user.lastName || ''}`.trim() || user.username;
+                    const score = user[this.currentLeaderboardTab].toLocaleString('ru-RU');
+                    
+                    return `
+                        <div class="leaderboard-item ${isMe ? 'me' : ''}">
+                            <div class="rank rank-${rank}">${rank}</div>
+                            <div class="leaderboard-avatar">
+                                ${user.photoUrl ? 
+                                    `<img src="${user.photoUrl}" alt="${name}">` :
+                                    `<div class="avatar-placeholder">${name[0]?.toUpperCase() || '?'}</div>`
+                                }
+                            </div>
+                            <div class="leaderboard-info">
+                                <div class="leaderboard-name">${name}</div>
+                                <div class="leaderboard-level">ID: ${user.id}</div>
+                            </div>
+                            <div class="leaderboard-score">${score} ${this.currentLeaderboardTab === 'balance' ? 'ИК' : ''}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateFriendsList() {
+                const container = document.getElementById('friendsList');
+                const searchInput = document.getElementById('friendsSearch');
+                const searchTerm = searchInput ? searchInput.value.toLowerCase() : '';
+                
+                let friends = this.userData.friends;
+                if (searchTerm) {
+                    friends = friends.filter(friend => 
+                        friend.name.toLowerCase().includes(searchTerm) ||
+                        friend.username?.toLowerCase().includes(searchTerm) ||
+                        friend.id.toString().includes(searchTerm)
+                    );
+                }
+                
+                container.innerHTML = friends.map(friend => `
+                    <div class="friend-item" data-friend-id="${friend.id}">
+                        <div class="friend-avatar">
+                            ${friend.photoUrl ? 
+                                `<img src="${friend.photoUrl}" alt="${friend.name}">` :
+                                `<div class="avatar-placeholder">${friend.name[0]?.toUpperCase() || '?'}</div>`
+                            }
+                        </div>
+                        <div class="friend-info">
+                            <div class="friend-name">${friend.name}</div>
+                            <div class="friend-balance">${friend.balance ? friend.balance.toLocaleString('ru-RU') + ' ИК' : 'Нет данных'}</div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="friend-btn send" onclick="app.sendMoneyToFriend(${friend.id})">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                            <button class="friend-btn request" onclick="app.requestLoanFromFriend(${friend.id})">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </button>
                         </div>
                     </div>
                 `).join('');
+                
+                // Добавляем обработчики для выбора друга
+                container.querySelectorAll('.friend-item').forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        if (!e.target.closest('.friend-btn')) {
+                            const friendId = parseInt(item.dataset.friendId);
+                            this.showFriendDetails(friendId);
+                        }
+                    });
+                });
+            }
+
+            updateRequestsList() {
+                const container = document.getElementById('requestsList');
+                const incomingRequests = this.userData.incomingRequests.filter(r => r.status === 'pending');
+                
+                if (incomingRequests.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center text-muted" style="padding: 20px;">
+                            Нет активных запросов
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = incomingRequests.map(request => {
+                    const fromUser = GlobalUsers.getUser(request.fromUserId);
+                    const name = fromUser ? `${fromUser.firstName} ${fromUser.lastName || ''}`.trim() : `Пользователь ${request.fromUserId}`;
+                    
+                    return `
+                        <div class="request-item">
+                            <div class="request-header">
+                                <div class="request-user">
+                                    <div class="request-avatar">
+                                        ${fromUser?.photoUrl ? 
+                                            `<img src="${fromUser.photoUrl}" alt="${name}">` :
+                                            `<div class="avatar-placeholder">${name[0]?.toUpperCase() || '?'}</div>`
+                                        }
+                                    </div>
+                                    <div class="request-name">${name}</div>
+                                </div>
+                                <div class="request-amount">${request.amount.toLocaleString('ru-RU')} ИК</div>
+                            </div>
+                            <div class="request-message">${request.message || 'Без сообщения'}</div>
+                            <div class="request-actions">
+                                <button class="request-btn accept" onclick="app.respondToRequest(${request.id}, true)">
+                                    <i class="fas fa-check"></i> Дать
+                                </button>
+                                <button class="request-btn reject" onclick="app.respondToRequest(${request.id}, false)">
+                                    <i class="fas fa-times"></i> Отказать
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            updateRequestsBadge() {
+                const badge = document.getElementById('requestsBadge');
+                const incomingRequests = this.userData.incomingRequests.filter(r => r.status === 'pending');
+                
+                if (incomingRequests.length > 0) {
+                    badge.textContent = incomingRequests.length > 99 ? '99+' : incomingRequests.length;
+                    badge.style.display = 'flex';
+                } else {
+                    badge.style.display = 'none';
+                }
             }
 
             setupEventListeners() {
@@ -1013,6 +1970,28 @@
                         tab.classList.add('active');
                     });
                 });
+
+                // Табы лидерборда
+                document.querySelectorAll('.leaderboard-tab').forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        const tabName = tab.dataset.tab;
+                        this.currentLeaderboardTab = tabName;
+                        
+                        // Обновляем активный таб
+                        document.querySelectorAll('.leaderboard-tab').forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+                        
+                        this.updateLeaderboard();
+                    });
+                });
+
+                // Поиск друзей
+                const searchInput = document.getElementById('friendsSearch');
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => {
+                        this.updateFriendsList();
+                    });
+                }
 
                 // Обработчики событий Telegram
                 TelegramWebApp.onEvent('viewportChanged', this.handleViewportChange.bind(this));
@@ -1052,8 +2031,11 @@
                     amount: earnings,
                     description: 'Заработок в кликере',
                     date: new Date().toLocaleDateString(),
-                    time: new Date().toLocaleTimeString()
+                    time: Date.now()
                 });
+
+                // Обновляем глобальные данные
+                this.updateGlobalUser();
 
                 // Обновляем интерфейс
                 this.updateUI();
@@ -1079,6 +2061,9 @@
                         this.clickerStats.autoClicker = true;
                         this.startAutoClicker();
                     }
+                    if (upgrade.effect.friendMultiplier) {
+                        this.clickerStats.friendMultiplier += upgrade.effect.friendMultiplier;
+                    }
 
                     // Сохраняем улучшение
                     this.userData.addUpgrade(upgradeId);
@@ -1090,7 +2075,7 @@
                         amount: price,
                         description: `Покупка: ${upgrade.name}`,
                         date: new Date().toLocaleDateString(),
-                        time: new Date().toLocaleTimeString()
+                        time: Date.now()
                     });
 
                     // Обновляем интерфейс
@@ -1127,6 +2112,269 @@
                 }
             }
 
+            // Друзья и переводы
+            openAddFriendModal() {
+                document.getElementById('addFriendModal').classList.add('active');
+            }
+
+            addFriend() {
+                const friendId = parseInt(document.getElementById('friendIdInput').value);
+                if (!friendId || friendId <= 0) {
+                    this.showToast('Введите корректный ID', 'error');
+                    return;
+                }
+
+                if (friendId === this.userData.telegramData?.id) {
+                    this.showToast('Нельзя добавить себя в друзья', 'error');
+                    return;
+                }
+
+                const friend = GlobalUsers.getUser(friendId);
+                if (!friend) {
+                    this.showToast('Пользователь не найден', 'error');
+                    return;
+                }
+
+                const friendData = {
+                    id: friend.id,
+                    name: `${friend.firstName} ${friend.lastName || ''}`.trim() || friend.username,
+                    username: friend.username,
+                    photoUrl: friend.photoUrl,
+                    balance: friend.balance
+                };
+
+                if (this.userData.addFriend(friendData)) {
+                    this.closeModal('addFriendModal');
+                    this.updateUI();
+                    this.showToast('Друг успешно добавлен', 'success');
+                    document.getElementById('friendIdInput').value = '';
+                } else {
+                    this.showToast('Этот пользователь уже в друзьях', 'error');
+                }
+            }
+
+            showFriendDetails(friendId) {
+                const friend = this.userData.friends.find(f => f.id === friendId);
+                if (!friend) return;
+
+                this.selectedFriend = friend;
+
+                document.getElementById('friendDetailsName').textContent = friend.name;
+                document.getElementById('friendDetailsBalance').textContent = 
+                    friend.balance ? friend.balance.toLocaleString('ru-RU') : '0';
+                
+                const avatarContainer = document.getElementById('friendDetailsAvatar');
+                if (friend.photoUrl) {
+                    avatarContainer.innerHTML = `<img src="${friend.photoUrl}" alt="${friend.name}">`;
+                } else {
+                    avatarContainer.innerHTML = `<div class="avatar-placeholder">${friend.name[0]?.toUpperCase() || '?'}</div>`;
+                }
+
+                document.getElementById('friendDetailsModal').classList.add('active');
+            }
+
+            sendMoneyToFriend(friendId) {
+                this.selectedFriend = this.userData.friends.find(f => f.id === friendId);
+                this.openTransferModal();
+            }
+
+            requestLoanFromFriend(friendId) {
+                this.selectedFriend = this.userData.friends.find(f => f.id === friendId);
+                this.openLoanRequestModal();
+            }
+
+            sendMoneyToSelectedFriend() {
+                this.openTransferModal();
+            }
+
+            requestLoanFromSelectedFriend() {
+                this.openLoanRequestModal();
+            }
+
+            removeSelectedFriend() {
+                if (this.selectedFriend) {
+                    TelegramWebApp.showConfirm(
+                        `Удалить ${this.selectedFriend.name} из друзей?`,
+                        (confirmed) => {
+                            if (confirmed) {
+                                this.userData.removeFriend(this.selectedFriend.id);
+                                this.closeModal('friendDetailsModal');
+                                this.updateUI();
+                                this.showToast('Друг удален', 'warning');
+                                this.selectedFriend = null;
+                            }
+                        }
+                    );
+                }
+            }
+
+            openTransferModal() {
+                const select = document.getElementById('transferFriendSelect');
+                select.innerHTML = '';
+                
+                this.userData.friends.forEach(friend => {
+                    const option = document.createElement('option');
+                    option.value = friend.id;
+                    option.textContent = `${friend.name} (${friend.balance ? friend.balance.toLocaleString('ru-RU') + ' ИК' : 'Нет данных'})`;
+                    select.appendChild(option);
+                });
+                
+                if (this.selectedFriend) {
+                    select.value = this.selectedFriend.id;
+                }
+                
+                document.getElementById('transferModal').classList.add('active');
+            }
+
+            sendTransfer() {
+                const friendId = parseInt(document.getElementById('transferFriendSelect').value);
+                const amount = parseInt(document.getElementById('transferAmount').value);
+                const message = document.getElementById('transferMessage').value;
+                
+                if (!friendId || friendId <= 0) {
+                    this.showToast('Выберите друга', 'error');
+                    return;
+                }
+                
+                if (!amount || amount <= 0) {
+                    this.showToast('Введите корректную сумму', 'error');
+                    return;
+                }
+                
+                if (amount > this.userData.balance) {
+                    this.showToast('Недостаточно средств', 'error');
+                    return;
+                }
+                
+                const friend = this.userData.friends.find(f => f.id === friendId);
+                if (!friend) {
+                    this.showToast('Друг не найден', 'error');
+                    return;
+                }
+                
+                // Выполняем перевод
+                this.userData.spendBalance(amount);
+                
+                // Обновляем баланс друга в глобальной системе (симуляция)
+                const globalFriend = GlobalUsers.getUser(friendId);
+                if (globalFriend) {
+                    globalFriend.balance += amount;
+                    GlobalUsers.save();
+                }
+                
+                // Добавляем транзакцию
+                this.userData.addTransaction({
+                    id: Date.now(),
+                    type: 'outcome',
+                    amount: amount,
+                    description: `Перевод ${friend.name}: ${message || 'без сообщения'}`,
+                    date: new Date().toLocaleDateString(),
+                    time: Date.now()
+                });
+                
+                this.closeModal('transferModal');
+                this.updateUI();
+                this.showToast(`Перевод ${amount} ИК выполнен`, 'success');
+                
+                // Очищаем форму
+                document.getElementById('transferAmount').value = '';
+                document.getElementById('transferMessage').value = '';
+                this.selectedFriend = null;
+            }
+
+            openLoanRequestModal() {
+                const select = document.getElementById('loanFriendSelect');
+                select.innerHTML = '';
+                
+                this.userData.friends.forEach(friend => {
+                    const option = document.createElement('option');
+                    option.value = friend.id;
+                    option.textContent = friend.name;
+                    select.appendChild(option);
+                });
+                
+                if (this.selectedFriend) {
+                    select.value = this.selectedFriend.id;
+                }
+                
+                document.getElementById('loanRequestModal').classList.add('active');
+            }
+
+            sendLoanRequest() {
+                const friendId = parseInt(document.getElementById('loanFriendSelect').value);
+                const amount = parseInt(document.getElementById('loanAmount').value);
+                const message = document.getElementById('loanMessage').value;
+                
+                if (!friendId || friendId <= 0) {
+                    this.showToast('Выберите друга', 'error');
+                    return;
+                }
+                
+                if (!amount || amount <= 0) {
+                    this.showToast('Введите корректную сумму', 'error');
+                    return;
+                }
+                
+                const friend = this.userData.friends.find(f => f.id === friendId);
+                if (!friend) {
+                    this.showToast('Друг не найден', 'error');
+                    return;
+                }
+                
+                // Отправляем запрос
+                const request = this.userData.sendLoanRequest(friendId, amount, message);
+                
+                // Симулируем получение запроса другом
+                const globalFriend = GlobalUsers.getUser(friendId);
+                if (globalFriend) {
+                    // В реальном приложении здесь был бы push-уведомление
+                    console.log(`Запрос в долг отправлен пользователю ${friendId}: ${amount} ИК`);
+                }
+                
+                this.closeModal('loanRequestModal');
+                this.updateUI();
+                this.showToast('Запрос в долг отправлен', 'success');
+                
+                // Очищаем форму
+                document.getElementById('loanAmount').value = '';
+                document.getElementById('loanMessage').value = '';
+                this.selectedFriend = null;
+            }
+
+            respondToRequest(requestId, accepted) {
+                const request = this.userData.respondToLoanRequest(requestId, accepted);
+                
+                if (accepted && request) {
+                    // Выдаем деньги
+                    if (this.userData.spendBalance(request.amount)) {
+                        // Обновляем баланс получателя в глобальной системе
+                        const globalRequester = GlobalUsers.getUser(request.fromUserId);
+                        if (globalRequester) {
+                            globalRequester.balance += request.amount;
+                            GlobalUsers.save();
+                        }
+                        
+                        // Добавляем транзакцию
+                        this.userData.addTransaction({
+                            id: Date.now(),
+                            type: 'outcome',
+                            amount: request.amount,
+                            description: `Заем пользователю ID: ${request.fromUserId}`,
+                            date: new Date().toLocaleDateString(),
+                            time: Date.now()
+                        });
+                        
+                        this.showToast('Вы дали деньги в долг', 'success');
+                    } else {
+                        this.showToast('Недостаточно средств', 'error');
+                    }
+                } else if (!accepted) {
+                    this.showToast('Вы отказали в займе', 'warning');
+                }
+                
+                this.updateUI();
+            }
+
             createCard() {
                 const cardNumber = `0228 ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)} ${Math.floor(1000 + Math.random() * 9000)}`;
                 const cardName = `Карта ${this.userData.cards.length + 1}`;
@@ -1136,7 +2384,7 @@
                     number: cardNumber,
                     balance: 0,
                     name: cardName,
-                    created: new Date().toLocaleDateString()
+                    created: new Date().toISOString()
                 };
 
                 this.userData.addCard(newCard);
@@ -1144,52 +2392,42 @@
                 this.showToast('Новая карта создана', 'success');
             }
 
-            showTransferForm() {
-                // Простая реализация перевода
-                const amount = Math.floor(this.userData.balance * 0.1);
-                if (amount > 0 && this.userData.spendBalance(amount)) {
-                    this.userData.addTransaction({
-                        id: Date.now(),
-                        type: 'outcome',
-                        amount: amount,
-                        description: 'Перевод другу',
-                        date: new Date().toLocaleDateString(),
-                        time: new Date().toLocaleTimeString()
-                    });
-                    this.updateUI();
-                    this.showToast(`Переведено ${amount} ИК`, 'success');
-                } else {
-                    this.showToast('Недостаточно средств', 'error');
-                }
-            }
-
             resetProgress() {
-                if (confirm('Вы уверены? Весь прогресс будет сброшен.')) {
-                    this.userData.reset();
-                    this.clickerStats = {
-                        perClick: 10,
-                        multiplier: 1.0,
-                        autoClicker: false
-                    };
-                    if (this.autoClickerInterval) {
-                        clearInterval(this.autoClickerInterval);
-                        this.autoClickerInterval = null;
+                TelegramWebApp.showConfirm(
+                    'Вы уверены? Весь прогресс будет сброшен.',
+                    (confirmed) => {
+                        if (confirmed) {
+                            this.userData.reset();
+                            this.clickerStats = {
+                                perClick: 10,
+                                multiplier: 1.0,
+                                autoClicker: false,
+                                friendMultiplier: 0
+                            };
+                            if (this.autoClickerInterval) {
+                                clearInterval(this.autoClickerInterval);
+                                this.autoClickerInterval = null;
+                            }
+                            this.updateUI();
+                            this.showToast('Прогресс сброшен', 'warning');
+                        }
                     }
-                    this.updateUI();
-                    this.showToast('Прогресс сброшен', 'warning');
+                );
+            }
+
+            shareProfile() {
+                const tgData = this.userData.telegramData;
+                if (tgData) {
+                    const shareText = `Мой профиль в ИмбаБанке:\nБаланс: ${this.userData.balance.toLocaleString('ru-RU')} ИК\nКликов: ${this.userData.clicks.toLocaleString('ru-RU')}\nДрузей: ${this.userData.friends.length}`;
+                    
+                    // В реальном приложении можно использовать Telegram API для шеринга
+                    TelegramWebApp.showAlert(shareText);
+                    this.showToast('Текст профиля скопирован', 'success');
                 }
             }
 
-            saveToTelegram() {
-                TelegramWebApp.sendData(JSON.stringify({
-                    action: 'save',
-                    balance: this.userData.balance,
-                    clicks: this.userData.clicks,
-                    earned: this.userData.earned,
-                    cards: this.userData.cards.length,
-                    upgrades: this.userData.upgrades.length
-                }));
-                this.showToast('Данные сохранены в Telegram', 'success');
+            closeModal(modalId) {
+                document.getElementById(modalId).classList.remove('active');
             }
 
             showToast(message, type = 'info') {
@@ -1197,7 +2435,7 @@
                 const toast = document.createElement('div');
                 toast.style.cssText = `
                     position: fixed;
-                    top: 70px;
+                    top: 80px;
                     left: 50%;
                     transform: translateX(-50%);
                     background: ${type === 'success' ? '#38A169' : type === 'error' ? '#E53E3E' : type === 'warning' ? '#D69E2E' : '#805AD5'};
@@ -1208,27 +2446,12 @@
                     font-weight: 600;
                     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
                     animation: toastSlideIn 0.3s ease;
+                    max-width: 90%;
+                    text-align: center;
                 `;
                 
                 toast.textContent = message;
                 document.body.appendChild(toast);
-                
-                // Добавляем анимацию
-                if (!document.querySelector('#toast-styles')) {
-                    const style = document.createElement('style');
-                    style.id = 'toast-styles';
-                    style.textContent = `
-                        @keyframes toastSlideIn {
-                            from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
-                            to { transform: translateX(-50%) translateY(0); opacity: 1; }
-                        }
-                        @keyframes toastSlideOut {
-                            from { transform: translateX(-50%) translateY(0); opacity: 1; }
-                            to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
-                        }
-                    `;
-                    document.head.appendChild(style);
-                }
                 
                 // Удаляем через 3 секунды
                 setTimeout(() => {
@@ -1238,7 +2461,6 @@
             }
 
             handleViewportChange() {
-                // Адаптируемся к изменению viewport в Telegram
                 this.updateUI();
             }
         }
@@ -1249,9 +2471,6 @@
         // Вспомогательные функции для глобального доступа
         window.showPage = (page) => app.showPage(page);
         window.createCard = () => app.createCard();
-        window.showTransferForm = () => app.showTransferForm();
-        window.resetProgress = () => app.resetProgress();
-        window.saveToTelegram = () => app.saveToTelegram();
 
         // Инициализация при загрузке
         document.addEventListener('DOMContentLoaded', () => {
@@ -1265,10 +2484,37 @@
 
         // Обработчик для Telegram кнопки "Назад"
         TelegramWebApp.BackButton.onClick(() => {
-            history.back();
+            // Закрываем все модальные окна
+            document.querySelectorAll('.modal.active').forEach(modal => {
+                modal.classList.remove('active');
+            });
+            
+            // Если нет открытых модалок, возвращаемся на главную
+            if (document.querySelectorAll('.modal.active').length === 0) {
+                app.showPage('clicker');
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                document.querySelector('.nav-tab[data-page="clicker"]').classList.add('active');
+            }
         });
         
         TelegramWebApp.BackButton.show();
+
+        // Добавляем стили для анимации тостов
+        if (!document.querySelector('#toast-styles')) {
+            const style = document.createElement('style');
+            style.id = 'toast-styles';
+            style.textContent = `
+                @keyframes toastSlideIn {
+                    from { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+                    to { transform: translateX(-50%) translateY(0); opacity: 1; }
+                }
+                @keyframes toastSlideOut {
+                    from { transform: translateX(-50%) translateY(0); opacity: 1; }
+                    to { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(style);
+        }
     </script>
 </body>
 </html>
