@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>🍪 ПеченькоБанк | Cookie Clicker</title>
+    <title>🍪 ПеченькоБанк</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         /* Сброс и базовые стили */
         * {
@@ -18,145 +18,168 @@
         }
 
         :root {
-            /* Светлая тема */
-            --primary: #10B981; /* Зелёный */
-            --primary-dark: #059669;
-            --secondary: #EC4899; /* Розовый */
-            --secondary-light: #F472B6;
-            --accent: #3B82F6; /* Голубой для бонусов */
-            --accent-light: #60A5FA;
+            /* Цветовая палитра - глубокий синий/градиент с акцентами */
+            --primary: #4361EE; /* Глубокий синий */
+            --primary-dark: #3A56D4;
+            --primary-light: #4895EF;
+            --secondary: #FF9E00; /* Золотой акцент */
+            --accent: #00B4D8; /* Бирюзовый акцент */
+            --success: #4CC9F0; /* Лаймовый акцент */
+            --warning: #FFD166;
+            --danger: #EF476F;
             
-            --bg-light: #FFFFFF;
-            --bg-light-secondary: #F9FAFB;
-            --text-light: #111827;
-            --text-light-secondary: #6B7280;
-            --card-light: #FFFFFF;
-            --border-light: #E5E7EB;
-            --shadow-light: 0 4px 20px rgba(0, 0, 0, 0.08);
+            /* Градиенты */
+            --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
+            --gradient-accent: linear-gradient(135deg, var(--secondary), #FFD166);
+            --gradient-success: linear-gradient(135deg, var(--success), #00B4D8);
+            --gradient-warning: linear-gradient(135deg, var(--warning), #FF9E00);
             
-            /* Тёмная тема */
-            --bg-dark: #111827;
-            --bg-dark-secondary: #1F2937;
-            --text-dark: #F9FAFB;
-            --text-dark-secondary: #D1D5DB;
-            --card-dark: #1F2937;
-            --border-dark: #374151;
-            --shadow-dark: 0 4px 20px rgba(0, 0, 0, 0.3);
+            /* Фоны */
+            --bg-dark: #0A0E17;
+            --bg-dark-secondary: #131B2D;
+            --bg-dark-tertiary: #1A243F;
             
-            /* Общие */
-            --success: #10B981;
-            --error: #EF4444;
-            --warning: #F59E0B;
-            --info: #3B82F6;
+            /* Текст */
+            --text-primary: #FFFFFF;
+            --text-secondary: #94A3B8;
+            --text-tertiary: #64748B;
             
-            /* Текущая тема (по умолчанию тёмная) */
-            --bg: var(--bg-dark);
-            --bg-secondary: var(--bg-dark-secondary);
-            --text: var(--text-dark);
-            --text-secondary: var(--text-dark-secondary);
-            --card: var(--card-dark);
-            --border: var(--border-dark);
-            --shadow: var(--shadow-dark);
+            /* Карточки и границы */
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.4);
+            
+            /* Анимации */
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body {
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg);
-            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
-            line-height: 1.6;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            line-height: 1.5;
             overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        body.light-theme {
-            --bg: var(--bg-light);
-            --bg-secondary: var(--bg-light-secondary);
-            --text: var(--text-light);
-            --text-secondary: var(--text-light-secondary);
-            --card: var(--card-light);
-            --border: var(--border-light);
-            --shadow: var(--shadow-light);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 158, 0, 0.1) 0%, transparent 20%);
         }
 
         /* Контейнер приложения */
         .app-container {
+            max-width: 480px;
+            margin: 0 auto;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            padding: 0;
-            max-width: 480px;
-            margin: 0 auto;
             position: relative;
+            background: var(--bg-dark);
         }
 
-        /* Шапка */
+        /* Шапка с пользователем */
         .header {
-            background: var(--card);
             padding: 16px 20px;
-            border-bottom: 2px solid var(--border);
+            background: var(--bg-dark-secondary);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(31, 41, 55, 0.95);
+        }
+
+        .user-info {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: center;
         }
 
-        .light-theme .header {
-            background: rgba(255, 255, 255, 0.95);
-        }
-
-        .logo {
+        .user-left {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 1.4rem;
-            font-weight: 800;
+            gap: 12px;
         }
 
-        .logo-icon {
-            font-size: 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: pulse 2s infinite;
-        }
-
-        .theme-toggle {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            width: 44px;
-            height: 44px;
+        .user-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        .theme-toggle:hover {
-            transform: rotate(30deg);
-        }
-
-        .balance-display {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            padding: 8px 16px;
-            border-radius: 16px;
+            font-size: 1.4rem;
+            font-weight: 700;
             color: white;
+            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 1.1rem;
-            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            margin-bottom: 2px;
+        }
+
+        .user-level {
             display: flex;
             align-items: center;
             gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .level-progress {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .level-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--gradient-accent);
+            width: 60%; /* Изменяется динамически */
+        }
+
+        .user-resources {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .resource {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .resource i {
+            color: var(--secondary);
+            font-size: 1rem;
+        }
+
+        .resource.gems i {
+            color: var(--success);
+        }
+
+        .resource.bonus i {
+            color: var(--accent);
         }
 
         /* Основной контент */
@@ -166,922 +189,1201 @@
             display: flex;
             flex-direction: column;
             gap: 20px;
-            position: relative;
-            overflow: hidden;
+            padding-bottom: 90px; /* Для навигации */
         }
 
-        /* Карточка баланса */
-        .balance-card {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        /* Карточка статуса */
+        .status-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 24px;
-            text-align: center;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(16, 185, 129, 0.25);
-            animation: gradientShift 8s ease infinite;
-            background-size: 200% 200%;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
-
-        .balance-label {
-            font-size: 0.95rem;
-            opacity: 0.9;
-            margin-bottom: 8px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-        }
-
-        .balance-amount {
-            font-size: 3rem;
-            font-weight: 800;
-            margin-bottom: 4px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .balance-subtext {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            font-weight: 400;
-        }
-
-        /* Кликер */
-        .clicker-container {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 24px;
-            text-align: center;
-            border: 2px solid var(--border);
-            position: relative;
             box-shadow: var(--shadow);
-            transition: all 0.3s ease;
         }
 
-        .clicker-container.has-bonus {
-            background: linear-gradient(135deg, #F472B6, #60A5FA);
-            border-color: transparent;
-            animation: bonusGlow 2s ease infinite;
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        @keyframes bonusGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(236, 72, 153, 0.3); }
-            50% { box-shadow: 0 0 40px rgba(96, 165, 250, 0.5); }
+        .status-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .luck-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 158, 0, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .luck-indicator i {
+            animation: pulse 2s infinite;
+        }
+
+        /* Активные бафы */
+        .active-buffs {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .buff-tag {
+            padding: 8px 16px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--success);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid rgba(76, 201, 240, 0.2);
+        }
+
+        /* Кликер центр */
+        .clicker-center {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .clicker-center::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
         }
 
         .clicker-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text);
             font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .clicker-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 32px;
         }
 
         .clicker-button {
-            width: 180px;
-            height: 180px;
+            width: 160px;
+            height: 160px;
             margin: 0 auto 24px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            background: var(--gradient-primary);
             border: none;
             color: white;
-            font-size: 1.2rem;
-            font-weight: 700;
+            font-size: 1.3rem;
+            font-weight: 800;
             cursor: pointer;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            box-shadow: 0 12px 40px rgba(236, 72, 153, 0.4);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            touch-action: manipulation;
+            box-shadow: 
+                0 0 60px rgba(67, 97, 238, 0.4),
+                0 20px 40px rgba(0, 0, 0, 0.3),
+                inset 0 4px 20px rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
             position: relative;
-            z-index: 2;
             font-family: 'Poppins', sans-serif;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         }
 
         .clicker-button:hover {
             transform: scale(1.05);
-            box-shadow: 0 16px 48px rgba(236, 72, 153, 0.6);
+            box-shadow: 
+                0 0 80px rgba(67, 97, 238, 0.6),
+                0 25px 50px rgba(0, 0, 0, 0.4),
+                inset 0 4px 20px rgba(255, 255, 255, 0.3);
         }
 
         .clicker-button:active {
             transform: scale(0.95);
-            box-shadow: 0 8px 32px rgba(236, 72, 153, 0.3);
+            box-shadow: 
+                0 0 40px rgba(67, 97, 238, 0.3),
+                0 10px 30px rgba(0, 0, 0, 0.2),
+                inset 0 4px 20px rgba(255, 255, 255, 0.1);
         }
 
         .clicker-button i {
             font-size: 3.5rem;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+            animation: float 3s ease-in-out infinite;
         }
 
         .clicker-stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
             margin-top: 24px;
         }
 
-        .stat-item {
-            background: var(--bg-secondary);
-            padding: 16px;
-            border-radius: 16px;
-            border: 2px solid var(--border);
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary);
+        .clicker-stat {
+            text-align: center;
         }
 
         .stat-value {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: var(--primary);
-            margin-bottom: 4px;
             font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--success);
+            margin-bottom: 4px;
+            text-shadow: 0 2px 8px rgba(76, 201, 240, 0.3);
         }
 
         .stat-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--text-secondary);
             font-weight: 500;
-            font-family: 'Roboto', sans-serif;
         }
 
-        /* Активные бонусы */
-        .active-bonuses {
+        /* Быстрые действия */
+        .quick-actions {
             display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 24px;
         }
 
-        .bonus-tag {
-            background: linear-gradient(135deg, var(--accent-light), var(--accent));
-            color: white;
-            padding: 10px 18px;
-            border-radius: 20px;
+        .action-btn {
+            padding: 12px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: var(--text-primary);
             font-size: 0.9rem;
             font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
             display: flex;
             align-items: center;
             gap: 8px;
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-            animation: pulse 2s infinite;
-            font-family: 'Roboto', sans-serif;
+            font-family: 'Inter', sans-serif;
         }
 
-        /* Промокоды */
-        .promocode-container {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 24px;
-            border: 2px solid var(--border);
-            box-shadow: var(--shadow);
-        }
-
-        .promocode-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 20px;
-            color: var(--text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .promocode-input-group {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .promocode-input {
-            flex: 1;
-            padding: 16px 20px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            color: var(--text);
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-align: center;
-            text-transform: uppercase;
-            font-family: 'Roboto', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .promocode-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-        }
-
-        .user-promocode {
-            background: rgba(16, 185, 129, 0.1);
-            border: 2px dashed var(--primary);
-            border-radius: 20px;
-            padding: 20px;
-            margin-top: 20px;
-        }
-
-        .promocode-label {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            margin-bottom: 8px;
-            font-weight: 500;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .promocode-value {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--primary);
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-        }
-
-        /* Кнопки */
-        .btn {
-            padding: 16px 32px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            border: none;
-            border-radius: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            font-family: 'Poppins', sans-serif;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn:hover {
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
         }
 
-        .btn:active {
+        .action-btn:active {
             transform: translateY(0);
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
         }
 
-        .btn-wide {
-            width: 100%;
+        .action-btn.active {
+            background: rgba(76, 201, 240, 0.2);
+            border-color: rgba(76, 201, 240, 0.3);
+            color: var(--success);
         }
 
-        /* События */
-        .events-container {
-            background: var(--card);
+        /* Лента событий */
+        .activity-feed {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 24px;
-            border: 2px solid var(--border);
             box-shadow: var(--shadow);
         }
 
-        .events-grid {
-            display: grid;
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .feed-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .feed-list {
+            display: flex;
+            flex-direction: column;
             gap: 16px;
         }
 
-        .event-card {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
+        .feed-item {
             display: flex;
             align-items: center;
-            gap: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .event-card:hover {
-            transform: translateY(-3px);
-            border-color: var(--primary);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        }
-
-        .event-card.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .event-card.disabled:hover {
-            transform: none;
-            border-color: var(--border);
-            box-shadow: none;
-        }
-
-        .event-icon {
-            width: 56px;
-            height: 56px;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
+            transition: var(--transition);
+        }
+
+        .feed-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .feed-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--gradient-accent);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
-            flex-shrink: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            font-weight: 700;
             color: white;
+            font-size: 0.9rem;
         }
 
-        .event-info {
+        .feed-content {
             flex: 1;
         }
 
-        .event-name {
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: var(--text);
-            font-size: 1.1rem;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .event-desc {
+        .feed-text {
             font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-family: 'Roboto', sans-serif;
+            color: var(--text-primary);
+            margin-bottom: 4px;
         }
 
-        .event-status {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--warning);
-            text-align: right;
-            font-family: 'Roboto', sans-serif;
+        .feed-time {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
         }
 
-        /* Карта */
-        .card-container {
-            background: linear-gradient(135deg, #2D3748, #4A5568);
+        /* Карточка прогресса */
+        .progress-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 24px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--shadow);
         }
 
-        .card-container::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(236, 72, 153, 0.1) 0%, transparent 70%);
-        }
-
-        .card-title {
-            font-size: 1.3rem;
-            font-weight: 700;
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 20px;
-            color: white;
+        }
+
+        .progress-info {
+            text-align: center;
+        }
+
+        .progress-value {
             font-family: 'Poppins', sans-serif;
-        }
-
-        .card-number {
-            font-family: 'Roboto Mono', monospace;
-            font-size: 1.4rem;
-            letter-spacing: 2px;
-            margin-bottom: 16px;
-            color: white;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        }
-
-        .card-balance {
-            font-size: 2.5rem;
             font-weight: 800;
-            color: var(--success);
-            margin-bottom: 8px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: var(--secondary);
+            margin-bottom: 4px;
         }
 
-        .card-name {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: 'Roboto', sans-serif;
+        .progress-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
         }
 
-        /* Боттом-бар */
-        .bottom-nav {
-            background: var(--card);
-            border-top: 2px solid var(--border);
-            padding: 16px 20px;
-            position: sticky;
-            bottom: 0;
-            z-index: 100;
-            backdrop-filter: blur(10px);
-            background: rgba(31, 41, 55, 0.95);
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 16px;
+            position: relative;
         }
 
-        .light-theme .bottom-nav {
-            background: rgba(255, 255, 255, 0.95);
+        .progress-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: var(--gradient-accent);
+            width: 75%;
+            border-radius: 4px;
+            transition: width 0.5s ease;
         }
 
-        .nav-tabs {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
+        /* Карточка рекомендаций */
+        .recommendation-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-radius: 24px;
+            padding: 24px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(76, 201, 240, 0.1);
+        }
+
+        .recommendation-header {
+            display: flex;
+            align-items: center;
             gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .recommendation-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--gradient-success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+        }
+
+        .recommendation-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--success);
+        }
+
+        .recommendation-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Навигация */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            max-width: 480px;
+            margin: 0 auto;
+            background: var(--bg-dark-secondary);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 1000;
         }
 
         .nav-tab {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 14px 10px;
-            border-radius: 16px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 6px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 0.8rem;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-            position: relative;
-            font-family: 'Roboto', sans-serif;
-            font-weight: 500;
+            transition: var(--transition);
+            padding: 8px 12px;
+            border-radius: 16px;
+            min-width: 64px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
 
         .nav-tab:hover {
-            background: var(--bg-secondary);
-            color: var(--text);
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .nav-tab.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+            color: var(--primary-light);
+            background: rgba(67, 97, 238, 0.1);
         }
 
         .nav-tab i {
             font-size: 1.4rem;
+            transition: var(--transition);
         }
 
-        .tab-badge {
+        .nav-tab.active i {
+            transform: translateY(-2px);
+        }
+
+        .nav-badge {
             position: absolute;
-            top: 8px;
+            top: 4px;
             right: 8px;
-            background: var(--secondary);
+            background: var(--danger);
             color: white;
             font-size: 0.7rem;
-            min-width: 20px;
-            height: 20px;
-            border-radius: 10px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 5px;
+            padding: 0 4px;
             font-weight: 700;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Модальные окна */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            animation: fadeIn 0.3s ease;
-            backdrop-filter: blur(8px);
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: var(--card);
-            border-radius: 28px;
-            padding: 32px;
-            width: 100%;
-            max-width: 420px;
-            border: 2px solid var(--border);
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
-            animation: slideUp 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 28px;
-        }
-
-        .modal-title {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--text);
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .close-btn {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text);
-            transition: all 0.3s ease;
-        }
-
-        .close-btn:hover {
-            background: var(--error);
-            color: white;
-            border-color: var(--error);
-            transform: rotate(90deg);
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 12px;
-            color: var(--text-secondary);
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: 'Roboto', sans-serif;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 18px 20px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 16px;
-            color: var(--text);
-            font-size: 1rem;
-            font-family: 'Roboto', sans-serif;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-        }
-
-        /* Печеньки */
-        .cookie {
-            position: absolute;
-            pointer-events: none;
-            z-index: 1;
-            font-size: 1.8rem;
-            opacity: 0;
-            animation: cookieFall 2s linear forwards;
-        }
-
-        @keyframes cookieFall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Уведомления */
-        .notification {
-            position: fixed;
-            top: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            padding: 16px 28px;
-            border-radius: 16px;
-            font-weight: 600;
-            z-index: 1000;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            animation: slideDown 0.3s ease;
-            max-width: 90%;
-            text-align: center;
-            font-family: 'Roboto', sans-serif;
-            backdrop-filter: blur(10px);
-        }
-
-        .notification.success {
-            background: linear-gradient(135deg, var(--success), rgba(16, 185, 129, 0.9));
-            color: white;
-        }
-
-        .notification.error {
-            background: linear-gradient(135deg, var(--error), rgba(239, 68, 68, 0.9));
-            color: white;
-        }
-
-        .notification.info {
-            background: linear-gradient(135deg, var(--info), rgba(59, 130, 246, 0.9));
-            color: white;
-        }
-
-        @keyframes slideDown {
-            from { transform: translateX(-50%) translateY(-50px); opacity: 0; }
-            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+            box-shadow: 0 2px 8px rgba(239, 71, 111, 0.4);
         }
 
         /* Страницы */
         .page {
             display: none;
-            animation: fadeIn 0.4s ease;
+            animation: slideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Страница друзей */
+        .friends-search {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 16px 20px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            width: 100%;
+            margin-bottom: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .friends-search:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+        }
+
+        .friends-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .friend-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: var(--transition);
+        }
+
+        .friend-card:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .friend-avatar {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .friend-info {
+            flex: 1;
+        }
+
+        .friend-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        .status-dot.offline {
+            background: var(--text-tertiary);
+        }
+
+        .friend-stats {
+            display: flex;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .friend-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .friend-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .friend-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .friend-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.1);
+        }
+
+        .friend-btn.gift {
+            color: var(--secondary);
+            background: rgba(255, 158, 0, 0.1);
+            border-color: rgba(255, 158, 0, 0.2);
+        }
+
+        /* Таблица лидеров */
+        .leaderboard {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-top: 20px;
+        }
+
+        .leaderboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .leaderboard-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        .leaderboard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+        }
+
+        .leaderboard-rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: var(--gradient-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        /* Страница бустов */
+        .boosts-categories {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .category-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-btn.active {
+            background: rgba(76, 201, 240, 0.2);
+            color: var(--success);
+            border-color: rgba(76, 201, 240, 0.3);
+        }
+
+        .boosts-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .boost-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boost-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .boost-card.active {
+            border-color: rgba(76, 201, 240, 0.3);
+            box-shadow: 
+                0 0 40px rgba(76, 201, 240, 0.2),
+                var(--shadow);
+        }
+
+        .boost-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .boost-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--gradient-warning);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .boost-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+        }
+
+        .boost-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .boost-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .boost-price {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.3rem;
+            color: var(--secondary);
+        }
+
+        .boost-timer {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(76, 201, 240, 0.1);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        /* Страница переводов */
+        .currencies-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .currency-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+        }
+
+        .currency-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .currency-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .currency-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 4px;
+        }
+
+        .currency-balance {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--success);
+            margin-bottom: 24px;
+        }
+
+        .transfer-form {
+            margin-top: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .transfer-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 16px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 8px 32px rgba(67, 97, 238, 0.3);
+        }
+
+        .transfer-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(67, 97, 238, 0.4);
+        }
+
+        .transfer-btn:active {
+            transform: translateY(0);
+        }
+
+        /* Печеньки */
+        .cookie {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            font-size: 2rem;
+            opacity: 0;
+            animation: cookieFall 2s linear forwards;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes cookieFall {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
         }
 
         /* Адаптивность */
         @media (max-width: 480px) {
             .main-content {
                 padding: 16px;
+                padding-bottom: 90px;
             }
             
-            .balance-amount {
-                font-size: 2.5rem;
+            .header {
+                padding: 12px 16px;
             }
             
             .clicker-button {
-                width: 160px;
-                height: 160px;
+                width: 140px;
+                height: 140px;
             }
             
             .clicker-button i {
                 font-size: 3rem;
             }
             
-            .stat-value {
-                font-size: 1.5rem;
+            .quick-actions {
+                flex-wrap: wrap;
+            }
+            
+            .user-resources {
+                display: none; /* Скрываем на мобильных */
             }
         }
 
         @media (max-height: 700px) {
             .clicker-button {
-                width: 140px;
-                height: 140px;
+                width: 120px;
+                height: 120px;
             }
             
-            .balance-amount {
-                font-size: 2.2rem;
+            .clicker-button i {
+                font-size: 2.5rem;
             }
         }
 
         /* Утилиты */
-        .text-center { text-align: center; }
-        .mt-3 { margin-top: 24px; }
-        .mb-3 { margin-bottom: 24px; }
-        .mt-2 { margin-top: 16px; }
-        .mb-2 { margin-bottom: 16px; }
+        .text-gradient {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .mb-4 { margin-bottom: 24px; }
+        .mt-4 { margin-top: 24px; }
+        .mb-3 { margin-bottom: 20px; }
+        .mt-3 { margin-top: 20px; }
     </style>
 </head>
 <body>
     <div class="app-container">
         <!-- Шапка -->
         <header class="header">
-            <div class="logo">
-                <div class="logo-icon">🍪</div>
-                <span>ПеченькоБанк</span>
+            <div class="user-info">
+                <div class="user-left">
+                    <div class="user-avatar">П</div>
+                    <div class="user-details">
+                        <div class="user-name">Печеньковый Магнат</div>
+                        <div class="user-level">
+                            <span>Уровень 15</span>
+                            <div class="level-progress">
+                                <div class="level-fill"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-resources">
+                    <div class="resource">
+                        <i class="fas fa-coins"></i>
+                        <span id="coinBalance">12,450</span>
+                    </div>
+                    <div class="resource gems">
+                        <i class="fas fa-gem"></i>
+                        <span id="gemBalance">245</span>
+                    </div>
+                    <div class="resource bonus">
+                        <i class="fas fa-star"></i>
+                        <span id="bonusBalance">78</span>
+                    </div>
+                </div>
             </div>
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-moon"></i>
-            </button>
         </header>
 
         <!-- Основной контент -->
         <main class="main-content">
             <!-- Главная страница -->
-            <div id="mainPage" class="page active">
-                <div class="balance-card">
-                    <div class="balance-label">Ваш баланс</div>
-                    <div class="balance-amount" id="totalBalance">0</div>
-                    <div class="balance-subtext">печенек</div>
+            <div id="homePage" class="page active">
+                <!-- Карточка статуса -->
+                <div class="status-card">
+                    <div class="status-header">
+                        <div class="status-title">Текущий статус</div>
+                        <div class="luck-indicator">
+                            <i class="fas fa-bolt"></i>
+                            <span>Удача x1.8</span>
+                        </div>
+                    </div>
+                    <div class="active-buffs" id="activeBuffs">
+                        <!-- Активные бафы загружаются динамически -->
+                    </div>
                 </div>
 
-                <div class="clicker-container" id="clickerArea">
-                    <h2 class="clicker-title">Кликай за печеньки!</h2>
+                <!-- Кликер центр -->
+                <div class="clicker-center">
+                    <h2 class="clicker-title">ПЕЧЕНЬКОВЫЙ КЛИКЕР</h2>
+                    <p class="clicker-subtitle">Кликай и собирай печеньки!</p>
+                    
                     <button class="clicker-button" id="clickerBtn">
                         <i class="fas fa-cookie-bite"></i>
-                        <span>Клик!</span>
+                        <span>КЛИК!</span>
                     </button>
                     
-                    <div class="active-bonuses" id="activeBonuses">
-                        <!-- Активные бонусы отображаются здесь -->
-                    </div>
-                    
                     <div class="clicker-stats">
-                        <div class="stat-item">
-                            <div class="stat-value" id="perClick">1</div>
-                            <div class="stat-label">За клик</div>
+                        <div class="clicker-stat">
+                            <div class="stat-value" id="perClick">12</div>
+                            <div class="stat-label">за клик</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="multiplier">x1.0</div>
-                            <div class="stat-label">Множитель</div>
+                        <div class="clicker-stat">
+                            <div class="stat-value" id="multiplier">x1.8</div>
+                            <div class="stat-label">множитель</div>
                         </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="clicksCount">0</div>
-                            <div class="stat-label">Всего кликов</div>
-                        </div>
-                        <div class="stat-item">
-                            <div class="stat-value" id="totalEarned">0</div>
-                            <div class="stat-label">Всего заработано</div>
+                        <div class="clicker-stat">
+                            <div class="stat-value" id="clicksTotal">1,245</div>
+                            <div class="stat-label">кликов</div>
                         </div>
                     </div>
-                </div>
-
-                <div class="promocode-container">
-                    <h2 class="promocode-title">Промокоды</h2>
                     
-                    <div class="promocode-input-group">
-                        <input type="text" class="promocode-input" id="promocodeInput" placeholder="ВВЕДИТЕ ПРОМОКОД" maxlength="8">
-                        <button class="btn" onclick="app.usePromocode()">Активировать</button>
-                    </div>
-                    
-                    <div class="user-promocode">
-                        <div class="promocode-label">Ваш промокод для друзей:</div>
-                        <div class="promocode-value" id="userPromocode">COOKIE000</div>
-                        <button class="btn btn-wide mt-2" onclick="app.copyPromocode()">
-                            <i class="fas fa-copy"></i>
-                            <span>Скопировать</span>
+                    <div class="quick-actions">
+                        <button class="action-btn" id="doubleClickBtn">
+                            <i class="fas fa-redo"></i>
+                            <span>Двойной клик</span>
+                        </button>
+                        <button class="action-btn" id="autoClickBtn">
+                            <i class="fas fa-play"></i>
+                            <span>Автоклик</span>
                         </button>
                     </div>
                 </div>
-            </div>
 
-            <!-- Улучшения -->
-            <div id="upgradesPage" class="page">
-                <div class="events-container">
-                    <h2 class="promocode-title">Улучшения</h2>
-                    
-                    <div class="events-grid" id="upgradesList">
-                        <!-- Улучшения загружаются динамически -->
+                <!-- Лента событий -->
+                <div class="activity-feed">
+                    <div class="feed-header">
+                        <div class="feed-title">Лента событий</div>
+                        <button class="action-btn">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
                     </div>
+                    <div class="feed-list" id="activityFeed">
+                        <!-- События загружаются динамически -->
+                    </div>
+                </div>
+
+                <!-- Карточка прогресса -->
+                <div class="progress-card">
+                    <div class="progress-header">
+                        <div class="status-title">Прогресс уровня</div>
+                        <div class="progress-info">
+                            <div class="progress-value">15</div>
+                            <div class="progress-label">текущий уровень</div>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Карточка рекомендаций -->
+                <div class="recommendation-card">
+                    <div class="recommendation-header">
+                        <div class="recommendation-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="recommendation-title">Совет дня</div>
+                    </div>
+                    <p class="recommendation-text">
+                        Используйте автоклик на ночь для пассивного заработка. 
+                        Каждые 5 уровней открываются новые бусты!
+                    </p>
                 </div>
             </div>
 
-            <!-- События -->
-            <div id="eventsPage" class="page">
-                <div class="events-container">
-                    <h2 class="promocode-title">События</h2>
-                    
-                    <div class="events-grid">
-                        <div class="event-card" id="wheelEvent" onclick="app.showModal('wheelModal')">
-                            <div class="event-icon">
-                                <i class="fas fa-dharmachakra"></i>
-                            </div>
-                            <div class="event-info">
-                                <div class="event-name">Колесо удачи</div>
-                                <div class="event-desc">Крути каждые 50 кликов</div>
-                            </div>
-                            <div class="event-status" id="wheelStatus">Доступно</div>
-                        </div>
-                        
-                        <div class="event-card" onclick="app.spawnBonusBarrel()">
-                            <div class="event-icon">
-                                <i class="fas fa-gift"></i>
-                            </div>
-                            <div class="event-info">
-                                <div class="event-name">Бонусная бочка</div>
-                                <div class="event-desc">Случайная награда</div>
-                            </div>
-                            <div class="event-status">Активировать</div>
-                        </div>
-                        
-                        <div class="event-card" onclick="app.activateNightMode()">
-                            <div class="event-icon">
-                                <i class="fas fa-moon"></i>
-                            </div>
-                            <div class="event-info">
-                                <div class="event-name">Ночной режим</div>
-                                <div class="event-desc">Редкие призы ночью</div>
-                            </div>
-                            <div class="event-status" id="nightStatus">Не активно</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Карта -->
-            <div id="cardPage" class="page">
-                <div class="card-container">
-                    <h2 class="card-title">Ваша карта</h2>
-                    <div class="card-number" id="cardNumber">0228 1234 5678 9000</div>
-                    <div class="card-balance" id="cardBalance">0 печенек</div>
-                    <div class="card-name">Основная карта</div>
+            <!-- Страница друзей -->
+            <div id="friendsPage" class="page">
+                <input type="text" class="friends-search" placeholder="Поиск друзей..." id="friendsSearch">
+                
+                <div class="friends-list" id="friendsList">
+                    <!-- Друзья загружаются динамически -->
                 </div>
                 
-                <div class="mt-3">
-                    <button class="btn btn-wide" onclick="app.showModal('transferModal')">
-                        <i class="fas fa-paper-plane"></i>
-                        <span>Перевести другу</span>
-                    </button>
+                <div class="leaderboard mt-4">
+                    <div class="leaderboard-header">
+                        <div class="leaderboard-title">Лидеры среди друзей</div>
+                        <button class="action-btn">
+                            <i class="fas fa-trophy"></i>
+                        </button>
+                    </div>
+                    <div class="leaderboard-list" id="leaderboardList">
+                        <!-- Лидерборд загружается динамически -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Страница бустов -->
+            <div id="boostsPage" class="page">
+                <div class="boosts-categories">
+                    <button class="category-btn active" data-category="temporary">Временные</button>
+                    <button class="category-btn" data-category="permanent">Постоянные</button>
+                    <button class="category-btn" data-category="combo">Комбо</button>
+                </div>
+                
+                <div class="boosts-grid" id="boostsGrid">
+                    <!-- Бусты загружаются динамически -->
+                </div>
+            </div>
+
+            <!-- Страница переводов -->
+            <div id="transfersPage" class="page">
+                <div class="currencies-grid">
+                    <!-- Валюта 1: Печеньки -->
+                    <div class="currency-card">
+                        <div class="currency-header">
+                            <div class="currency-icon">
+                                <i class="fas fa-coins"></i>
+                            </div>
+                            <div>
+                                <div class="currency-name">Печеньки</div>
+                                <div class="currency-balance" id="coinBalanceLarge">12,450</div>
+                            </div>
+                        </div>
+                        
+                        <div class="transfer-form">
+                            <div class="form-group">
+                                <label class="form-label">Получатель</label>
+                                <input type="text" class="form-input" placeholder="Введите ID или ник друга" id="recipientInput">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Количество печенек</label>
+                                <input type="number" class="form-input" placeholder="Введите сумму" id="transferAmount">
+                            </div>
+                            <button class="transfer-btn" onclick="app.sendTransfer()">
+                                <i class="fas fa-paper-plane"></i>
+                                Отправить перевод
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </main>
 
-        <!-- Модальные окна -->
-        <div id="wheelModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Колесо удачи</h2>
-                    <button class="close-btn" onclick="app.closeModal()">&times;</button>
-                </div>
-                <div class="text-center mb-3">
-                    <div style="font-size: 4rem; margin-bottom: 20px;">🎡</div>
-                    <p style="color: var(--text-secondary); margin-bottom: 24px;">Крути колесо каждые 50 кликов</p>
-                    <button class="btn btn-wide" onclick="app.spinWheel()" id="spinWheelBtn">
-                        <i class="fas fa-redo"></i>
-                        <span>Крутить колесо (50 кликов)</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div id="transferModal" class="modal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Перевод другу</h2>
-                    <button class="close-btn" onclick="app.closeModal()">&times;</button>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">ID друга</label>
-                    <input type="number" class="form-input" id="friendId" placeholder="Введите ID друга">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Количество печенек</label>
-                    <input type="number" class="form-input" id="transferAmount" placeholder="Введите количество">
-                </div>
-                <button class="btn btn-wide" onclick="app.sendTransfer()">Отправить</button>
-            </div>
-        </div>
-
         <!-- Навигация -->
         <nav class="bottom-nav">
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-page="mainPage">
-                    <i class="fas fa-home"></i>
-                    <span>Главная</span>
-                </button>
-                <button class="nav-tab" data-page="upgradesPage">
-                    <i class="fas fa-arrow-up"></i>
-                    <span>Улучшения</span>
-                </button>
-                <button class="nav-tab" data-page="eventsPage">
-                    <i class="fas fa-calendar-star"></i>
-                    <span>События</span>
-                    <span class="tab-badge" id="eventsBadge" style="display: none;">!</span>
-                </button>
-                <button class="nav-tab" data-page="cardPage">
-                    <i class="fas fa-credit-card"></i>
-                    <span>Карта</span>
-                </button>
-            </div>
+            <button class="nav-tab active" data-page="homePage">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </button>
+            <button class="nav-tab" data-page="friendsPage">
+                <i class="fas fa-users"></i>
+                <span>Друзья</span>
+                <span class="nav-badge" id="friendsBadge" style="display: none;">3</span>
+            </button>
+            <button class="nav-tab" data-page="boostsPage">
+                <i class="fas fa-bolt"></i>
+                <span>Бусты</span>
+            </button>
+            <button class="nav-tab" data-page="transfersPage">
+                <i class="fas fa-exchange-alt"></i>
+                <span>Переводы</span>
+            </button>
         </nav>
     </div>
 
@@ -1090,48 +1392,62 @@
         class CookieBankApp {
             constructor() {
                 this.data = this.loadData();
-                this.currentPage = 'mainPage';
+                this.currentPage = 'homePage';
                 this.isClicking = false;
-                this.clickCooldown = 100; // 10 кликов в секунду максимум
-                this.bonusMultiplier = 1;
-                this.activeBonuses = [];
-                this.wheelAvailable = false;
+                this.autoClickerActive = false;
+                this.autoClickInterval = null;
+                this.activeBuffs = [];
+                this.friends = [];
+                this.leaderboard = [];
                 
                 this.init();
             }
             
-            init() {
-                this.setupEventListeners();
-                this.updateUI();
-                this.checkWheelAvailability();
-                this.setupTheme();
-            }
-            
             loadData() {
-                const saved = localStorage.getItem('cookiebank_data');
+                const saved = localStorage.getItem('cookiebank_v2');
                 if (saved) {
                     return JSON.parse(saved);
                 }
                 
                 // Начальные данные
                 return {
-                    balance: 100,
-                    clicks: 0,
-                    totalEarned: 100,
-                    upgrades: [],
-                    usedPromocodes: [],
-                    userPromocode: 'COOKIE' + Math.floor(Math.random() * 10000).toString().padStart(4, '0'),
-                    wheelSpins: 0,
-                    lastWheelSpin: 0,
-                    cardNumber: '0228 ' + 
-                        Math.floor(1000 + Math.random() * 9000) + ' ' + 
-                        Math.floor(1000 + Math.random() * 9000) + ' ' + 
-                        Math.floor(1000 + Math.random() * 9000)
+                    coins: 12450,
+                    gems: 245,
+                    bonusPoints: 78,
+                    level: 15,
+                    xp: 4500,
+                    xpToNextLevel: 6000,
+                    clicks: 1245,
+                    perClick: 12,
+                    multiplier: 1.8,
+                    upgrades: ['doubleClick'],
+                    activeBoosts: [],
+                    friends: [],
+                    transferHistory: [],
+                    usedPromocodes: []
                 };
             }
             
             saveData() {
-                localStorage.setItem('cookiebank_data', JSON.stringify(this.data));
+                localStorage.setItem('cookiebank_v2', JSON.stringify(this.data));
+            }
+            
+            init() {
+                this.setupEventListeners();
+                this.loadFriends();
+                this.loadLeaderboard();
+                this.loadActivityFeed();
+                this.loadBoosts();
+                this.updateUI();
+                this.checkActiveBuffs();
+                
+                // Запускаем проверку активных баффов
+                setInterval(() => this.checkActiveBuffs(), 1000);
+                
+                // Запускаем автокликер если активен
+                if (localStorage.getItem('autoClickerActive') === 'true') {
+                    this.toggleAutoClicker();
+                }
             }
             
             setupEventListeners() {
@@ -1142,6 +1458,16 @@
                     e.preventDefault();
                     this.handleClick(e);
                 }, { passive: false });
+                
+                // Двойной клик
+                document.getElementById('doubleClickBtn').addEventListener('click', () => {
+                    this.activateDoubleClick();
+                });
+                
+                // Автоклик
+                document.getElementById('autoClickBtn').addEventListener('click', () => {
+                    this.toggleAutoClicker();
+                });
                 
                 // Навигация
                 document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1156,16 +1482,21 @@
                     });
                 });
                 
-                // Промокод по Enter
-                document.getElementById('promocodeInput').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
-                        this.usePromocode();
-                    }
+                // Категории бустов
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const category = btn.dataset.category;
+                        this.filterBoosts(category);
+                        
+                        // Обновляем активную категорию
+                        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                    });
                 });
                 
-                // Переключение темы
-                document.getElementById('themeToggle').addEventListener('click', () => {
-                    this.toggleTheme();
+                // Поиск друзей
+                document.getElementById('friendsSearch').addEventListener('input', (e) => {
+                    this.searchFriends(e.target.value);
                 });
             }
             
@@ -1187,19 +1518,19 @@
                 // Расчет заработка
                 let earnings = this.calculateEarnings();
                 
-                // Шанс x3 (5% вместо 25%)
+                // Шанс x3 (5%)
                 if (Math.random() < 0.05) {
                     earnings *= 3;
-                    this.showNotification('🍪🍪🍪 УДАЧА! x3 ПЕЧЕНЬКИ! 🍪🍪🍪', 'success');
+                    this.addActivity('🎰 Удача! x3 печеньки!', 'success');
                 }
                 
                 // Обновляем данные
                 this.data.clicks++;
-                this.data.balance += earnings;
-                this.data.totalEarned += earnings;
+                this.data.coins += earnings;
+                this.data.xp += Math.floor(earnings / 10);
                 
-                // Проверяем доступность колеса
-                this.checkWheelAvailability();
+                // Проверяем уровень
+                this.checkLevelUp();
                 
                 // Сохраняем
                 this.saveData();
@@ -1210,7 +1541,7 @@
                 // Разрешаем следующий клик
                 setTimeout(() => {
                     this.isClicking = false;
-                }, this.clickCooldown);
+                }, 100);
             }
             
             createCookies(button) {
@@ -1218,22 +1549,20 @@
                 const x = rect.left + rect.width / 2;
                 const y = rect.top + rect.height / 2;
                 
-                // Создаем 3-5 печенек
-                const cookieCount = 3 + Math.floor(Math.random() * 3);
+                // Создаем 5-8 печенек
+                const cookieCount = 5 + Math.floor(Math.random() * 4);
                 
                 for (let i = 0; i < cookieCount; i++) {
                     const cookie = document.createElement('div');
                     cookie.className = 'cookie';
                     cookie.innerHTML = '🍪';
-                    cookie.style.left = `${x}px`;
+                    cookie.style.left = `${x + (Math.random() - 0.5) * 100}px`;
                     cookie.style.top = `${y}px`;
                     
-                    // Случайная горизонтальная позиция
-                    const offsetX = (Math.random() - 0.5) * 200;
-                    cookie.style.setProperty('--offset-x', `${offsetX}px`);
-                    
-                    // Случайная задержка
-                    cookie.style.animationDelay = `${Math.random() * 0.5}s`;
+                    // Случайная анимация
+                    const duration = 1 + Math.random();
+                    const delay = Math.random() * 0.5;
+                    cookie.style.animation = `cookieFall ${duration}s linear ${delay}s forwards`;
                     
                     document.body.appendChild(cookie);
                     
@@ -1242,389 +1571,505 @@
                         if (cookie.parentNode) {
                             cookie.parentNode.removeChild(cookie);
                         }
-                    }, 2000);
+                    }, (duration + delay) * 1000);
                 }
             }
             
             calculateEarnings() {
-                let base = 1;
+                let base = this.data.perClick;
+                let multiplier = this.data.multiplier;
                 
-                // Базовые улучшения
-                if (this.data.upgrades.includes('double')) base *= 2;
-                if (this.data.upgrades.includes('triple')) base *= 3;
-                
-                // Активные бонусы
-                this.activeBonuses.forEach(bonus => {
-                    if (bonus.type === 'multiplier') {
-                        base *= bonus.value;
+                // Активные баффы
+                this.activeBuffs.forEach(buff => {
+                    if (buff.type === 'multiplier') {
+                        multiplier *= buff.value;
+                    } else if (buff.type === 'clickPower') {
+                        base += buff.value;
                     }
                 });
                 
-                return Math.floor(base * this.bonusMultiplier);
+                return Math.floor(base * multiplier);
+            }
+            
+            checkLevelUp() {
+                if (this.data.xp >= this.data.xpToNextLevel) {
+                    this.data.level++;
+                    this.data.xp = 0;
+                    this.data.xpToNextLevel = Math.floor(this.data.xpToNextLevel * 1.5);
+                    
+                    // Награда за уровень
+                    const reward = this.data.level * 1000;
+                    this.data.coins += reward;
+                    this.data.gems += Math.floor(this.data.level / 5);
+                    
+                    this.addActivity(`🎉 Новый уровень ${this.data.level}! +${reward} печенек`, 'level');
+                    this.showNotification(`Достигнут уровень ${this.data.level}!`, 'success');
+                }
             }
             
             updateUI() {
-                // Баланс
-                document.getElementById('totalBalance').textContent = 
-                    this.data.balance.toLocaleString('ru-RU');
-                document.getElementById('cardBalance').textContent = 
-                    this.data.balance.toLocaleString('ru-RU') + ' печенек';
-                document.getElementById('cardNumber').textContent = this.data.cardNumber;
+                // Балансы
+                document.getElementById('coinBalance').textContent = 
+                    this.data.coins.toLocaleString('ru-RU');
+                document.getElementById('coinBalanceLarge').textContent = 
+                    this.data.coins.toLocaleString('ru-RU');
+                document.getElementById('gemBalance').textContent = 
+                    this.data.gems.toLocaleString('ru-RU');
+                document.getElementById('bonusBalance').textContent = 
+                    this.data.bonusPoints.toLocaleString('ru-RU');
                 
                 // Статистика
-                const earnings = this.calculateEarnings();
-                document.getElementById('perClick').textContent = earnings;
-                document.getElementById('clicksCount').textContent = 
+                document.getElementById('perClick').textContent = this.data.perClick;
+                document.getElementById('multiplier').textContent = `x${this.data.multiplier.toFixed(1)}`;
+                document.getElementById('clicksTotal').textContent = 
                     this.data.clicks.toLocaleString('ru-RU');
-                document.getElementById('totalEarned').textContent = 
-                    this.data.totalEarned.toLocaleString('ru-RU');
                 
-                // Обновляем бонусы
-                this.updateActiveBonuses();
-                
-                // Обновляем улучшения
-                this.updateUpgradesList();
-                
-                // Обновляем статус событий
-                this.updateEventStatuses();
+                // Прогресс уровня
+                const xpPercent = (this.data.xp / this.data.xpToNextLevel) * 100;
+                document.querySelector('.level-fill').style.width = `${xpPercent}%`;
+                document.querySelector('.progress-fill').style.width = `${xpPercent}%`;
+                document.querySelector('.progress-value').textContent = this.data.level;
             }
             
-            updateActiveBonuses() {
-                const container = document.getElementById('activeBonuses');
-                const clickerArea = document.getElementById('clickerArea');
-                
-                // Очищаем устаревшие бонусы
+            checkActiveBuffs() {
                 const now = Date.now();
-                this.activeBonuses = this.activeBonuses.filter(bonus => bonus.expires > now);
+                this.activeBuffs = this.activeBuffs.filter(buff => buff.expires > now);
                 
-                if (this.activeBonuses.length === 0) {
-                    container.innerHTML = '';
-                    clickerArea.classList.remove('has-bonus');
-                    this.bonusMultiplier = 1;
+                this.updateActiveBuffsUI();
+            }
+            
+            updateActiveBuffsUI() {
+                const container = document.getElementById('activeBuffs');
+                
+                if (this.activeBuffs.length === 0) {
+                    container.innerHTML = '<div class="buff-tag">Нет активных баффов</div>';
                     return;
                 }
                 
-                // Активируем розово-голубую тему
-                clickerArea.classList.add('has-bonus');
-                
-                // Обновляем множитель
-                this.bonusMultiplier = 1;
-                this.activeBonuses.forEach(bonus => {
-                    if (bonus.type === 'multiplier') {
-                        this.bonusMultiplier *= bonus.value;
-                    }
-                });
-                
-                // Показываем активные бонусы
-                container.innerHTML = this.activeBonuses.map(bonus => {
-                    let icon = '🍪';
-                    let text = '';
+                container.innerHTML = this.activeBuffs.map(buff => {
+                    const timeLeft = Math.ceil((buff.expires - Date.now()) / 1000);
+                    let icon = '⚡';
                     
-                    if (bonus.type === 'multiplier') {
-                        icon = '⚡';
-                        text = `x${bonus.value}`;
-                    } else if (bonus.type === 'speed') {
-                        icon = '🐇';
-                        text = 'Скорость';
+                    if (buff.type === 'multiplier') {
+                        icon = '🎯';
+                    } else if (buff.type === 'clickPower') {
+                        icon = '💪';
                     }
-                    
-                    const timeLeft = Math.ceil((bonus.expires - now) / 1000);
                     
                     return `
-                        <div class="bonus-tag">
+                        <div class="buff-tag">
                             <span>${icon}</span>
-                            <span>${text} (${timeLeft}с)</span>
+                            <span>${buff.name} (${timeLeft}с)</span>
                         </div>
                     `;
                 }).join('');
-                
-                document.getElementById('multiplier').textContent = `x${this.bonusMultiplier.toFixed(1)}`;
             }
             
-            updateUpgradesList() {
-                const container = document.getElementById('upgradesList');
-                
-                const upgrades = [
-                    {
-                        id: 'double',
-                        name: 'Двойные печеньки',
-                        description: 'Удваивает доход за клик',
-                        price: 1000,
-                        icon: 'fa-times-circle'
-                    },
-                    {
-                        id: 'triple',
-                        name: 'Тройные печеньки',
-                        description: 'Утраивает доход за клик',
-                        price: 5000,
-                        icon: 'fa-times-circle',
-                        requires: 'double'
-                    },
-                    {
-                        id: 'speed',
-                        name: 'Быстрые пальцы',
-                        description: 'Уменьшает задержку между кликами',
-                        price: 2000,
-                        icon: 'fa-bolt'
-                    },
-                    {
-                        id: 'wheel',
-                        name: 'Удачливое колесо',
-                        description: 'Нужно меньше кликов для колеса',
-                        price: 3000,
-                        icon: 'fa-dharmachakra'
-                    }
+            loadActivityFeed() {
+                const feed = [
+                    { user: 'Анна', action: 'выиграла 5,000 печенек в колесе удачи', time: '2 мин назад' },
+                    { user: 'Максим', action: 'достиг 20 уровня', time: '15 мин назад' },
+                    { user: 'Вы', action: 'активировали буст x2 на 15 минут', time: '1 час назад' },
+                    { user: 'София', action: 'отправила вам подарок', time: '3 часа назад' }
                 ];
                 
-                container.innerHTML = upgrades.map(upgrade => {
-                    const owned = this.data.upgrades.includes(upgrade.id);
-                    const canAfford = this.data.balance >= upgrade.price;
-                    const canBuy = !owned && canAfford && 
-                        (!upgrade.requires || this.data.upgrades.includes(upgrade.requires));
-                    
-                    return `
-                        <div class="event-card ${!canBuy ? 'disabled' : ''}" 
-                             onclick="${canBuy ? `app.buyUpgrade('${upgrade.id}', ${upgrade.price})` : ''}">
-                            <div class="event-icon">
-                                <i class="fas ${upgrade.icon}"></i>
+                const container = document.getElementById('activityFeed');
+                container.innerHTML = feed.map(item => `
+                    <div class="feed-item">
+                        <div class="feed-avatar">${item.user.charAt(0)}</div>
+                        <div class="feed-content">
+                            <div class="feed-text">
+                                <strong>${item.user}</strong> ${item.action}
                             </div>
-                            <div class="event-info">
-                                <div class="event-name">${upgrade.name}</div>
-                                <div class="event-desc">${upgrade.description}</div>
-                                <div style="color: var(--warning); font-weight: 600; margin-top: 8px;">
-                                    ${upgrade.price.toLocaleString('ru-RU')} печенек
-                                </div>
-                            </div>
-                            <div class="event-status">
-                                ${owned ? 'Куплено' : (canBuy ? 'Купить' : 'Недоступно')}
-                            </div>
+                            <div class="feed-time">${item.time}</div>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `).join('');
             }
             
-            updateEventStatuses() {
-                // Колесо
-                const clicksSinceWheel = this.data.clicks - this.data.lastWheelSpin;
-                const clicksNeeded = this.data.upgrades.includes('wheel') ? 25 : 50;
-                this.wheelAvailable = clicksSinceWheel >= clicksNeeded;
+            addActivity(text, type = 'info') {
+                const feed = document.getElementById('activityFeed');
+                const item = document.createElement('div');
+                item.className = 'feed-item';
+                item.innerHTML = `
+                    <div class="feed-avatar">В</div>
+                    <div class="feed-content">
+                        <div class="feed-text">${text}</div>
+                        <div class="feed-time">только что</div>
+                    </div>
+                `;
                 
-                document.getElementById('wheelStatus').textContent = 
-                    this.wheelAvailable ? 'Доступно' : `Нужно кликов: ${clicksNeeded - clicksSinceWheel}`;
+                feed.prepend(item);
                 
-                // Обновляем бейдж событий
-                const badge = document.getElementById('eventsBadge');
-                if (this.wheelAvailable) {
-                    badge.style.display = 'flex';
-                } else {
-                    badge.style.display = 'none';
+                // Ограничиваем количество записей
+                if (feed.children.length > 5) {
+                    feed.removeChild(feed.lastChild);
                 }
             }
             
-            checkWheelAvailability() {
-                const clicksSinceWheel = this.data.clicks - this.data.lastWheelSpin;
-                const clicksNeeded = this.data.upgrades.includes('wheel') ? 25 : 50;
-                this.wheelAvailable = clicksSinceWheel >= clicksNeeded;
-                this.updateEventStatuses();
+            loadFriends() {
+                // Тестовые данные друзей
+                this.friends = [
+                    { id: 1, name: 'Анна Петрова', level: 18, online: true, coins: 23450, clicks: 2567 },
+                    { id: 2, name: 'Максим Иванов', level: 22, online: true, coins: 45670, clicks: 4231 },
+                    { id: 3, name: 'София Сидорова', level: 15, online: false, coins: 12340, clicks: 1876 },
+                    { id: 4, name: 'Дмитрий Кузнецов', level: 19, online: true, coins: 28760, clicks: 3124 },
+                    { id: 5, name: 'Елена Смирнова', level: 21, online: false, coins: 39870, clicks: 3987 }
+                ];
+                
+                this.updateFriendsList();
             }
             
-            buyUpgrade(upgradeId, price) {
-                if (this.data.balance < price) {
+            updateFriendsList() {
+                const container = document.getElementById('friendsList');
+                container.innerHTML = this.friends.map(friend => `
+                    <div class="friend-card">
+                        <div class="friend-avatar">${friend.name.charAt(0)}</div>
+                        <div class="friend-info">
+                            <div class="friend-name">${friend.name}</div>
+                            <div class="friend-status">
+                                <div class="status-dot ${friend.online ? '' : 'offline'}"></div>
+                                <span>Уровень ${friend.level}</span>
+                            </div>
+                            <div class="friend-stats">
+                                <div class="friend-stat">
+                                    <i class="fas fa-coins"></i>
+                                    <span>${friend.coins.toLocaleString('ru-RU')}</span>
+                                </div>
+                                <div class="friend-stat">
+                                    <i class="fas fa-mouse-pointer"></i>
+                                    <span>${friend.clicks.toLocaleString('ru-RU')}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="friend-actions">
+                            <button class="friend-btn" onclick="app.sendGift(${friend.id})">
+                                <i class="fas fa-gift"></i>
+                            </button>
+                            <button class="friend-btn" onclick="app.visitFriend(${friend.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            searchFriends(query) {
+                if (!query) {
+                    this.updateFriendsList();
+                    return;
+                }
+                
+                const filtered = this.friends.filter(friend => 
+                    friend.name.toLowerCase().includes(query.toLowerCase())
+                );
+                
+                const container = document.getElementById('friendsList');
+                container.innerHTML = filtered.map(friend => `
+                    <div class="friend-card">
+                        <div class="friend-avatar">${friend.name.charAt(0)}</div>
+                        <div class="friend-info">
+                            <div class="friend-name">${friend.name}</div>
+                            <div class="friend-status">
+                                <div class="status-dot ${friend.online ? '' : 'offline'}"></div>
+                                <span>Уровень ${friend.level}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            loadLeaderboard() {
+                this.leaderboard = this.friends
+                    .sort((a, b) => b.coins - a.coins)
+                    .slice(0, 5);
+                
+                const container = document.getElementById('leaderboardList');
+                container.innerHTML = this.leaderboard.map((friend, index) => `
+                    <div class="leaderboard-item">
+                        <div class="leaderboard-rank">${index + 1}</div>
+                        <div class="feed-avatar">${friend.name.charAt(0)}</div>
+                        <div class="feed-content">
+                            <div class="feed-text">
+                                <strong>${friend.name}</strong>
+                            </div>
+                            <div class="feed-time">${friend.coins.toLocaleString('ru-RU')} печенек</div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            loadBoosts() {
+                this.boosts = {
+                    temporary: [
+                        { 
+                            id: 'boost2x', 
+                            name: 'Удвоитель печенек', 
+                            description: 'Удваивает количество печенек за клик на 15 минут',
+                            price: 1000,
+                            type: 'multiplier',
+                            value: 2,
+                            duration: 900,
+                            icon: 'fa-times-circle'
+                        },
+                        { 
+                            id: 'speedBoost', 
+                            name: 'Ускорение кликов', 
+                            description: 'Увеличивает скорость кликов на 30% на 10 минут',
+                            price: 750,
+                            type: 'speed',
+                            value: 1.3,
+                            duration: 600,
+                            icon: 'fa-bolt'
+                        },
+                        { 
+                            id: 'luckBoost', 
+                            name: 'Удача новичка', 
+                            description: 'Увеличивает шанс на x3 в 2 раза на 20 минут',
+                            price: 1500,
+                            type: 'luck',
+                            value: 2,
+                            duration: 1200,
+                            icon: 'fa-clover'
+                        }
+                    ],
+                    permanent: [
+                        { 
+                            id: 'permanent2x', 
+                            name: 'Постоянный удвоитель', 
+                            description: 'Навсегда увеличивает базовый доход на 100%',
+                            price: 5000,
+                            type: 'permanent',
+                            value: 2,
+                            icon: 'fa-infinity'
+                        }
+                    ],
+                    combo: [
+                        { 
+                            id: 'comboBoost', 
+                            name: 'Комбо-цепочка', 
+                            description: 'Каждый 10-й клик даёт в 5 раз больше печенек',
+                            price: 2000,
+                            type: 'combo',
+                            value: 5,
+                            duration: 300,
+                            icon: 'fa-fire'
+                        }
+                    ]
+                };
+                
+                this.updateBoostsGrid('temporary');
+            }
+            
+            updateBoostsGrid(category) {
+                const boosts = this.boosts[category] || [];
+                const container = document.getElementById('boostsGrid');
+                
+                container.innerHTML = boosts.map(boost => {
+                    const owned = this.data.upgrades.includes(boost.id);
+                    const active = this.activeBuffs.some(b => b.id === boost.id);
+                    const canAfford = this.data.coins >= boost.price;
+                    
+                    return `
+                        <div class="boost-card ${active ? 'active' : ''}">
+                            <div class="boost-header">
+                                <div class="boost-icon">
+                                    <i class="fas ${boost.icon}"></i>
+                                </div>
+                                <div>
+                                    <div class="boost-title">${boost.name}</div>
+                                    <div class="boost-price">${boost.price.toLocaleString('ru-RU')} печенек</div>
+                                </div>
+                            </div>
+                            <p class="boost-desc">${boost.description}</p>
+                            <div class="boost-footer">
+                                ${active ? `
+                                    <div class="boost-timer">
+                                        <i class="fas fa-clock"></i>
+                                        <span>Активен</span>
+                                    </div>
+                                ` : `
+                                    <button class="transfer-btn" style="padding: 12px 24px;" 
+                                            onclick="app.activateBoost('${boost.id}', '${category}')"
+                                            ${(!canAfford || owned) ? 'disabled' : ''}>
+                                        ${owned ? 'Куплено' : (canAfford ? 'Активировать' : 'Недостаточно')}
+                                    </button>
+                                `}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            filterBoosts(category) {
+                this.updateBoostsGrid(category);
+            }
+            
+            activateBoost(boostId, category) {
+                const boost = this.boosts[category].find(b => b.id === boostId);
+                
+                if (!boost) return;
+                
+                if (this.data.coins < boost.price) {
                     this.showNotification('Недостаточно печенек!', 'error');
                     return;
                 }
                 
-                this.data.balance -= price;
-                this.data.upgrades.push(upgradeId);
+                this.data.coins -= boost.price;
                 
-                // Применяем улучшения
-                if (upgradeId === 'speed') {
-                    this.clickCooldown = 50; // 20 кликов в секунду
-                }
-                
-                this.saveData();
-                this.updateUI();
-                this.showNotification('Улучшение куплено!', 'success');
-            }
-            
-            usePromocode() {
-                const input = document.getElementById('promocodeInput');
-                const code = input.value.trim().toUpperCase();
-                
-                if (!code) {
-                    this.showNotification('Введите промокод', 'error');
-                    return;
-                }
-                
-                if (this.data.usedPromocodes.includes(code)) {
-                    this.showNotification('Промокод уже использован', 'error');
-                    return;
-                }
-                
-                const rewards = {
-                    'COOKIE100': 100,
-                    'COOKIE500': 500,
-                    'COOKIE1000': 1000,
-                    'COOKIE5000': 5000,
-                    'BONUS2X': { type: 'multiplier', value: 2, duration: 30 },
-                    'BONUS3X': { type: 'multiplier', value: 3, duration: 20 }
-                };
-                
-                if (code in rewards) {
-                    this.data.usedPromocodes.push(code);
-                    const reward = rewards[code];
-                    
-                    if (typeof reward === 'number') {
-                        this.data.balance += reward;
-                        this.showNotification(`+${reward} печенек!`, 'success');
-                    } else {
-                        reward.expires = Date.now() + reward.duration * 1000;
-                        this.activeBonuses.push(reward);
-                        this.showNotification(`Бонус x${reward.value} на ${reward.duration} секунд!`, 'success');
-                    }
-                    
-                    input.value = '';
-                    this.saveData();
-                    this.updateUI();
+                if (boost.type === 'permanent') {
+                    this.data.upgrades.push(boost.id);
+                    this.data.perClick *= boost.value;
+                    this.showNotification(`${boost.name} активирован навсегда!`, 'success');
                 } else {
-                    this.showNotification('Неверный промокод', 'error');
-                }
-            }
-            
-            copyPromocode() {
-                const promocode = this.data.userPromocode;
-                navigator.clipboard.writeText(promocode)
-                    .then(() => {
-                        this.showNotification('Промокод скопирован!', 'success');
-                    })
-                    .catch(() => {
-                        const textArea = document.createElement('textarea');
-                        textArea.value = promocode;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        document.execCommand('copy');
-                        document.body.removeChild(textArea);
-                        this.showNotification('Промокод скопирован!', 'success');
-                    });
-            }
-            
-            spinWheel() {
-                if (!this.wheelAvailable) {
-                    this.showNotification('Нужно больше кликов!', 'error');
-                    return;
-                }
-                
-                this.data.lastWheelSpin = this.data.clicks;
-                this.data.wheelSpins++;
-                this.wheelAvailable = false;
-                
-                // Призы колеса
-                const prizes = [
-                    { type: 'balance', value: 1000, probability: 40 },
-                    { type: 'balance', value: 5000, probability: 20 },
-                    { type: 'balance', value: 10000, probability: 5 },
-                    { type: 'multiplier', value: 2, duration: 60, probability: 25 },
-                    { type: 'multiplier', value: 3, duration: 30, probability: 10 }
-                ];
-                
-                // Выбор приза
-                const totalProbability = prizes.reduce((sum, prize) => sum + prize.probability, 0);
-                let random = Math.random() * totalProbability;
-                let selectedPrize = null;
-                
-                for (const prize of prizes) {
-                    random -= prize.probability;
-                    if (random <= 0) {
-                        selectedPrize = prize;
-                        break;
-                    }
-                }
-                
-                // Выдача приза
-                if (selectedPrize.type === 'balance') {
-                    this.data.balance += selectedPrize.value;
-                    this.showNotification(`🎉 Вы выиграли ${selectedPrize.value} печенек!`, 'success');
-                } else {
-                    selectedPrize.expires = Date.now() + selectedPrize.duration * 1000;
-                    this.activeBonuses.push(selectedPrize);
-                    this.showNotification(`🎁 Бонус x${selectedPrize.value} на ${selectedPrize.duration} секунд!`, 'success');
-                }
-                
-                this.saveData();
-                this.updateUI();
-                this.closeModal();
-            }
-            
-            spawnBonusBarrel() {
-                // Случайный бонус из бочки
-                const bonuses = [
-                    { type: 'balance', value: 100 },
-                    { type: 'balance', value: 500 },
-                    { type: 'multiplier', value: 1.5, duration: 15 },
-                    { type: 'multiplier', value: 2, duration: 10 }
-                ];
-                
-                const bonus = bonuses[Math.floor(Math.random() * bonuses.length)];
-                
-                if (bonus.type === 'balance') {
-                    this.data.balance += bonus.value;
-                    this.showNotification(`🎁 Бочка: +${bonus.value} печенек!`, 'success');
-                } else {
-                    bonus.expires = Date.now() + bonus.duration * 1000;
-                    this.activeBonuses.push(bonus);
-                    this.showNotification(`🎁 Бочка: x${bonus.value} на ${bonus.duration} секунд!`, 'success');
-                }
-                
-                this.saveData();
-                this.updateUI();
-            }
-            
-            activateNightMode() {
-                const hour = new Date().getHours();
-                const isNight = hour >= 22 || hour < 8;
-                
-                if (isNight) {
-                    const nightBonus = {
-                        type: 'multiplier',
-                        value: 1.5,
-                        duration: 300,
-                        expires: Date.now() + 300000
+                    const buff = {
+                        id: boost.id,
+                        name: boost.name,
+                        type: boost.type,
+                        value: boost.value,
+                        expires: Date.now() + (boost.duration * 1000)
                     };
                     
-                    this.activeBonuses.push(nightBonus);
-                    document.getElementById('nightStatus').textContent = 'Активно (x1.5)';
-                    this.showNotification('🌙 Ночной режим активирован! x1.5 на 5 минут!', 'success');
-                    this.updateUI();
-                } else {
-                    this.showNotification('Ночной режим доступен с 22:00 до 8:00', 'error');
+                    this.activeBuffs.push(buff);
+                    this.showNotification(`${boost.name} активирован на ${boost.duration / 60} минут!`, 'success');
                 }
+                
+                this.saveData();
+                this.updateUI();
+                this.updateBoostsGrid(category);
+            }
+            
+            activateDoubleClick() {
+                if (this.data.coins < 500) {
+                    this.showNotification('Недостаточно печенек!', 'error');
+                    return;
+                }
+                
+                this.data.coins -= 500;
+                
+                // Активируем двойной клик на 50 кликов
+                const buff = {
+                    id: 'doubleClick',
+                    name: 'Двойной клик',
+                    type: 'clickPower',
+                    value: this.data.perClick,
+                    expires: Date.now() + 60000 // 1 минута
+                };
+                
+                this.activeBuffs.push(buff);
+                this.addActivity('⚡ Активирован двойной клик', 'boost');
+                this.showNotification('Двойной клик активирован!', 'success');
+                
+                this.saveData();
+                this.updateUI();
+            }
+            
+            toggleAutoClicker() {
+                const btn = document.getElementById('autoClickBtn');
+                
+                if (this.autoClickerActive) {
+                    clearInterval(this.autoClickInterval);
+                    this.autoClickerActive = false;
+                    btn.innerHTML = '<i class="fas fa-play"></i><span>Автоклик</span>';
+                    localStorage.setItem('autoClickerActive', 'false');
+                    this.showNotification('Автокликер отключен', 'info');
+                } else {
+                    if (this.data.coins < 1000) {
+                        this.showNotification('Нужно 1000 печенек для автокликера!', 'error');
+                        return;
+                    }
+                    
+                    this.data.coins -= 1000;
+                    this.autoClickerActive = true;
+                    btn.innerHTML = '<i class="fas fa-pause"></i><span>Остановить</span>';
+                    btn.classList.add('active');
+                    
+                    // Автоклик каждую секунду
+                    this.autoClickInterval = setInterval(() => {
+                        this.simulateClick();
+                    }, 1000);
+                    
+                    localStorage.setItem('autoClickerActive', 'true');
+                    this.addActivity('🤖 Автокликер активирован', 'boost');
+                    this.showNotification('Автокликер активирован!', 'success');
+                }
+                
+                this.saveData();
+                this.updateUI();
+            }
+            
+            simulateClick() {
+                // Симуляция клика
+                let earnings = Math.floor(this.calculateEarnings() * 0.5); // 50% от обычного клика
+                this.data.coins += earnings;
+                this.data.clicks++;
+                this.data.xp += Math.floor(earnings / 20);
+                
+                this.saveData();
+                this.updateUI();
             }
             
             sendTransfer() {
-                const friendId = document.getElementById('friendId').value;
+                const recipient = document.getElementById('recipientInput').value;
                 const amount = parseInt(document.getElementById('transferAmount').value);
                 
-                if (!friendId || !amount || amount <= 0) {
-                    this.showNotification('Заполните все поля', 'error');
+                if (!recipient || !amount || amount <= 0) {
+                    this.showNotification('Заполните все поля правильно', 'error');
                     return;
                 }
                 
-                if (amount > this.data.balance) {
+                if (amount > this.data.coins) {
                     this.showNotification('Недостаточно печенек', 'error');
                     return;
                 }
                 
-                // Симуляция перевода
-                this.data.balance -= amount;
-                this.saveData();
-                this.updateUI();
-                this.closeModal();
+                // Максимальный перевод за раз
+                if (amount > 10000) {
+                    this.showNotification('Максимальный перевод - 10,000 печенек', 'error');
+                    return;
+                }
                 
-                this.showNotification(`✅ Перевод ${amount} печенек отправлен!`, 'success');
+                this.data.coins -= amount;
+                this.addActivity(`📤 Перевод ${amount.toLocaleString('ru-RU')} печенек пользователю ${recipient}`, 'transfer');
+                this.showNotification(`Перевод ${amount} печенек отправлен!`, 'success');
                 
                 // Очищаем форму
-                document.getElementById('friendId').value = '';
+                document.getElementById('recipientInput').value = '';
                 document.getElementById('transferAmount').value = '';
+                
+                this.saveData();
+                this.updateUI();
+            }
+            
+            sendGift(friendId) {
+                const friend = this.friends.find(f => f.id === friendId);
+                if (!friend) return;
+                
+                if (this.data.coins < 500) {
+                    this.showNotification('Нужно минимум 500 печенек для подарка', 'error');
+                    return;
+                }
+                
+                this.data.coins -= 500;
+                this.addActivity(`🎁 Подарок отправлен ${friend.name}`, 'gift');
+                this.showNotification(`Подарок отправлен ${friend.name}!`, 'success');
+                
+                this.saveData();
+                this.updateUI();
+            }
+            
+            visitFriend(friendId) {
+                const friend = this.friends.find(f => f.id === friendId);
+                if (!friend) return;
+                
+                // Награда за посещение
+                const reward = 100;
+                this.data.coins += reward;
+                this.addActivity(`👀 Посещение профиля ${friend.name}`, 'visit');
+                this.showNotification(`+${reward} печенек за посещение!`, 'success');
+                
+                this.saveData();
+                this.updateUI();
             }
             
             showPage(pageId) {
@@ -1639,29 +2084,29 @@
                 }
             }
             
-            showModal(modalId) {
-                const modal = document.getElementById(modalId);
-                if (modal) {
-                    modal.classList.add('active');
-                }
-            }
-            
-            closeModal() {
-                document.querySelectorAll('.modal.active').forEach(modal => {
-                    modal.classList.remove('active');
-                });
-            }
-            
             showNotification(message, type) {
-                // Удаляем старые уведомления
-                document.querySelectorAll('.notification').forEach(notif => {
-                    notif.remove();
-                });
-                
+                // Создаем уведомление
                 const notification = document.createElement('div');
-                notification.className = `notification ${type}`;
-                notification.textContent = message;
+                notification.className = 'status-card';
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 100px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    padding: 16px 28px;
+                    border-radius: 20px;
+                    font-weight: 600;
+                    z-index: 1000;
+                    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+                    animation: slideDown 0.3s ease;
+                    max-width: 90%;
+                    text-align: center;
+                    border: 1px solid ${type === 'success' ? 'rgba(76, 201, 240, 0.3)' : 'rgba(239, 71, 111, 0.3)'};
+                    background: ${type === 'success' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(30, 41, 59, 0.95)'};
+                    backdrop-filter: blur(20px);
+                `;
                 
+                notification.textContent = message;
                 document.body.appendChild(notification);
                 
                 // Удаляем через 3 секунды
@@ -1671,40 +2116,23 @@
                     }
                 }, 3000);
             }
-            
-            setupTheme() {
-                // Проверяем сохранённую тему
-                const savedTheme = localStorage.getItem('cookiebank_theme');
-                if (savedTheme === 'light') {
-                    this.toggleTheme();
-                }
-                
-                // Обновляем иконку
-                this.updateThemeIcon();
-            }
-            
-            toggleTheme() {
-                document.body.classList.toggle('light-theme');
-                
-                // Сохраняем тему
-                const isLight = document.body.classList.contains('light-theme');
-                localStorage.setItem('cookiebank_theme', isLight ? 'light' : 'dark');
-                
-                this.updateThemeIcon();
-            }
-            
-            updateThemeIcon() {
-                const icon = document.querySelector('#themeToggle i');
-                const isLight = document.body.classList.contains('light-theme');
-                icon.className = isLight ? 'fas fa-sun' : 'fas fa-moon';
-            }
         }
         
         // Инициализация приложения
         const app = new CookieBankApp();
         
-        // Глобальные функции для HTML onclick
+        // Глобальные функции
         window.app = app;
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            // Обновляем бейдж друзей
+            const onlineFriends = app.friends.filter(f => f.online).length;
+            if (onlineFriends > 0) {
+                document.getElementById('friendsBadge').style.display = 'flex';
+                document.getElementById('friendsBadge').textContent = onlineFriends;
+            }
+        });
     </script>
 </body>
 </html>
