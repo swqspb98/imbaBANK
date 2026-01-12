@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
-    <title>🍪 ПеченькоБанк</title>
+    <title>💰 Telegram Bank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -19,14 +19,14 @@
 
         :root {
             /* Цветовая палитра - глубокий синий/градиент с акцентами */
-            --primary: #4361EE; /* Глубокий синий */
-            --primary-dark: #3A56D4;
-            --primary-light: #4895EF;
+            --primary: #0088CC; /* Telegram синий */
+            --primary-dark: #0077B5;
+            --primary-light: #34B7F1;
             --secondary: #FF9E00; /* Золотой акцент */
             --accent: #00B4D8; /* Бирюзовый акцент */
-            --success: #4CC9F0; /* Лаймовый акцент */
+            --success: #25D366; /* WhatsApp зеленый */
             --warning: #FFD166;
-            --danger: #EF476F;
+            --danger: #FF3333;
             
             /* Градиенты */
             --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-light));
@@ -35,9 +35,9 @@
             --gradient-warning: linear-gradient(135deg, var(--warning), #FF9E00);
             
             /* Фоны */
-            --bg-dark: #0A0E17;
-            --bg-dark-secondary: #131B2D;
-            --bg-dark-tertiary: #1A243F;
+            --bg-dark: #0F0F23;
+            --bg-dark-secondary: #1A1A2E;
+            --bg-dark-tertiary: #16213E;
             
             /* Текст */
             --text-primary: #FFFFFF;
@@ -45,7 +45,7 @@
             --text-tertiary: #64748B;
             
             /* Карточки и границы */
-            --card-bg: rgba(30, 41, 59, 0.6);
+            --card-bg: rgba(30, 41, 59, 0.7);
             --card-border: rgba(255, 255, 255, 0.1);
             --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             --shadow-elevated: 0 20px 60px rgba(0, 0, 0, 0.4);
@@ -62,8 +62,8 @@
             line-height: 1.5;
             overflow-x: hidden;
             background-image: 
-                radial-gradient(circle at 10% 20%, rgba(67, 97, 238, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 158, 0, 0.1) 0%, transparent 20%);
+                radial-gradient(circle at 10% 20%, rgba(0, 136, 204, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(37, 211, 102, 0.1) 0%, transparent 20%);
         }
 
         /* Контейнер приложения */
@@ -86,100 +86,55 @@
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-
-        .user-info {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .user-left {
+        .header-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .user-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 16px;
+        .bank-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
             background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: white;
-            box-shadow: 0 4px 20px rgba(67, 97, 238, 0.4);
+            box-shadow: 0 4px 20px rgba(0, 136, 204, 0.4);
         }
 
-        .user-details {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .user-name {
+        .bank-title {
             font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 2px;
+            font-weight: 800;
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
 
-        .user-level {
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+            gap: 12px;
         }
 
-        .level-progress {
-            width: 100px;
-            height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .level-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            background: var(--gradient-accent);
-            width: 60%; /* Изменяется динамически */
-        }
-
-        .user-resources {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .resource {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            padding: 6px 12px;
+        .balance-display {
             background: rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-
-        .resource i {
-            color: var(--secondary);
-            font-size: 1rem;
-        }
-
-        .resource.gems i {
+            padding: 8px 16px;
+            font-weight: 700;
+            font-size: 1.1rem;
             color: var(--success);
-        }
-
-        .resource.bonus i {
-            color: var(--accent);
+            border: 1px solid rgba(37, 211, 102, 0.2);
         }
 
         /* Основной контент */
@@ -192,73 +147,86 @@
             padding-bottom: 90px; /* Для навигации */
         }
 
-        /* Карточка статуса */
-        .status-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--card-border);
+        /* Баннер */
+        .banner-card {
+            background: var(--gradient-primary);
             border-radius: 24px;
             padding: 24px;
+            text-align: center;
             box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
         }
 
-        .status-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .status-title {
+        .banner-title {
             font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-            background: linear-gradient(135deg, var(--text-primary), var(--text-secondary));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: white;
         }
 
-        .luck-indicator {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(255, 158, 0, 0.1);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--secondary);
+        .banner-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
         }
 
-        .luck-indicator i {
-            animation: pulse 2s infinite;
+        .banner-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 3rem;
+            opacity: 0.3;
         }
 
-        /* Активные бафы */
-        .active-buffs {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
+        /* Быстрые действия */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
         }
 
-        .buff-tag {
-            padding: 8px 16px;
-            background: rgba(76, 201, 240, 0.1);
-            border-radius: 16px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: var(--success);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            border: 1px solid rgba(76, 201, 240, 0.2);
-        }
-
-        /* Кликер центр */
-        .clicker-center {
+        .quick-action {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .quick-action:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--primary-light);
+        }
+
+        .action-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            background: var(--gradient-success);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .action-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        /* Карточка баланса */
+        .balance-card {
+            background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 32px 24px;
@@ -268,296 +236,86 @@
             overflow: hidden;
         }
 
-        .clicker-center::before {
+        .balance-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--gradient-primary);
+            background: var(--gradient-success);
         }
 
-        .clicker-title {
+        .balance-title {
             font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
-        .clicker-subtitle {
+            font-weight: 600;
+            font-size: 1rem;
             color: var(--text-secondary);
-            font-size: 0.95rem;
-            margin-bottom: 32px;
+            margin-bottom: 8px;
         }
 
-        .clicker-button {
-            width: 160px;
-            height: 160px;
-            margin: 0 auto 24px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            border: none;
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 800;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            box-shadow: 
-                0 0 60px rgba(67, 97, 238, 0.4),
-                0 20px 40px rgba(0, 0, 0, 0.3),
-                inset 0 4px 20px rgba(255, 255, 255, 0.2);
-            transition: var(--transition);
-            position: relative;
-            font-family: 'Poppins', sans-serif;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .clicker-button:hover {
-            transform: scale(1.05);
-            box-shadow: 
-                0 0 80px rgba(67, 97, 238, 0.6),
-                0 25px 50px rgba(0, 0, 0, 0.4),
-                inset 0 4px 20px rgba(255, 255, 255, 0.3);
-        }
-
-        .clicker-button:active {
-            transform: scale(0.95);
-            box-shadow: 
-                0 0 40px rgba(67, 97, 238, 0.3),
-                0 10px 30px rgba(0, 0, 0, 0.2),
-                inset 0 4px 20px rgba(255, 255, 255, 0.1);
-        }
-
-        .clicker-button i {
-            font-size: 3.5rem;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        .clicker-stats {
-            display: flex;
-            justify-content: center;
-            gap: 24px;
-            margin-top: 24px;
-        }
-
-        .clicker-stat {
-            text-align: center;
-        }
-
-        .stat-value {
+        .balance-amount {
             font-family: 'Poppins', sans-serif;
             font-weight: 800;
-            font-size: 1.8rem;
+            font-size: 3rem;
             color: var(--success);
             margin-bottom: 4px;
-            text-shadow: 0 2px 8px rgba(76, 201, 240, 0.3);
+            text-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
         }
 
-        .stat-label {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
+        .balance-currency {
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
             font-weight: 500;
         }
 
-        /* Быстрые действия */
-        .quick-actions {
-            display: flex;
-            gap: 16px;
-            justify-content: center;
-            margin-top: 24px;
-        }
-
-        .action-btn {
-            padding: 12px 24px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            color: var(--text-primary);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: 'Inter', sans-serif;
-        }
-
-        .action-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .action-btn:active {
-            transform: translateY(0);
-        }
-
-        .action-btn.active {
-            background: rgba(76, 201, 240, 0.2);
-            border-color: rgba(76, 201, 240, 0.3);
-            color: var(--success);
-        }
-
-        /* Лента событий */
-        .activity-feed {
+        /* Транзакции */
+        .transactions-card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
             border: 1px solid var(--card-border);
             border-radius: 24px;
             padding: 24px;
             box-shadow: var(--shadow);
         }
 
-        .feed-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
 
-        .feed-title {
+        .card-title {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
             font-size: 1.2rem;
         }
 
-        .feed-list {
+        .transactions-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
         }
 
-        .feed-item {
+        .transaction {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
+            gap: 16px;
+            padding: 16px;
             background: rgba(255, 255, 255, 0.03);
             border-radius: 16px;
             transition: var(--transition);
         }
 
-        .feed-item:hover {
+        .transaction:hover {
             background: rgba(255, 255, 255, 0.06);
             transform: translateX(4px);
         }
 
-        .feed-avatar {
-            width: 40px;
-            height: 40px;
+        .transaction-icon {
+            width: 48px;
+            height: 48px;
             border-radius: 12px;
-            background: var(--gradient-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: white;
-            font-size: 0.9rem;
-        }
-
-        .feed-content {
-            flex: 1;
-        }
-
-        .feed-text {
-            font-size: 0.9rem;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .feed-time {
-            font-size: 0.75rem;
-            color: var(--text-tertiary);
-        }
-
-        /* Карточка прогресса */
-        .progress-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: var(--shadow);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .progress-info {
-            text-align: center;
-        }
-
-        .progress-value {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 2rem;
-            color: var(--secondary);
-            margin-bottom: 4px;
-        }
-
-        .progress-label {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-        }
-
-        .progress-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 16px;
-            position: relative;
-        }
-
-        .progress-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            background: var(--gradient-accent);
-            width: 75%;
-            border-radius: 4px;
-            transition: width 0.5s ease;
-        }
-
-        /* Карточка рекомендаций */
-        .recommendation-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(76, 201, 240, 0.3);
-            border-radius: 24px;
-            padding: 24px;
-            box-shadow: 
-                0 8px 32px rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(76, 201, 240, 0.1);
-        }
-
-        .recommendation-header {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .recommendation-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            background: var(--gradient-success);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -565,17 +323,46 @@
             color: white;
         }
 
-        .recommendation-title {
-            font-family: 'Poppins', sans-serif;
+        .transaction-icon.income {
+            background: var(--gradient-success);
+        }
+
+        .transaction-icon.outcome {
+            background: var(--gradient-warning);
+        }
+
+        .transaction-details {
+            flex: 1;
+        }
+
+        .transaction-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .transaction-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .transaction-amount {
             font-weight: 700;
             font-size: 1.1rem;
+        }
+
+        .transaction-amount.positive {
             color: var(--success);
         }
 
-        .recommendation-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-            line-height: 1.6;
+        .transaction-amount.negative {
+            color: var(--warning);
+        }
+
+        .transaction-time {
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
         }
 
         /* Навигация */
@@ -620,7 +407,7 @@
 
         .nav-tab.active {
             color: var(--primary-light);
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(0, 136, 204, 0.1);
         }
 
         .nav-tab i {
@@ -630,24 +417,6 @@
 
         .nav-tab.active i {
             transform: translateY(-2px);
-        }
-
-        .nav-badge {
-            position: absolute;
-            top: 4px;
-            right: 8px;
-            background: var(--danger);
-            color: white;
-            font-size: 0.7rem;
-            min-width: 18px;
-            height: 18px;
-            border-radius: 9px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0 4px;
-            font-weight: 700;
-            box-shadow: 0 2px 8px rgba(239, 71, 111, 0.4);
         }
 
         /* Страницы */
@@ -672,6 +441,14 @@
         }
 
         /* Страница друзей */
+        .friends-search-container {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
         .friends-search {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -680,14 +457,42 @@
             color: var(--text-primary);
             font-size: 1rem;
             width: 100%;
-            margin-bottom: 20px;
             font-family: 'Inter', sans-serif;
         }
 
         .friends-search:focus {
             outline: none;
             border-color: var(--primary-light);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.1);
+            box-shadow: 0 0 0 3px rgba(0, 136, 204, 0.1);
+        }
+
+        .search-type {
+            display: flex;
+            gap: 12px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .search-type-btn {
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-type-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .search-type-btn.active {
+            background: rgba(0, 136, 204, 0.2);
+            color: var(--primary-light);
+            border-color: rgba(0, 136, 204, 0.3);
         }
 
         .friends-list {
@@ -737,7 +542,7 @@
             margin-bottom: 4px;
         }
 
-        .friend-status {
+        .friend-details {
             display: flex;
             align-items: center;
             gap: 8px;
@@ -745,15 +550,11 @@
             color: var(--text-secondary);
         }
 
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--success);
-        }
-
-        .status-dot.offline {
-            background: var(--text-tertiary);
+        .friend-username {
+            background: rgba(0, 136, 204, 0.1);
+            padding: 2px 8px;
+            border-radius: 10px;
+            color: var(--primary-light);
         }
 
         .friend-stats {
@@ -772,250 +573,108 @@
 
         .friend-actions {
             display: flex;
+            flex-direction: column;
             gap: 8px;
         }
 
         .friend-btn {
-            width: 40px;
-            height: 40px;
+            padding: 8px 16px;
             border-radius: 12px;
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
             color: var(--text-primary);
             cursor: pointer;
             transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            white-space: nowrap;
         }
 
         .friend-btn:hover {
             background: rgba(255, 255, 255, 0.1);
-            transform: scale(1.1);
         }
 
-        .friend-btn.gift {
-            color: var(--secondary);
-            background: rgba(255, 158, 0, 0.1);
-            border-color: rgba(255, 158, 0, 0.2);
-        }
-
-        /* Таблица лидеров */
-        .leaderboard {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 24px;
-            margin-top: 20px;
-        }
-
-        .leaderboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .leaderboard-title {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.2rem;
-        }
-
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .leaderboard-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 16px;
-        }
-
-        .leaderboard-rank {
-            width: 32px;
-            height: 32px;
-            border-radius: 10px;
-            background: var(--gradient-accent);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            color: white;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-
-        /* Страница бустов */
-        .boosts-categories {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 24px;
-            flex-wrap: wrap;
-        }
-
-        .category-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .category-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .category-btn.active {
-            background: rgba(76, 201, 240, 0.2);
+        .friend-btn.added {
+            background: rgba(37, 211, 102, 0.1);
             color: var(--success);
-            border-color: rgba(76, 201, 240, 0.3);
+            border-color: rgba(37, 211, 102, 0.2);
         }
 
-        .boosts-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .boost-card {
+        /* Страница профиля */
+        .profile-card {
             background: var(--card-bg);
             border: 1px solid var(--card-border);
             border-radius: 24px;
-            padding: 24px;
-            transition: var(--transition);
+            padding: 32px 24px;
+            text-align: center;
+            box-shadow: var(--shadow);
             position: relative;
             overflow: hidden;
         }
 
-        .boost-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-elevated);
-        }
-
-        .boost-card.active {
-            border-color: rgba(76, 201, 240, 0.3);
-            box-shadow: 
-                0 0 40px rgba(76, 201, 240, 0.2),
-                var(--shadow);
-        }
-
-        .boost-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-
-        .boost-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
-            background: var(--gradient-warning);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .boost-title {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            margin-bottom: 4px;
-        }
-
-        .boost-desc {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-
-        .boost-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .boost-price {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 800;
-            font-size: 1.3rem;
-            color: var(--secondary);
-        }
-
-        .boost-timer {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 16px;
-            background: rgba(76, 201, 240, 0.1);
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--success);
-        }
-
-        /* Страница переводов */
-        .currencies-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        .currency-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 24px;
-            padding: 24px;
-        }
-
-        .currency-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-
-        .currency-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: 16px;
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 30px;
             background: var(--gradient-primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.5rem;
-            color: white;
-            flex-shrink: 0;
-        }
-
-        .currency-name {
-            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
             font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 4px;
+            color: white;
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 32px rgba(0, 136, 204, 0.4);
         }
 
-        .currency-balance {
-            font-size: 1.8rem;
+        .profile-name {
+            font-family: 'Poppins', sans-serif;
             font-weight: 800;
-            color: var(--success);
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+        }
+
+        .profile-username {
+            color: var(--text-secondary);
+            font-size: 1rem;
             margin-bottom: 24px;
         }
 
-        .transfer-form {
-            margin-top: 24px;
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 32px;
+        }
+
+        .profile-stat {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 2rem;
+            color: var(--success);
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Страница переводов */
+        .transfer-form-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 24px;
+            margin-bottom: 20px;
         }
 
         .form-group {
@@ -1060,40 +719,19 @@
             cursor: pointer;
             transition: var(--transition);
             font-family: 'Poppins', sans-serif;
-            box-shadow: 0 8px 32px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 136, 204, 0.3);
         }
 
         .transfer-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(67, 97, 238, 0.4);
+            box-shadow: 0 12px 40px rgba(0, 136, 204, 0.4);
         }
 
         .transfer-btn:active {
             transform: translateY(0);
         }
 
-        /* Печеньки */
-        .cookie {
-            position: absolute;
-            pointer-events: none;
-            z-index: 10;
-            font-size: 2rem;
-            opacity: 0;
-            animation: cookieFall 2s linear forwards;
-            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
-        }
-
-        @keyframes cookieFall {
-            0% {
-                transform: translateY(0) rotate(0deg) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg) scale(1);
-                opacity: 0;
-            }
-        }
-
+        /* Анимации */
         @keyframes float {
             0%, 100% {
                 transform: translateY(0);
@@ -1123,38 +761,18 @@
                 padding: 12px 16px;
             }
             
-            .clicker-button {
-                width: 140px;
-                height: 140px;
+            .quick-actions-grid {
+                grid-template-columns: 1fr;
             }
             
-            .clicker-button i {
-                font-size: 3rem;
-            }
-            
-            .quick-actions {
-                flex-wrap: wrap;
-            }
-            
-            .user-resources {
-                display: none; /* Скрываем на мобильных */
-            }
-        }
-
-        @media (max-height: 700px) {
-            .clicker-button {
-                width: 120px;
-                height: 120px;
-            }
-            
-            .clicker-button i {
+            .balance-amount {
                 font-size: 2.5rem;
             }
         }
 
         /* Утилиты */
         .text-gradient {
-            background: var(--gradient-accent);
+            background: var(--gradient-primary);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -1170,33 +788,12 @@
     <div class="app-container">
         <!-- Шапка -->
         <header class="header">
-            <div class="user-info">
-                <div class="user-left">
-                    <div class="user-avatar">П</div>
-                    <div class="user-details">
-                        <div class="user-name">Печеньковый Магнат</div>
-                        <div class="user-level">
-                            <span>Уровень 15</span>
-                            <div class="level-progress">
-                                <div class="level-fill"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="user-resources">
-                    <div class="resource">
-                        <i class="fas fa-coins"></i>
-                        <span id="coinBalance">12,450</span>
-                    </div>
-                    <div class="resource gems">
-                        <i class="fas fa-gem"></i>
-                        <span id="gemBalance">245</span>
-                    </div>
-                    <div class="resource bonus">
-                        <i class="fas fa-star"></i>
-                        <span id="bonusBalance">78</span>
-                    </div>
-                </div>
+            <div class="header-left">
+                <div class="bank-logo">₽</div>
+                <div class="bank-title">Telegram Bank</div>
+            </div>
+            <div class="header-right">
+                <div class="balance-display" id="headerBalance">0 ₽</div>
             </div>
         </header>
 
@@ -1204,162 +801,134 @@
         <main class="main-content">
             <!-- Главная страница -->
             <div id="homePage" class="page active">
-                <!-- Карточка статуса -->
-                <div class="status-card">
-                    <div class="status-header">
-                        <div class="status-title">Текущий статус</div>
-                        <div class="luck-indicator">
-                            <i class="fas fa-bolt"></i>
-                            <span>Удача x1.8</span>
+                <!-- Баннер -->
+                <div class="banner-card">
+                    <div class="banner-icon">💰</div>
+                    <h2 class="banner-title">Добро пожаловать в банк!</h2>
+                    <p class="banner-subtitle">Безопасные переводы между пользователями Telegram</p>
+                </div>
+
+                <!-- Быстрые действия -->
+                <div class="quick-actions-grid">
+                    <div class="quick-action" onclick="app.showPage('transfersPage')">
+                        <div class="action-icon">
+                            <i class="fas fa-paper-plane"></i>
                         </div>
+                        <div class="action-text">Перевод</div>
                     </div>
-                    <div class="active-buffs" id="activeBuffs">
-                        <!-- Активные бафы загружаются динамически -->
+                    <div class="quick-action" onclick="app.showPage('friendsPage')">
+                        <div class="action-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="action-text">Друзья</div>
+                    </div>
+                    <div class="quick-action" onclick="app.showPage('profilePage')">
+                        <div class="action-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="action-text">Профиль</div>
+                    </div>
+                    <div class="quick-action" onclick="app.showTransactions()">
+                        <div class="action-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="action-text">История</div>
                     </div>
                 </div>
 
-                <!-- Кликер центр -->
-                <div class="clicker-center">
-                    <h2 class="clicker-title">ПЕЧЕНЬКОВЫЙ КЛИКЕР</h2>
-                    <p class="clicker-subtitle">Кликай и собирай печеньки!</p>
-                    
-                    <button class="clicker-button" id="clickerBtn">
-                        <i class="fas fa-cookie-bite"></i>
-                        <span>КЛИК!</span>
-                    </button>
-                    
-                    <div class="clicker-stats">
-                        <div class="clicker-stat">
-                            <div class="stat-value" id="perClick">12</div>
-                            <div class="stat-label">за клик</div>
-                        </div>
-                        <div class="clicker-stat">
-                            <div class="stat-value" id="multiplier">x1.8</div>
-                            <div class="stat-label">множитель</div>
-                        </div>
-                        <div class="clicker-stat">
-                            <div class="stat-value" id="clicksTotal">1,245</div>
-                            <div class="stat-label">кликов</div>
-                        </div>
-                    </div>
-                    
-                    <div class="quick-actions">
-                        <button class="action-btn" id="doubleClickBtn">
-                            <i class="fas fa-redo"></i>
-                            <span>Двойной клик</span>
-                        </button>
-                        <button class="action-btn" id="autoClickBtn">
-                            <i class="fas fa-play"></i>
-                            <span>Автоклик</span>
-                        </button>
-                    </div>
+                <!-- Карточка баланса -->
+                <div class="balance-card">
+                    <div class="balance-title">Ваш баланс</div>
+                    <div class="balance-amount" id="mainBalance">0 ₽</div>
+                    <div class="balance-currency">Рублики</div>
                 </div>
 
-                <!-- Лента событий -->
-                <div class="activity-feed">
-                    <div class="feed-header">
-                        <div class="feed-title">Лента событий</div>
-                        <button class="action-btn">
-                            <i class="fas fa-sync-alt"></i>
+                <!-- Последние транзакции -->
+                <div class="transactions-card">
+                    <div class="card-header">
+                        <div class="card-title">Последние операции</div>
+                        <button class="friend-btn" onclick="app.showTransactions()">
+                            Все
                         </button>
                     </div>
-                    <div class="feed-list" id="activityFeed">
-                        <!-- События загружаются динамически -->
+                    <div class="transactions-list" id="transactionsList">
+                        <!-- Транзакции загружаются динамически -->
                     </div>
-                </div>
-
-                <!-- Карточка прогресса -->
-                <div class="progress-card">
-                    <div class="progress-header">
-                        <div class="status-title">Прогресс уровня</div>
-                        <div class="progress-info">
-                            <div class="progress-value">15</div>
-                            <div class="progress-label">текущий уровень</div>
-                        </div>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill"></div>
-                    </div>
-                </div>
-
-                <!-- Карточка рекомендаций -->
-                <div class="recommendation-card">
-                    <div class="recommendation-header">
-                        <div class="recommendation-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <div class="recommendation-title">Совет дня</div>
-                    </div>
-                    <p class="recommendation-text">
-                        Используйте автоклик на ночь для пассивного заработка. 
-                        Каждые 5 уровней открываются новые бусты!
-                    </p>
                 </div>
             </div>
 
             <!-- Страница друзей -->
             <div id="friendsPage" class="page">
-                <input type="text" class="friends-search" placeholder="Поиск друзей..." id="friendsSearch">
+                <div class="friends-search-container">
+                    <input type="text" class="friends-search" placeholder="Поиск по ID, username или имени..." id="friendsSearch">
+                    <div class="search-type">
+                        <button class="search-type-btn active" data-type="all">Все</button>
+                        <button class="search-type-btn" data-type="friends">Друзья</button>
+                        <button class="search-type-btn" data-type="online">Онлайн</button>
+                        <button class="search-type-btn" data-type="requests">Заявки</button>
+                    </div>
+                </div>
                 
                 <div class="friends-list" id="friendsList">
                     <!-- Друзья загружаются динамически -->
                 </div>
-                
-                <div class="leaderboard mt-4">
-                    <div class="leaderboard-header">
-                        <div class="leaderboard-title">Лидеры среди друзей</div>
-                        <button class="action-btn">
-                            <i class="fas fa-trophy"></i>
-                        </button>
-                    </div>
-                    <div class="leaderboard-list" id="leaderboardList">
-                        <!-- Лидерборд загружается динамически -->
-                    </div>
-                </div>
             </div>
 
-            <!-- Страница бустов -->
-            <div id="boostsPage" class="page">
-                <div class="boosts-categories">
-                    <button class="category-btn active" data-category="temporary">Временные</button>
-                    <button class="category-btn" data-category="permanent">Постоянные</button>
-                    <button class="category-btn" data-category="combo">Комбо</button>
-                </div>
-                
-                <div class="boosts-grid" id="boostsGrid">
-                    <!-- Бусты загружаются динамически -->
+            <!-- Страница профиля -->
+            <div id="profilePage" class="page">
+                <div class="profile-card">
+                    <div class="profile-avatar" id="profileAvatar">П</div>
+                    <h2 class="profile-name" id="profileName">Пользователь</h2>
+                    <div class="profile-username" id="profileUsername">@username</div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <div class="stat-value" id="profileBalance">0 ₽</div>
+                            <div class="stat-label">Баланс</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="stat-value" id="profileLevel">0</div>
+                            <div class="stat-label">Уровень</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="stat-value" id="profileFriends">0</div>
+                            <div class="stat-label">Друзей</div>
+                        </div>
+                        <div class="profile-stat">
+                            <div class="stat-value" id="profileTransfers">0</div>
+                            <div class="stat-label">Переводов</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Страница переводов -->
             <div id="transfersPage" class="page">
-                <div class="currencies-grid">
-                    <!-- Валюта 1: Печеньки -->
-                    <div class="currency-card">
-                        <div class="currency-header">
-                            <div class="currency-icon">
-                                <i class="fas fa-coins"></i>
-                            </div>
-                            <div>
-                                <div class="currency-name">Печеньки</div>
-                                <div class="currency-balance" id="coinBalanceLarge">12,450</div>
-                            </div>
-                        </div>
-                        
-                        <div class="transfer-form">
-                            <div class="form-group">
-                                <label class="form-label">Получатель</label>
-                                <input type="text" class="form-input" placeholder="Введите ID или ник друга" id="recipientInput">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label">Количество печенек</label>
-                                <input type="number" class="form-input" placeholder="Введите сумму" id="transferAmount">
-                            </div>
-                            <button class="transfer-btn" onclick="app.sendTransfer()">
-                                <i class="fas fa-paper-plane"></i>
-                                Отправить перевод
-                            </button>
-                        </div>
+                <div class="transfer-form-card">
+                    <div class="form-group">
+                        <label class="form-label">Получатель</label>
+                        <input type="text" class="form-input" placeholder="Введите ID, username или имя" id="recipientInput">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Сумма перевода</label>
+                        <input type="number" class="form-input" placeholder="Введите сумму в ₽" id="transferAmount">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Комментарий (необязательно)</label>
+                        <input type="text" class="form-input" placeholder="Например: за обед" id="transferComment">
+                    </div>
+                    <button class="transfer-btn" onclick="app.sendTransfer()">
+                        <i class="fas fa-paper-plane"></i>
+                        Отправить перевод
+                    </button>
+                </div>
+
+                <div class="transactions-card">
+                    <div class="card-header">
+                        <div class="card-title">Недавние переводы</div>
+                    </div>
+                    <div class="transactions-list" id="transfersHistory">
+                        <!-- История переводов загружается динамически -->
                     </div>
                 </div>
             </div>
@@ -1374,11 +943,10 @@
             <button class="nav-tab" data-page="friendsPage">
                 <i class="fas fa-users"></i>
                 <span>Друзья</span>
-                <span class="nav-badge" id="friendsBadge" style="display: none;">3</span>
             </button>
-            <button class="nav-tab" data-page="boostsPage">
-                <i class="fas fa-bolt"></i>
-                <span>Бусты</span>
+            <button class="nav-tab" data-page="profilePage">
+                <i class="fas fa-user"></i>
+                <span>Профиль</span>
             </button>
             <button class="nav-tab" data-page="transfersPage">
                 <i class="fas fa-exchange-alt"></i>
@@ -1389,86 +957,133 @@
 
     <script>
         // Основное приложение
-        class CookieBankApp {
+        class TelegramBankApp {
             constructor() {
                 this.data = this.loadData();
                 this.currentPage = 'homePage';
-                this.isClicking = false;
-                this.autoClickerActive = false;
-                this.autoClickInterval = null;
-                this.activeBuffs = [];
-                this.friends = [];
-                this.leaderboard = [];
+                this.searchType = 'all';
+                this.users = this.loadUsers();
                 
                 this.init();
             }
             
             loadData() {
-                const saved = localStorage.getItem('cookiebank_v2');
+                const saved = localStorage.getItem('telegrambank_v3');
                 if (saved) {
                     return JSON.parse(saved);
                 }
                 
-                // Начальные данные
+                // Начальные данные - всем пользователям 3000 ₽ и уровень 0
                 return {
-                    coins: 12450,
-                    gems: 245,
-                    bonusPoints: 78,
-                    level: 15,
-                    xp: 4500,
-                    xpToNextLevel: 6000,
-                    clicks: 1245,
-                    perClick: 12,
-                    multiplier: 1.8,
-                    upgrades: ['doubleClick'],
-                    activeBoosts: [],
+                    balance: 3000,
+                    level: 0,
+                    xp: 0,
                     friends: [],
-                    transferHistory: [],
-                    usedPromocodes: []
+                    friendRequests: [],
+                    transactions: [],
+                    transfers: [],
+                    profile: {
+                        name: "Пользователь",
+                        username: "@username",
+                        id: this.generateId()
+                    }
                 };
             }
             
+            generateId() {
+                return Math.floor(100000 + Math.random() * 900000);
+            }
+            
+            loadUsers() {
+                // Загрузка пользователей из localStorage или создание тестовых
+                const saved = localStorage.getItem('telegrambank_users');
+                if (saved) {
+                    return JSON.parse(saved);
+                }
+                
+                // Только авторизованные пользователи (имитация)
+                const users = [
+                    {
+                        id: 123456,
+                        name: "Алексей Иванов",
+                        username: "@alexey",
+                        balance: 3000,
+                        level: 0,
+                        online: true,
+                        friends: [],
+                        isFriend: false
+                    },
+                    {
+                        id: 234567,
+                        name: "Мария Петрова",
+                        username: "@maria",
+                        balance: 3000,
+                        level: 1,
+                        online: true,
+                        friends: [],
+                        isFriend: true
+                    },
+                    {
+                        id: 345678,
+                        name: "Дмитрий Смирнов",
+                        username: "@dmitry",
+                        balance: 3000,
+                        level: 0,
+                        online: false,
+                        friends: [],
+                        isFriend: false
+                    },
+                    {
+                        id: 456789,
+                        name: "Елена Кузнецова",
+                        username: "@elena",
+                        balance: 3000,
+                        level: 2,
+                        online: true,
+                        friends: [],
+                        isFriend: true
+                    },
+                    {
+                        id: 567890,
+                        name: "Иван Васильев",
+                        username: "@ivan",
+                        balance: 3000,
+                        level: 0,
+                        online: false,
+                        friends: [],
+                        isFriend: false
+                    },
+                    {
+                        id: 678901,
+                        name: "Ольга Николаева",
+                        username: "@olga",
+                        balance: 3000,
+                        level: 1,
+                        online: true,
+                        friends: [],
+                        isFriend: false
+                    }
+                ];
+                
+                // Сохраняем для последующего использования
+                localStorage.setItem('telegrambank_users', JSON.stringify(users));
+                return users;
+            }
+            
             saveData() {
-                localStorage.setItem('cookiebank_v2', JSON.stringify(this.data));
+                localStorage.setItem('telegrambank_v3', JSON.stringify(this.data));
+                localStorage.setItem('telegrambank_users', JSON.stringify(this.users));
             }
             
             init() {
                 this.setupEventListeners();
-                this.loadFriends();
-                this.loadLeaderboard();
-                this.loadActivityFeed();
-                this.loadBoosts();
                 this.updateUI();
-                this.checkActiveBuffs();
-                
-                // Запускаем проверку активных баффов
-                setInterval(() => this.checkActiveBuffs(), 1000);
-                
-                // Запускаем автокликер если активен
-                if (localStorage.getItem('autoClickerActive') === 'true') {
-                    this.toggleAutoClicker();
-                }
+                this.loadTransactions();
+                this.loadTransfersHistory();
+                this.updateFriendsList();
             }
             
             setupEventListeners() {
-                // Кликер
-                const clickerBtn = document.getElementById('clickerBtn');
-                clickerBtn.addEventListener('click', (e) => this.handleClick(e));
-                clickerBtn.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    this.handleClick(e);
-                }, { passive: false });
-                
-                // Двойной клик
-                document.getElementById('doubleClickBtn').addEventListener('click', () => {
-                    this.activateDoubleClick();
-                });
-                
-                // Автоклик
-                document.getElementById('autoClickBtn').addEventListener('click', () => {
-                    this.toggleAutoClicker();
-                });
-                
                 // Навигация
                 document.querySelectorAll('.nav-tab').forEach(tab => {
                     tab.addEventListener('click', (e) => {
@@ -1482,272 +1097,210 @@
                     });
                 });
                 
-                // Категории бустов
-                document.querySelectorAll('.category-btn').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const category = btn.dataset.category;
-                        this.filterBoosts(category);
-                        
-                        // Обновляем активную категорию
-                        document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                        btn.classList.add('active');
-                    });
-                });
-                
                 // Поиск друзей
                 document.getElementById('friendsSearch').addEventListener('input', (e) => {
                     this.searchFriends(e.target.value);
                 });
-            }
-            
-            handleClick(e) {
-                if (this.isClicking) return;
                 
-                this.isClicking = true;
-                
-                // Анимация кнопки
-                const btn = e.currentTarget;
-                btn.style.transform = 'scale(0.95)';
-                setTimeout(() => {
-                    btn.style.transform = 'scale(1)';
-                }, 150);
-                
-                // Создаем печеньки
-                this.createCookies(btn);
-                
-                // Расчет заработка
-                let earnings = this.calculateEarnings();
-                
-                // Шанс x3 (5%)
-                if (Math.random() < 0.05) {
-                    earnings *= 3;
-                    this.addActivity('🎰 Удача! x3 печеньки!', 'success');
-                }
-                
-                // Обновляем данные
-                this.data.clicks++;
-                this.data.coins += earnings;
-                this.data.xp += Math.floor(earnings / 10);
-                
-                // Проверяем уровень
-                this.checkLevelUp();
-                
-                // Сохраняем
-                this.saveData();
-                
-                // Обновляем UI
-                this.updateUI();
-                
-                // Разрешаем следующий клик
-                setTimeout(() => {
-                    this.isClicking = false;
-                }, 100);
-            }
-            
-            createCookies(button) {
-                const rect = button.getBoundingClientRect();
-                const x = rect.left + rect.width / 2;
-                const y = rect.top + rect.height / 2;
-                
-                // Создаем 5-8 печенек
-                const cookieCount = 5 + Math.floor(Math.random() * 4);
-                
-                for (let i = 0; i < cookieCount; i++) {
-                    const cookie = document.createElement('div');
-                    cookie.className = 'cookie';
-                    cookie.innerHTML = '🍪';
-                    cookie.style.left = `${x + (Math.random() - 0.5) * 100}px`;
-                    cookie.style.top = `${y}px`;
-                    
-                    // Случайная анимация
-                    const duration = 1 + Math.random();
-                    const delay = Math.random() * 0.5;
-                    cookie.style.animation = `cookieFall ${duration}s linear ${delay}s forwards`;
-                    
-                    document.body.appendChild(cookie);
-                    
-                    // Удаляем после анимации
-                    setTimeout(() => {
-                        if (cookie.parentNode) {
-                            cookie.parentNode.removeChild(cookie);
-                        }
-                    }, (duration + delay) * 1000);
-                }
-            }
-            
-            calculateEarnings() {
-                let base = this.data.perClick;
-                let multiplier = this.data.multiplier;
-                
-                // Активные баффы
-                this.activeBuffs.forEach(buff => {
-                    if (buff.type === 'multiplier') {
-                        multiplier *= buff.value;
-                    } else if (buff.type === 'clickPower') {
-                        base += buff.value;
-                    }
+                // Типы поиска
+                document.querySelectorAll('.search-type-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.searchType = btn.dataset.type;
+                        
+                        // Обновляем активную кнопку
+                        document.querySelectorAll('.search-type-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        
+                        this.searchFriends(document.getElementById('friendsSearch').value);
+                    });
                 });
-                
-                return Math.floor(base * multiplier);
-            }
-            
-            checkLevelUp() {
-                if (this.data.xp >= this.data.xpToNextLevel) {
-                    this.data.level++;
-                    this.data.xp = 0;
-                    this.data.xpToNextLevel = Math.floor(this.data.xpToNextLevel * 1.5);
-                    
-                    // Награда за уровень
-                    const reward = this.data.level * 1000;
-                    this.data.coins += reward;
-                    this.data.gems += Math.floor(this.data.level / 5);
-                    
-                    this.addActivity(`🎉 Новый уровень ${this.data.level}! +${reward} печенек`, 'level');
-                    this.showNotification(`Достигнут уровень ${this.data.level}!`, 'success');
-                }
             }
             
             updateUI() {
                 // Балансы
-                document.getElementById('coinBalance').textContent = 
-                    this.data.coins.toLocaleString('ru-RU');
-                document.getElementById('coinBalanceLarge').textContent = 
-                    this.data.coins.toLocaleString('ru-RU');
-                document.getElementById('gemBalance').textContent = 
-                    this.data.gems.toLocaleString('ru-RU');
-                document.getElementById('bonusBalance').textContent = 
-                    this.data.bonusPoints.toLocaleString('ru-RU');
+                document.getElementById('headerBalance').textContent = 
+                    `${this.data.balance.toLocaleString('ru-RU')} ₽`;
+                document.getElementById('mainBalance').textContent = 
+                    `${this.data.balance.toLocaleString('ru-RU')} ₽`;
                 
-                // Статистика
-                document.getElementById('perClick').textContent = this.data.perClick;
-                document.getElementById('multiplier').textContent = `x${this.data.multiplier.toFixed(1)}`;
-                document.getElementById('clicksTotal').textContent = 
-                    this.data.clicks.toLocaleString('ru-RU');
-                
-                // Прогресс уровня
-                const xpPercent = (this.data.xp / this.data.xpToNextLevel) * 100;
-                document.querySelector('.level-fill').style.width = `${xpPercent}%`;
-                document.querySelector('.progress-fill').style.width = `${xpPercent}%`;
-                document.querySelector('.progress-value').textContent = this.data.level;
+                // Профиль
+                document.getElementById('profileAvatar').textContent = 
+                    this.data.profile.name.charAt(0);
+                document.getElementById('profileName').textContent = 
+                    this.data.profile.name;
+                document.getElementById('profileUsername').textContent = 
+                    this.data.profile.username;
+                document.getElementById('profileBalance').textContent = 
+                    `${this.data.balance.toLocaleString('ru-RU')} ₽`;
+                document.getElementById('profileLevel').textContent = 
+                    this.data.level;
+                document.getElementById('profileFriends').textContent = 
+                    this.data.friends.length;
+                document.getElementById('profileTransfers').textContent = 
+                    this.data.transfers.length;
             }
             
-            checkActiveBuffs() {
-                const now = Date.now();
-                this.activeBuffs = this.activeBuffs.filter(buff => buff.expires > now);
-                
-                this.updateActiveBuffsUI();
-            }
-            
-            updateActiveBuffsUI() {
-                const container = document.getElementById('activeBuffs');
-                
-                if (this.activeBuffs.length === 0) {
-                    container.innerHTML = '<div class="buff-tag">Нет активных баффов</div>';
-                    return;
-                }
-                
-                container.innerHTML = this.activeBuffs.map(buff => {
-                    const timeLeft = Math.ceil((buff.expires - Date.now()) / 1000);
-                    let icon = '⚡';
-                    
-                    if (buff.type === 'multiplier') {
-                        icon = '🎯';
-                    } else if (buff.type === 'clickPower') {
-                        icon = '💪';
+            loadTransactions() {
+                // Тестовые транзакции
+                const transactions = [
+                    { 
+                        id: 1,
+                        type: 'income',
+                        title: 'Перевод от Марии',
+                        amount: 500,
+                        time: '2 минуты назад'
+                    },
+                    { 
+                        id: 2,
+                        type: 'outcome',
+                        title: 'Перевод Алексею',
+                        amount: 300,
+                        time: '1 час назад'
+                    },
+                    { 
+                        id: 3,
+                        type: 'income',
+                        title: 'Возврат долга',
+                        amount: 1000,
+                        time: '3 часа назад'
                     }
-                    
-                    return `
-                        <div class="buff-tag">
-                            <span>${icon}</span>
-                            <span>${buff.name} (${timeLeft}с)</span>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
-            loadActivityFeed() {
-                const feed = [
-                    { user: 'Анна', action: 'выиграла 5,000 печенек в колесе удачи', time: '2 мин назад' },
-                    { user: 'Максим', action: 'достиг 20 уровня', time: '15 мин назад' },
-                    { user: 'Вы', action: 'активировали буст x2 на 15 минут', time: '1 час назад' },
-                    { user: 'София', action: 'отправила вам подарок', time: '3 часа назад' }
                 ];
                 
-                const container = document.getElementById('activityFeed');
-                container.innerHTML = feed.map(item => `
-                    <div class="feed-item">
-                        <div class="feed-avatar">${item.user.charAt(0)}</div>
-                        <div class="feed-content">
-                            <div class="feed-text">
-                                <strong>${item.user}</strong> ${item.action}
+                this.data.transactions = transactions;
+                this.updateTransactionsList();
+            }
+            
+            updateTransactionsList() {
+                const container = document.getElementById('transactionsList');
+                const transactions = this.data.transactions.slice(0, 3); // Показываем 3 последние
+                
+                container.innerHTML = transactions.map(transaction => `
+                    <div class="transaction">
+                        <div class="transaction-icon ${transaction.type}">
+                            <i class="fas fa-${transaction.type === 'income' ? 'arrow-down' : 'arrow-up'}"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">${transaction.title}</div>
+                            <div class="transaction-info">
+                                <div class="transaction-amount ${transaction.type === 'income' ? 'positive' : 'negative'}">
+                                    ${transaction.type === 'income' ? '+' : '-'}${transaction.amount.toLocaleString('ru-RU')} ₽
+                                </div>
+                                <div class="transaction-time">${transaction.time}</div>
                             </div>
-                            <div class="feed-time">${item.time}</div>
                         </div>
                     </div>
                 `).join('');
             }
             
-            addActivity(text, type = 'info') {
-                const feed = document.getElementById('activityFeed');
-                const item = document.createElement('div');
-                item.className = 'feed-item';
-                item.innerHTML = `
-                    <div class="feed-avatar">В</div>
-                    <div class="feed-content">
-                        <div class="feed-text">${text}</div>
-                        <div class="feed-time">только что</div>
-                    </div>
-                `;
-                
-                feed.prepend(item);
-                
-                // Ограничиваем количество записей
-                if (feed.children.length > 5) {
-                    feed.removeChild(feed.lastChild);
-                }
-            }
-            
-            loadFriends() {
-                // Тестовые данные друзей
-                this.friends = [
-                    { id: 1, name: 'Анна Петрова', level: 18, online: true, coins: 23450, clicks: 2567 },
-                    { id: 2, name: 'Максим Иванов', level: 22, online: true, coins: 45670, clicks: 4231 },
-                    { id: 3, name: 'София Сидорова', level: 15, online: false, coins: 12340, clicks: 1876 },
-                    { id: 4, name: 'Дмитрий Кузнецов', level: 19, online: true, coins: 28760, clicks: 3124 },
-                    { id: 5, name: 'Елена Смирнова', level: 21, online: false, coins: 39870, clicks: 3987 }
+            loadTransfersHistory() {
+                // Тестовая история переводов
+                const transfers = [
+                    { 
+                        id: 1,
+                        recipient: 'Мария Петрова',
+                        amount: 300,
+                        comment: 'За обед',
+                        time: '1 час назад'
+                    },
+                    { 
+                        id: 2,
+                        recipient: 'Дмитрий Смирнов',
+                        amount: 500,
+                        comment: '',
+                        time: '3 дня назад'
+                    },
+                    { 
+                        id: 3,
+                        recipient: 'Елена Кузнецова',
+                        amount: 1000,
+                        comment: 'Возврат долга',
+                        time: '1 неделю назад'
+                    }
                 ];
                 
-                this.updateFriendsList();
+                this.data.transfers = transfers;
+                this.updateTransfersHistory();
+            }
+            
+            updateTransfersHistory() {
+                const container = document.getElementById('transfersHistory');
+                const transfers = this.data.transfers.slice(0, 3); // Показываем 3 последние
+                
+                container.innerHTML = transfers.map(transfer => `
+                    <div class="transaction">
+                        <div class="transaction-icon outcome">
+                            <i class="fas fa-paper-plane"></i>
+                        </div>
+                        <div class="transaction-details">
+                            <div class="transaction-title">Перевод ${transfer.recipient}</div>
+                            <div class="transaction-info">
+                                <div class="transaction-amount negative">
+                                    -${transfer.amount.toLocaleString('ru-RU')} ₽
+                                </div>
+                                <div class="transaction-time">${transfer.time}</div>
+                            </div>
+                            ${transfer.comment ? `<div style="font-size: 0.85rem; color: var(--text-tertiary); margin-top: 4px;">${transfer.comment}</div>` : ''}
+                        </div>
+                    </div>
+                `).join('');
             }
             
             updateFriendsList() {
                 const container = document.getElementById('friendsList');
-                container.innerHTML = this.friends.map(friend => `
+                const searchQuery = document.getElementById('friendsSearch').value.toLowerCase();
+                
+                // Фильтруем пользователей по поисковому запросу и типу
+                let filteredUsers = this.users.filter(user => {
+                    // Проверяем поисковый запрос
+                    const matchesSearch = !searchQuery || 
+                        user.name.toLowerCase().includes(searchQuery) ||
+                        user.username.toLowerCase().includes(searchQuery) ||
+                        user.id.toString().includes(searchQuery);
+                    
+                    // Проверяем тип
+                    if (this.searchType === 'friends') {
+                        return matchesSearch && user.isFriend;
+                    } else if (this.searchType === 'online') {
+                        return matchesSearch && user.online;
+                    } else if (this.searchType === 'requests') {
+                        return matchesSearch && this.data.friendRequests.includes(user.id);
+                    }
+                    
+                    return matchesSearch;
+                });
+                
+                container.innerHTML = filteredUsers.map(user => `
                     <div class="friend-card">
-                        <div class="friend-avatar">${friend.name.charAt(0)}</div>
+                        <div class="friend-avatar">${user.name.charAt(0)}</div>
                         <div class="friend-info">
-                            <div class="friend-name">${friend.name}</div>
-                            <div class="friend-status">
-                                <div class="status-dot ${friend.online ? '' : 'offline'}"></div>
-                                <span>Уровень ${friend.level}</span>
+                            <div class="friend-name">${user.name}</div>
+                            <div class="friend-details">
+                                <span class="friend-username">${user.username}</span>
+                                <span>ID: ${user.id}</span>
+                                <span>${user.online ? '🟢 Онлайн' : '⚫️ Не в сети'}</span>
                             </div>
                             <div class="friend-stats">
                                 <div class="friend-stat">
                                     <i class="fas fa-coins"></i>
-                                    <span>${friend.coins.toLocaleString('ru-RU')}</span>
+                                    <span>${user.balance.toLocaleString('ru-RU')} ₽</span>
                                 </div>
                                 <div class="friend-stat">
-                                    <i class="fas fa-mouse-pointer"></i>
-                                    <span>${friend.clicks.toLocaleString('ru-RU')}</span>
+                                    <i class="fas fa-star"></i>
+                                    <span>Ур. ${user.level}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="friend-actions">
-                            <button class="friend-btn" onclick="app.sendGift(${friend.id})">
-                                <i class="fas fa-gift"></i>
-                            </button>
-                            <button class="friend-btn" onclick="app.visitFriend(${friend.id})">
-                                <i class="fas fa-eye"></i>
+                            ${user.isFriend ? 
+                                `<button class="friend-btn added" onclick="app.removeFriend(${user.id})">
+                                    <i class="fas fa-check"></i> Друг
+                                </button>` :
+                                `<button class="friend-btn" onclick="app.addFriend(${user.id})">
+                                    <i class="fas fa-user-plus"></i> Добавить
+                                </button>`
+                            }
+                            <button class="friend-btn" onclick="app.sendToFriend(${user.id})">
+                                <i class="fas fa-paper-plane"></i> Перевести
                             </button>
                         </div>
                     </div>
@@ -1755,321 +1308,135 @@
             }
             
             searchFriends(query) {
-                if (!query) {
-                    this.updateFriendsList();
-                    return;
-                }
-                
-                const filtered = this.friends.filter(friend => 
-                    friend.name.toLowerCase().includes(query.toLowerCase())
-                );
-                
-                const container = document.getElementById('friendsList');
-                container.innerHTML = filtered.map(friend => `
-                    <div class="friend-card">
-                        <div class="friend-avatar">${friend.name.charAt(0)}</div>
-                        <div class="friend-info">
-                            <div class="friend-name">${friend.name}</div>
-                            <div class="friend-status">
-                                <div class="status-dot ${friend.online ? '' : 'offline'}"></div>
-                                <span>Уровень ${friend.level}</span>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+                this.updateFriendsList();
             }
             
-            loadLeaderboard() {
-                this.leaderboard = this.friends
-                    .sort((a, b) => b.coins - a.coins)
-                    .slice(0, 5);
+            addFriend(userId) {
+                const user = this.users.find(u => u.id === userId);
+                if (!user) return;
                 
-                const container = document.getElementById('leaderboardList');
-                container.innerHTML = this.leaderboard.map((friend, index) => `
-                    <div class="leaderboard-item">
-                        <div class="leaderboard-rank">${index + 1}</div>
-                        <div class="feed-avatar">${friend.name.charAt(0)}</div>
-                        <div class="feed-content">
-                            <div class="feed-text">
-                                <strong>${friend.name}</strong>
-                            </div>
-                            <div class="feed-time">${friend.coins.toLocaleString('ru-RU')} печенек</div>
-                        </div>
-                    </div>
-                `).join('');
-            }
-            
-            loadBoosts() {
-                this.boosts = {
-                    temporary: [
-                        { 
-                            id: 'boost2x', 
-                            name: 'Удвоитель печенек', 
-                            description: 'Удваивает количество печенек за клик на 15 минут',
-                            price: 1000,
-                            type: 'multiplier',
-                            value: 2,
-                            duration: 900,
-                            icon: 'fa-times-circle'
-                        },
-                        { 
-                            id: 'speedBoost', 
-                            name: 'Ускорение кликов', 
-                            description: 'Увеличивает скорость кликов на 30% на 10 минут',
-                            price: 750,
-                            type: 'speed',
-                            value: 1.3,
-                            duration: 600,
-                            icon: 'fa-bolt'
-                        },
-                        { 
-                            id: 'luckBoost', 
-                            name: 'Удача новичка', 
-                            description: 'Увеличивает шанс на x3 в 2 раза на 20 минут',
-                            price: 1500,
-                            type: 'luck',
-                            value: 2,
-                            duration: 1200,
-                            icon: 'fa-clover'
-                        }
-                    ],
-                    permanent: [
-                        { 
-                            id: 'permanent2x', 
-                            name: 'Постоянный удвоитель', 
-                            description: 'Навсегда увеличивает базовый доход на 100%',
-                            price: 5000,
-                            type: 'permanent',
-                            value: 2,
-                            icon: 'fa-infinity'
-                        }
-                    ],
-                    combo: [
-                        { 
-                            id: 'comboBoost', 
-                            name: 'Комбо-цепочка', 
-                            description: 'Каждый 10-й клик даёт в 5 раз больше печенек',
-                            price: 2000,
-                            type: 'combo',
-                            value: 5,
-                            duration: 300,
-                            icon: 'fa-fire'
-                        }
-                    ]
-                };
+                user.isFriend = true;
+                this.data.friends.push(userId);
                 
-                this.updateBoostsGrid('temporary');
-            }
-            
-            updateBoostsGrid(category) {
-                const boosts = this.boosts[category] || [];
-                const container = document.getElementById('boostsGrid');
-                
-                container.innerHTML = boosts.map(boost => {
-                    const owned = this.data.upgrades.includes(boost.id);
-                    const active = this.activeBuffs.some(b => b.id === boost.id);
-                    const canAfford = this.data.coins >= boost.price;
-                    
-                    return `
-                        <div class="boost-card ${active ? 'active' : ''}">
-                            <div class="boost-header">
-                                <div class="boost-icon">
-                                    <i class="fas ${boost.icon}"></i>
-                                </div>
-                                <div>
-                                    <div class="boost-title">${boost.name}</div>
-                                    <div class="boost-price">${boost.price.toLocaleString('ru-RU')} печенек</div>
-                                </div>
-                            </div>
-                            <p class="boost-desc">${boost.description}</p>
-                            <div class="boost-footer">
-                                ${active ? `
-                                    <div class="boost-timer">
-                                        <i class="fas fa-clock"></i>
-                                        <span>Активен</span>
-                                    </div>
-                                ` : `
-                                    <button class="transfer-btn" style="padding: 12px 24px;" 
-                                            onclick="app.activateBoost('${boost.id}', '${category}')"
-                                            ${(!canAfford || owned) ? 'disabled' : ''}>
-                                        ${owned ? 'Куплено' : (canAfford ? 'Активировать' : 'Недостаточно')}
-                                    </button>
-                                `}
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
-            filterBoosts(category) {
-                this.updateBoostsGrid(category);
-            }
-            
-            activateBoost(boostId, category) {
-                const boost = this.boosts[category].find(b => b.id === boostId);
-                
-                if (!boost) return;
-                
-                if (this.data.coins < boost.price) {
-                    this.showNotification('Недостаточно печенек!', 'error');
-                    return;
-                }
-                
-                this.data.coins -= boost.price;
-                
-                if (boost.type === 'permanent') {
-                    this.data.upgrades.push(boost.id);
-                    this.data.perClick *= boost.value;
-                    this.showNotification(`${boost.name} активирован навсегда!`, 'success');
-                } else {
-                    const buff = {
-                        id: boost.id,
-                        name: boost.name,
-                        type: boost.type,
-                        value: boost.value,
-                        expires: Date.now() + (boost.duration * 1000)
-                    };
-                    
-                    this.activeBuffs.push(buff);
-                    this.showNotification(`${boost.name} активирован на ${boost.duration / 60} минут!`, 'success');
-                }
-                
+                this.showNotification(`Добавлен друг: ${user.name}`, 'success');
                 this.saveData();
-                this.updateUI();
-                this.updateBoostsGrid(category);
-            }
-            
-            activateDoubleClick() {
-                if (this.data.coins < 500) {
-                    this.showNotification('Недостаточно печенек!', 'error');
-                    return;
-                }
-                
-                this.data.coins -= 500;
-                
-                // Активируем двойной клик на 50 кликов
-                const buff = {
-                    id: 'doubleClick',
-                    name: 'Двойной клик',
-                    type: 'clickPower',
-                    value: this.data.perClick,
-                    expires: Date.now() + 60000 // 1 минута
-                };
-                
-                this.activeBuffs.push(buff);
-                this.addActivity('⚡ Активирован двойной клик', 'boost');
-                this.showNotification('Двойной клик активирован!', 'success');
-                
-                this.saveData();
+                this.updateFriendsList();
                 this.updateUI();
             }
             
-            toggleAutoClicker() {
-                const btn = document.getElementById('autoClickBtn');
+            removeFriend(userId) {
+                const user = this.users.find(u => u.id === userId);
+                if (!user) return;
                 
-                if (this.autoClickerActive) {
-                    clearInterval(this.autoClickInterval);
-                    this.autoClickerActive = false;
-                    btn.innerHTML = '<i class="fas fa-play"></i><span>Автоклик</span>';
-                    localStorage.setItem('autoClickerActive', 'false');
-                    this.showNotification('Автокликер отключен', 'info');
-                } else {
-                    if (this.data.coins < 1000) {
-                        this.showNotification('Нужно 1000 печенек для автокликера!', 'error');
-                        return;
-                    }
-                    
-                    this.data.coins -= 1000;
-                    this.autoClickerActive = true;
-                    btn.innerHTML = '<i class="fas fa-pause"></i><span>Остановить</span>';
-                    btn.classList.add('active');
-                    
-                    // Автоклик каждую секунду
-                    this.autoClickInterval = setInterval(() => {
-                        this.simulateClick();
-                    }, 1000);
-                    
-                    localStorage.setItem('autoClickerActive', 'true');
-                    this.addActivity('🤖 Автокликер активирован', 'boost');
-                    this.showNotification('Автокликер активирован!', 'success');
-                }
+                user.isFriend = false;
+                this.data.friends = this.data.friends.filter(id => id !== userId);
                 
+                this.showNotification(`Удален из друзей: ${user.name}`, 'info');
                 this.saveData();
+                this.updateFriendsList();
                 this.updateUI();
             }
             
-            simulateClick() {
-                // Симуляция клика
-                let earnings = Math.floor(this.calculateEarnings() * 0.5); // 50% от обычного клика
-                this.data.coins += earnings;
-                this.data.clicks++;
-                this.data.xp += Math.floor(earnings / 20);
+            sendToFriend(userId) {
+                const user = this.users.find(u => u.id === userId);
+                if (!user) return;
                 
-                this.saveData();
-                this.updateUI();
+                // Переходим на страницу переводов и заполняем получателя
+                this.showPage('transfersPage');
+                document.getElementById('recipientInput').value = user.name;
+                document.getElementById('recipientInput').focus();
+                
+                // Обновляем активную навигацию
+                document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelector('[data-page="transfersPage"]').classList.add('active');
             }
             
             sendTransfer() {
-                const recipient = document.getElementById('recipientInput').value;
-                const amount = parseInt(document.getElementById('transferAmount').value);
+                const recipientInput = document.getElementById('recipientInput').value;
+                const amountInput = document.getElementById('transferAmount').value;
+                const commentInput = document.getElementById('transferComment').value;
                 
-                if (!recipient || !amount || amount <= 0) {
+                const amount = parseInt(amountInput);
+                
+                // Проверки
+                if (!recipientInput || !amount || amount <= 0) {
                     this.showNotification('Заполните все поля правильно', 'error');
                     return;
                 }
                 
-                if (amount > this.data.coins) {
-                    this.showNotification('Недостаточно печенек', 'error');
+                if (amount > this.data.balance) {
+                    this.showNotification('Недостаточно средств на балансе', 'error');
                     return;
                 }
                 
-                // Максимальный перевод за раз
+                // Минимальный и максимальный перевод
+                if (amount < 10) {
+                    this.showNotification('Минимальная сумма перевода - 10 ₽', 'error');
+                    return;
+                }
+                
                 if (amount > 10000) {
-                    this.showNotification('Максимальный перевод - 10,000 печенек', 'error');
+                    this.showNotification('Максимальный перевод за раз - 10,000 ₽', 'error');
                     return;
                 }
                 
-                this.data.coins -= amount;
-                this.addActivity(`📤 Перевод ${amount.toLocaleString('ru-RU')} печенек пользователю ${recipient}`, 'transfer');
-                this.showNotification(`Перевод ${amount} печенек отправлен!`, 'success');
+                // Списание средств
+                this.data.balance -= amount;
+                
+                // Создаем транзакцию
+                const transaction = {
+                    id: Date.now(),
+                    type: 'outcome',
+                    title: `Перевод ${recipientInput}`,
+                    amount: amount,
+                    time: 'только что'
+                };
+                
+                this.data.transactions.unshift(transaction);
+                
+                // Создаем запись в истории переводов
+                const transfer = {
+                    id: Date.now(),
+                    recipient: recipientInput,
+                    amount: amount,
+                    comment: commentInput,
+                    time: 'только что'
+                };
+                
+                this.data.transfers.unshift(transfer);
+                
+                // Опыт за перевод
+                this.data.xp += Math.floor(amount / 10);
+                this.checkLevelUp();
                 
                 // Очищаем форму
                 document.getElementById('recipientInput').value = '';
                 document.getElementById('transferAmount').value = '';
+                document.getElementById('transferComment').value = '';
                 
+                // Показываем уведомление
+                this.showNotification(`Перевод ${amount.toLocaleString('ru-RU')} ₽ выполнен успешно!`, 'success');
+                
+                // Сохраняем и обновляем UI
                 this.saveData();
                 this.updateUI();
+                this.updateTransactionsList();
+                this.updateTransfersHistory();
             }
             
-            sendGift(friendId) {
-                const friend = this.friends.find(f => f.id === friendId);
-                if (!friend) return;
+            checkLevelUp() {
+                const xpNeeded = (this.data.level + 1) * 1000;
                 
-                if (this.data.coins < 500) {
-                    this.showNotification('Нужно минимум 500 печенек для подарка', 'error');
-                    return;
+                if (this.data.xp >= xpNeeded) {
+                    this.data.level++;
+                    this.data.xp = 0;
+                    
+                    // Бонус за уровень
+                    const bonus = this.data.level * 500;
+                    this.data.balance += bonus;
+                    
+                    this.showNotification(`🎉 Новый уровень ${this.data.level}! +${bonus} ₽ бонуса`, 'success');
                 }
-                
-                this.data.coins -= 500;
-                this.addActivity(`🎁 Подарок отправлен ${friend.name}`, 'gift');
-                this.showNotification(`Подарок отправлен ${friend.name}!`, 'success');
-                
-                this.saveData();
-                this.updateUI();
-            }
-            
-            visitFriend(friendId) {
-                const friend = this.friends.find(f => f.id === friendId);
-                if (!friend) return;
-                
-                // Награда за посещение
-                const reward = 100;
-                this.data.coins += reward;
-                this.addActivity(`👀 Посещение профиля ${friend.name}`, 'visit');
-                this.showNotification(`+${reward} печенек за посещение!`, 'success');
-                
-                this.saveData();
-                this.updateUI();
             }
             
             showPage(pageId) {
@@ -2081,7 +1448,20 @@
                 if (page) {
                     page.classList.add('active');
                     this.currentPage = pageId;
+                    
+                    // При показе страницы друзей обновляем список
+                    if (pageId === 'friendsPage') {
+                        this.updateFriendsList();
+                    }
                 }
+            }
+            
+            showTransactions() {
+                this.showPage('transfersPage');
+                
+                // Обновляем активную навигацию
+                document.querySelectorAll('.nav-tab').forEach(tab => tab.classList.remove('active'));
+                document.querySelector('[data-page="transfersPage"]').classList.add('active');
             }
             
             showNotification(message, type) {
@@ -2101,13 +1481,17 @@
                     animation: slideDown 0.3s ease;
                     max-width: 90%;
                     text-align: center;
-                    border: 1px solid ${type === 'success' ? 'rgba(76, 201, 240, 0.3)' : 'rgba(239, 71, 111, 0.3)'};
-                    background: ${type === 'success' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(30, 41, 59, 0.95)'};
+                    border: 1px solid ${type === 'success' ? 'rgba(37, 211, 102, 0.3)' : 'rgba(255, 51, 51, 0.3)'};
+                    background: rgba(30, 41, 59, 0.95);
                     backdrop-filter: blur(20px);
+                    color: ${type === 'success' ? 'var(--success)' : 'var(--danger)'};
                 `;
                 
                 notification.textContent = message;
                 document.body.appendChild(notification);
+                
+                // Анимация появления
+                notification.style.animation = 'slideDown 0.3s ease';
                 
                 // Удаляем через 3 секунды
                 setTimeout(() => {
@@ -2119,20 +1503,26 @@
         }
         
         // Инициализация приложения
-        const app = new CookieBankApp();
+        const app = new TelegramBankApp();
         
         // Глобальные функции
         window.app = app;
         
-        // Инициализация при загрузке
-        document.addEventListener('DOMContentLoaded', () => {
-            // Обновляем бейдж друзей
-            const onlineFriends = app.friends.filter(f => f.online).length;
-            if (onlineFriends > 0) {
-                document.getElementById('friendsBadge').style.display = 'flex';
-                document.getElementById('friendsBadge').textContent = onlineFriends;
+        // Добавляем стили для анимации уведомления
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideDown {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
             }
-        });
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
