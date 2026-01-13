@@ -1,289 +1,492 @@
-// Основные игровые переменные
-let money = 0;
-let perClick = 1;
-let upgrades = {
-    1: { purchased: false, price: 50, effect: "click" }, // Усиленная печать
-    2: { purchased: false, price: 150, effect: "auto" },  // Национальный банк
-    3: { purchased: false, price: 500, effect: "multiplier" }, // Финансовый гений
-    4: { purchased: false, price: 1200, effect: "speed" } // Экономическое чудо
-};
+// Мультиплеерная логика (дополнение к основному скрипту)
 
-// Переменные для авто-дохода
-let autoIncome = 0;
-let autoIncomeInterval = 3000; // 3 секунды
-let autoIncomeTimer = null;
-let timeLeft = autoIncomeInterval;
-let autoIncomeMultiplier = 1;
+// Расширяем функциональность мультиплеера из основного скрипта
 
-// DOM элементы
-const moneyElement = document.getElementById('money');
-const perClickElement = document.getElementById('perClick');
-const coinElement = document.getElementById('coin');
-const resetButton = document.getElementById('reset-btn');
-const autoclickerProgress = document.getElementById('autoclicker-progress');
-const autoclickerTimer = document.getElementById('autoclicker-timer');
-const popup = document.getElementById('popup');
+// Глобальные переменные для мультиплеера
+let currentRoom = null;
+let roomUpdateInterval = null;
 
-// Инициализация игры
-function initGame() {
-    loadGame();
-    updateUI();
-    setupEventListeners();
+// Улучшенная функция создания комнаты
+function createRoom() {
+    const roomCode = generateRoomCode();
+    const playerName = document.getElementById('player-name').textContent;
     
-    // Запуск авто-дохода, если куплено улучшение
-    if (autoIncome > 0) {
-        startAutoIncome();
-    }
-}
-
-// Загрузка игры из localStorage
-function loadGame() {
-    const savedGame = localStorage.getItem('tugrikClicker');
-    
-    if (savedGame) {
-        const gameData = JSON.parse(savedGame);
-        money = gameData.money || 0;
-        perClick = gameData.perClick || 1;
-        upgrades = gameData.upgrades || upgrades;
-        autoIncome = gameData.autoIncome || 0;
-        autoIncomeInterval = gameData.autoIncomeInterval || 3000;
-        autoIncomeMultiplier = gameData.autoIncomeMultiplier || 1;
-    }
-}
-
-// Сохранение игры в localStorage
-function saveGame() {
-    const gameData = {
-        money,
-        perClick,
-        upgrades,
-        autoIncome,
-        autoIncomeInterval,
-        autoIncomeMultiplier
+    // Создаем комнату
+    const roomData = {
+        code: roomCode,
+        creator: playerName,
+        players: [playerName],
+        created: new Date().toISOString(),
+        gameState: 'waiting',
+        chat: [],
+        lastUpdate: new Date().toISOString()
     };
     
-    localStorage.setItem('tugrikClicker', JSON.stringify(gameData));
-}
-
-// Обновление интерфейса
-function updateUI() {
-    moneyElement.textContent = formatNumber(money);
-    perClickElement.textContent = formatNumber(perClick);
+    // Сохраняем комнату
+    localStorage.setItem(`room_${roomCode}`, JSON.stringify(roomData));
+    localStorage.setItem('current_room', roomCode);
     
-    // Обновление кнопок улучшений
-    for (let i = 1; i <= 4; i++) {
-        const upgrade = upgrades[i];
-        const button = document.querySelector(`.buy-btn[data-id="${i}"]`);
-        const card = document.getElementById(`upgrade${i}`);
-        
-        if (upgrade.purchased) {
-            button.textContent = "Куплено";
-            button.disabled = true;
-            button.classList.add('purchased');
-            card.classList.add('purchased');
-        } else {
-            button.disabled = money < upgrade.price;
+    // Показываем комнату
+    showRoom(roomCode);
+    currentRoom = roomCode;
+    
+    // Начинаем слушать обновления комнаты
+    startRoomListener(roomCode);
+    
+    showNotification(`Комната создана! Код: ${roomCode}`);
+    
+    // Предлагаем поделиться
+    setTimeout(() => {
+        if (confirm("Хотите поделиться кодом комнаты с другом?")) {
+            shareRoom();
         }
+    }, 1000);
+}
+
+// Генерация кода комнаты
+function generateRoomCode() {
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const numbers = '0123456789';
+    let code = '';
+    
+    // 2 буквы + 4 цифры
+    for (let i = 0; i < 2; i++) {
+        code += letters.charAt(Math.floor(Math.random() * letters.length));
+    }
+    for (let i = 0; i < 4; i++) {
+        code += numbers.charAt(Math.floor(Math.random() * numbers.length));
     }
     
-    // Обновление информации об авто-доходе
-    updateAutoIncomeInfo();
+    return code;
 }
 
-// Форматирование чисел (добавление разделителей тысяч)
-function formatNumber(num) {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-}
-
-// Обработка клика по монете
-function handleCoinClick() {
-    // Анимация монеты
-    coinElement.style.transform = 'scale(0.95) rotate(15deg)';
+// Улучшенная функция показа комнаты
+function showRoom(roomCode) {
+    const activeRoom = document.getElementById('active-room');
+    const roomCodeSpan = document.getElementById('current-room-code');
     
-    setTimeout(() => {
-        coinElement.style.transform = 'scale(1) rotate(0deg)';
-    }, 100);
+    roomCodeSpan.textContent = roomCode;
+    activeRoom.style.display = 'block';
     
-    // Добавление денег
-    money += perClick;
+    // Загружаем начальные данные комнаты
+    loadRoomData(roomCode);
     
-    // Создание попапа с полученной суммой
-    createPopup(perClick);
-    
-    // Обновление UI и сохранение
-    updateUI();
-    saveGame();
-}
-
-// Создание всплывающего сообщения о полученных тугриках
-function createPopup(amount) {
-    const newPopup = popup.cloneNode(true);
-    newPopup.textContent = `+${formatNumber(amount)} ₮`;
-    newPopup.style.opacity = '1';
-    newPopup.style.left = `${Math.random() * 70 + 15}%`;
-    newPopup.style.top = `${Math.random() * 40 + 30}%`;
-    
-    document.body.appendChild(newPopup);
-    
-    // Анимация всплывания и исчезновения
-    setTimeout(() => {
-        newPopup.style.opacity = '0';
-        newPopup.style.transform = 'translateY(-50px)';
-    }, 100);
-    
-    setTimeout(() => {
-        document.body.removeChild(newPopup);
-    }, 1500);
-}
-
-// Покупка улучшения
-function buyUpgrade(id) {
-    const upgrade = upgrades[id];
-    
-    if (money >= upgrade.price && !upgrade.purchased) {
-        money -= upgrade.price;
-        upgrade.purchased = true;
-        
-        // Применение эффекта улучшения
-        applyUpgradeEffect(id);
-        
-        // Обновление UI и сохранение
-        updateUI();
-        saveGame();
-    }
-}
-
-// Применение эффекта улучшения
-function applyUpgradeEffect(id) {
-    switch(id) {
-        case 1: // Усиленная печать
-            perClick += 1;
-            break;
-        case 2: // Национальный банк
-            autoIncome += 2;
-            startAutoIncome();
-            break;
-        case 3: // Финансовый гений
-            perClick *= 2;
-            break;
-        case 4: // Экономическое чудо
-            autoIncomeMultiplier *= 2;
-            // Обновляем интервал авто-дохода
-            if (autoIncomeTimer) {
-                clearInterval(autoIncomeTimer);
-                autoIncomeInterval = 3000 / autoIncomeMultiplier;
-                startAutoIncome();
-            }
-            break;
-    }
-}
-
-// Запуск авто-дохода
-function startAutoIncome() {
-    if (autoIncomeTimer) {
-        clearInterval(autoIncomeTimer);
-        clearInterval(progressTimer);
+    // Автообновление комнаты
+    if (roomUpdateInterval) {
+        clearInterval(roomUpdateInterval);
     }
     
-    if (autoIncome <= 0) return;
-    
-    // Сбрасываем таймер
-    timeLeft = autoIncomeInterval;
-    
-    // Запускаем интервал для авто-дохода
-    autoIncomeTimer = setInterval(() => {
-        money += autoIncome;
-        
-        // Создание попапа для авто-дохода
-        createPopup(autoIncome);
-        
-        // Обновление UI и сохранение
-        updateUI();
-        saveGame();
-        
-        // Сброс таймера
-        timeLeft = autoIncomeInterval;
-        autoclickerProgress.style.width = '0%';
-    }, autoIncomeInterval);
-    
-    // Запускаем анимацию прогресс  бара
-    const progressStep = 100 / (autoIncomeInterval / 100);
-    let progress = 0;
-    
-    const progressTimer = setInterval(() => {
-        timeLeft -= 100;
-        progress += progressStep;
-        autoclickerProgress.style.width = `${progress}%`;
-        
-        // Обновление текста таймера
-        const seconds = Math.ceil(timeLeft / 1000);
-        autoclickerTimer.textContent = `Авто-доход через: ${seconds}с`;
-    }, 100);
+    roomUpdateInterval = setInterval(() => {
+        updateRoomData(roomCode);
+    }, 2000);
 }
 
-// Обновление информации об авто-доходе
-function updateAutoIncomeInfo() {
-    if (autoIncome > 0) {
-        autoclickerTimer.textContent = `Авто-доход: +${autoIncome} ₮ каждые ${3/autoIncomeMultiplier}с`;
-        document.querySelector('.autoclicker-info').style.display = 'block';
+// Загрузка данных комнаты
+function loadRoomData(roomCode) {
+    const roomData = localStorage.getItem(`room_${roomCode}`);
+    if (!roomData) {
+        showNotification("Комната не найдена", true);
+        return;
+    }
+    
+    const room = JSON.parse(roomData);
+    updateRoomUI(room);
+}
+
+// Обновление данных комнаты
+function updateRoomData(roomCode) {
+    const roomData = localStorage.getItem(`room_${roomCode}`);
+    if (!roomData) return;
+    
+    const room = JSON.parse(roomData);
+    const playerName = document.getElementById('player-name').textContent;
+    
+    // Проверяем, не удалили ли нас из комнаты
+    if (!room.players.includes(playerName)) {
+        showNotification("Вас удалили из комнаты", true);
+        leaveRoom();
+        return;
+    }
+    
+    // Обновляем время последнего обновления
+    room.lastUpdate = new Date().toISOString();
+    localStorage.setItem(`room_${roomCode}`, JSON.stringify(room));
+    
+    updateRoomUI(room);
+}
+
+// Обновление интерфейса комнаты
+function updateRoomUI(room) {
+    const player1 = document.getElementById('player1');
+    const player2 = document.getElementById('player2');
+    const playerName = document.getElementById('player-name').textContent;
+    
+    // Определяем, кто первый игрок, а кто второй
+    const isCreator = room.players[0] === playerName;
+    
+    // Обновляем первого игрока
+    player1.querySelector('.player-name').textContent = room.players[0];
+    player1.querySelector('.player-avatar').textContent = room.players[0] === playerName ? '👑' : '👤';
+    player1.querySelector('.player-status').textContent = 'Готов';
+    
+    // Обновляем второго игрока
+    if (room.players.length > 1) {
+        player2.querySelector('.player-name').textContent = room.players[1];
+        player2.querySelector('.player-avatar').textContent = room.players[1] === playerName ? '👑' : '👤';
+        player2.querySelector('.player-status').textContent = 'Готов';
+        player2.style.opacity = '1';
     } else {
-        document.querySelector('.autoclicker-info').style.display = 'none';
+        player2.querySelector('.player-name').textContent = 'Ожидание...';
+        player2.querySelector('.player-avatar').textContent = '?';
+        player2.querySelector('.player-status').textContent = 'Не подключен';
+        player2.style.opacity = '0.7';
+    }
+    
+    // Обновляем чат
+    updateChat(room);
+    
+    // Обновляем состояние игры
+    if (room.gameState === 'playing') {
+        document.getElementById('click-race-game').style.display = 'block';
+        if (room.race) {
+            updateRaceProgress(room.race);
+        }
+    } else {
+        document.getElementById('click-race-game').style.display = 'none';
     }
 }
 
-// Сброс прогресса игры
-function resetGame() {
-    if (confirm("Вы уверены, что хотите обнулить казну? Весь прогресс будет потерян.")) {
-        // Сброс переменных
-        money = 0;
-        perClick = 1;
-        autoIncome = 0;
-        autoIncomeInterval = 3000;
-        autoIncomeMultiplier = 1;
+// Обновление чата
+function updateChat(room) {
+    const chatMessages = document.getElementById('chat-messages');
+    
+    if (!room.chat || room.chat.length === 0) {
+        chatMessages.innerHTML = '<div style="color: #C8FFA6; text-align: center; padding: 10px;">Нет сообщений</div>';
+        return;
+    }
+    
+    chatMessages.innerHTML = '';
+    
+    room.chat.slice(-10).forEach(message => { // Показываем последние 10 сообщений
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'chat-message';
+        messageDiv.innerHTML = `
+            <div class="chat-sender">${message.sender}:</div>
+            <div class="chat-text">${message.text}</div>
+            <div class="chat-time">${formatTime(message.time)}</div>
+        `;
         
-        // Сброс улучшений
-        for (let id in upgrades) {
-            upgrades[id].purchased = false;
-        }
-        
-        // Остановка таймеров
-        if (autoIncomeTimer) {
-            clearInterval(autoIncomeTimer);
-        }
-        
-        // Очистка localStorage
-        localStorage.removeItem('tugrikClicker');
-        
-        // Обновление UI
-        updateUI();
+        chatMessages.appendChild(messageDiv);
+    });
+    
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Форматирование времени для чата
+function formatTime(timeString) {
+    const time = new Date(timeString);
+    const now = new Date();
+    const diffMs = now - time;
+    const diffMins = Math.floor(diffMs / (1000 * 60));
+    
+    if (diffMins < 1) return 'только что';
+    if (diffMins < 60) return `${diffMins} мин назад`;
+    
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours} ч назад`;
+    
+    return time.toLocaleDateString();
+}
+
+// Отправка сообщения в чат
+function sendChatMessage(text) {
+    if (!currentRoom) return;
+    
+    const roomData = localStorage.getItem(`room_${currentRoom}`);
+    if (!roomData) return;
+    
+    const room = JSON.parse(roomData);
+    const playerName = document.getElementById('player-name').textContent;
+    
+    if (!room.chat) room.chat = [];
+    
+    room.chat.push({
+        sender: playerName,
+        text: text,
+        time: new Date().toISOString()
+    });
+    
+    localStorage.setItem(`room_${currentRoom}`, JSON.stringify(room));
+    
+    // Обновляем чат
+    updateChat(room);
+}
+
+// Обновление прогресса гонки кликов
+function updateRaceProgress(race) {
+    const player1Clicks = document.getElementById('player1-clicks');
+    const player2Clicks = document.getElementById('player2-clicks');
+    const player1Progress = document.getElementById('player1-progress');
+    const player2Progress = document.getElementById('player2-progress');
+    const playerName = document.getElementById('player-name').textContent;
+    
+    // Определяем, какой игрок под каким номером
+    const player1Name = race.player1.name;
+    const player2Name = race.player2.name;
+    
+    // Обновляем клики
+    player1Clicks.textContent = `${race.player1.clicks}/100`;
+    player2Clicks.textContent = `${race.player2.clicks}/100`;
+    
+    // Обновляем прогресс
+    player1Progress.style.width = `${Math.min(100, race.player1.clicks)}%`;
+    player2Progress.style.width = `${Math.min(100, race.player2.clicks)}%`;
+    
+    // Проверяем победителя
+    if (race.player1.clicks >= 100 || race.player2.clicks >= 100) {
+        endRace(race);
     }
 }
 
-// Настройка обработчиков событий
-function setupEventListeners() {
-    // Клик по монете
-    coinElement.addEventListener('click', handleCoinClick);
+// Завершение гонки
+function endRace(race) {
+    const winner = race.player1.clicks >= 100 ? race.player1 : race.player2;
+    const loser = race.player1.clicks >= 100 ? race.player2 : race.player1;
+    const playerName = document.getElementById('player-name').textContent;
     
-    // Клики по кнопкам покупки улучшений
-    document.querySelectorAll('.buy-btn').forEach(button => {
-        button.addEventListener('click', (e) => {
-            const id = parseInt(e.target.getAttribute('data-id'));
-            buyUpgrade(id);
-        });
-    });
+    // Награды
+    if (winner.name === playerName) {
+        gameData.balance += 5000;
+        gameData.gamesWon++;
+        showNotification(`🏆 Вы победили! +5000 ₮`);
+    } else {
+        gameData.balance += 1000;
+        showNotification(`🥈 Вы проиграли. +1000 ₮`);
+    }
     
-    // Кнопка сброса прогресса
-    resetButton.addEventListener('click', resetGame);
+    // Обновляем интерфейс основной игры
+    updateUI();
+    updateLeaderboard();
+    saveGameData();
     
-    // Поддержка сенсорных устройств
-    coinElement.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        handleCoinClick();
-    });
+    // Сбрасываем комнату
+    if (currentRoom) {
+        const roomData = localStorage.getItem(`room_${currentRoom}`);
+        if (roomData) {
+            const room = JSON.parse(roomData);
+            room.gameState = 'finished';
+            delete room.race;
+            localStorage.setItem(`room_${currentRoom}`, JSON.stringify(room));
+        }
+    }
     
-    // Сохранение при закрытии окна
-    window.addEventListener('beforeunload', saveGame);
+    // Скрываем игру через 3 секунды
+    setTimeout(() => {
+        document.getElementById('click-race-game').style.display = 'none';
+    }, 3000);
 }
 
-// Запуск игры при загрузке страницы
-document.addEventListener('DOMContentLoaded', initGame);
+// Начало гонки кликов
+function startClickRace() {
+    if (!currentRoom) {
+        showNotification("Сначала создайте или присоединитесь к комнате", true);
+        return;
+    }
+    
+    const roomData = localStorage.getItem(`room_${currentRoom}`);
+    if (!roomData) return;
+    
+    const room = JSON.parse(roomData);
+    const playerName = document.getElementById('player-name').textContent;
+    
+    if (room.players.length < 2) {
+        showNotification("❌ Ожидаем второго игрока", true);
+        return;
+    }
+    
+    // Создаем гонку
+    room.gameState = 'playing';
+    room.race = {
+        player1: { name: room.players[0], clicks: 0 },
+        player2: { name: room.players[1], clicks: 0 },
+        started: new Date().toISOString()
+    };
+    
+    localStorage.setItem(`room_${currentRoom}`, JSON.stringify(room));
+    
+    // Показываем игру
+    document.getElementById('click-race-game').style.display = 'block';
+    
+    // Добавляем обработчик кликов для гонки
+    document.addEventListener('click', handleRaceClick);
+    
+    showNotification("Гонка началась! Кликайте по экрану как можно быстрее!");
+}
+
+// Обработчик кликов во время гонки
+function handleRaceClick(e) {
+    if (!currentRoom) return;
+    
+    const roomData = localStorage.getItem(`room_${currentRoom}`);
+    if (!roomData) return;
+    
+    const room = JSON.parse(roomData);
+    const playerName = document.getElementById('player-name').textContent;
+    
+    if (!room.race || room.gameState !== 'playing') return;
+    
+    // Определяем, какой игрок кликнул
+    if (room.race.player1.name === playerName) {
+        room.race.player1.clicks++;
+    } else if (room.race.player2.name === playerName) {
+        room.race.player2.clicks++;
+    }
+    
+    localStorage.setItem(`room_${currentRoom}`, JSON.stringify(room));
+    
+    // Обновляем прогресс
+    updateRaceProgress(room.race);
+    
+    // Анимация клика
+    createRaceClickParticle(e.clientX, e.clientY);
+}
+
+// Создание частиц при клике во время гонки
+function createRaceClickParticle(x, y) {
+    const particle = document.createElement('div');
+    particle.className = 'particle';
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    particle.style.backgroundColor = '#E0FFC2';
+    
+    document.getElementById('particles-container').appendChild(particle);
+    
+    // Анимация
+    const angle = Math.random() * Math.PI * 2;
+    const distance = Math.random() * 50 + 30;
+    
+    particle.animate([
+        { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+        { transform: `translate(${Math.cos(angle) * distance}px, ${Math.sin(angle) * distance}px) scale(0)`, opacity: 0 }
+    ], {
+        duration: 500,
+        easing: 'ease-out'
+    });
+    
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, 500);
+}
+
+// Выход из комнаты
+function leaveRoom() {
+    if (!currentRoom) return;
+    
+    const roomData = localStorage.getItem(`room_${currentRoom}`);
+    if (roomData) {
+        const room = JSON.parse(roomData);
+        const playerName = document.getElementById('player-name').textContent;
+        
+        // Удаляем игрока из комнаты
+        room.players = room.players.filter(p => p !== playerName);
+        
+        if (room.players.length === 0) {
+            // Если комната пустая, удаляем её
+            localStorage.removeItem(`room_${currentRoom}`);
+        } else {
+            localStorage.setItem(`room_${currentRoom}`, JSON.stringify(room));
+        }
+    }
+    
+    // Скрываем комнату
+    document.getElementById('active-room').style.display = 'none';
+    
+    // Останавливаем слушатель
+    if (roomUpdateInterval) {
+        clearInterval(roomUpdateInterval);
+        roomUpdateInterval = null;
+    }
+    
+    // Удаляем обработчик кликов гонки
+    document.removeEventListener('click', handleRaceClick);
+    
+    currentRoom = null;
+    localStorage.removeItem('current_room');
+    
+    showNotification("Вы вышли из комнаты");
+}
+
+// Начало прослушивания комнаты
+function startRoomListener(roomCode) {
+    // Проверяем обновления комнаты каждые 2 секунды
+    if (roomUpdateInterval) {
+        clearInterval(roomUpdateInterval);
+    }
+    
+    roomUpdateInterval = setInterval(() => {
+        const roomData = localStorage.getItem(`room_${roomCode}`);
+        if (!roomData) {
+            // Комната удалена
+            showNotification("Комната была удалена", true);
+            leaveRoom();
+            return;
+        }
+        
+        const room = JSON.parse(roomData);
+        
+        // Проверяем, не слишком ли старые обновления (таймаут 30 секунд)
+        const lastUpdate = new Date(room.lastUpdate);
+        const now = new Date();
+        const diffSeconds = (now - lastUpdate) / 1000;
+        
+        if (diffSeconds > 30) {
+            showNotification("Соединение с комнатой потеряно", true);
+            leaveRoom();
+            return;
+        }
+        
+        updateRoomUI(room);
+    }, 2000);
+}
+
+// Автоматическое присоединение к комнате при загрузке
+function checkSavedRoom() {
+    const savedRoom = localStorage.getItem('current_room');
+    if (savedRoom) {
+        const roomData = localStorage.getItem(`room_${savedRoom}`);
+        if (roomData) {
+            const room = JSON.parse(roomData);
+            const playerName = document.getElementById('player-name').textContent;
+            
+            if (room.players.includes(playerName)) {
+                // Восстанавливаем комнату
+                currentRoom = savedRoom;
+                showRoom(savedRoom);
+                startRoomListener(savedRoom);
+            } else {
+                localStorage.removeItem('current_room');
+            }
+        }
+    }
+}
+
+// Инициализация мультиплеера при загрузке страницы
+document.addEventListener('DOMContentLoaded', () => {
+    // Проверяем сохраненную комнату
+    setTimeout(checkSavedRoom, 1000);
+    
+    // Добавляем кнопку выхода из комнаты
+    const activeRoom = document.getElementById('active-room');
+    if (activeRoom) {
+        const leaveBtn = document.createElement('button');
+        leaveBtn.className = 'btn-secondary';
+        leaveBtn.style.marginTop = '15px';
+        leaveBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Выйти из комнаты';
+        leaveBtn.addEventListener('click', leaveRoom);
+        
+        const roomHeader = activeRoom.querySelector('.room-header');
+        roomHeader.appendChild(leaveBtn);
+    }
+});
