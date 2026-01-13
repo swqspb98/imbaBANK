@@ -2,103 +2,1118 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Кликер-Тугрик</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тугрик Кликер Pro</title>
+    
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Шрифты и иконки -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Иконка для Telegram -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFASURBVHgB7ZbBDYJAEIVnE9ISLMFLbVASLMEWkAS8aQNJwJt6ogUswYNJABLIiXGZ3QG5Z9jjTybZsN++BWaZplIIwYlC5E5hghP6lJ6z5xEAfT/LFJ3B9hPEMjYpEGAT89RkL8Dxgv4lR5dYG6mMqwSsCIwADx45/hM4cBQ1dFd0SoAJagHut0A1NRGaoCkKJ8Fj2y2RlMCoM/cB9fJ9gBOQCGgdKjYIKoxfEzEBq8CB/0lNNGwSFJ2A1qFqg6CC/mA0JqBLgBPwDlVtEFS8b74EEwKcgHqoaoOgAu2BuQScACegH6raIKioB1F9MhGgCJwAjaB3qNggqLh7eK9MEqAIjICN4MQGQQUNBz+ZCtAETsBGcGqDoIL8RmQlwBHMCXAETgAUm/40xRXAExTigQAAAABJRU5ErkJggg==">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-coins"></i> Кликер-Тугрик</h1>
-            <div class="stats">
-                <div class="stat-box">
-                    <h2>Казна: <span id="money">0</span> ₮</h2>
+    <!-- Контейнер приложения -->
+    <div class="app-container">
+        <!-- Статус бар (как заголовок Telegram) -->
+        <header class="status-bar">
+            <div class="status-left">
+                <div class="player-level">
+                    <i class="fas fa-crown"></i>
+                    <span id="player-level">1</span>
                 </div>
-                <div class="stat-box">
-                    <h2>Доход за клик: <span id="perClick">1</span> ₮</h2>
+                <div class="player-name" id="player-name">Игрок</div>
+            </div>
+            <div class="status-center">
+                <div class="balance">
+                    <i class="fas fa-coins"></i>
+                    <span id="balance">0</span> ₮
                 </div>
+            </div>
+            <div class="status-right">
+                <button class="icon-btn" id="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </header>
 
-        <main>
-            <div class="clicker-section">
-                <div class="coin-container">
-                    <div class="coin" id="coin">
-                        <div class="coin-inner">
-                            <span class="coin-symbol">₮</span>
-                            <div class="coin-shine"></div>
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Главный экран (кликер) -->
+            <section id="home-screen" class="screen active">
+                <div class="clicker-container">
+                    <div class="coin-wrapper">
+                        <div class="coin" id="main-coin">
+                            <div class="coin-inner">
+                                <span class="coin-symbol">₮</span>
+                                <div class="coin-shine"></div>
+                            </div>
+                            <div class="coin-pulse"></div>
                         </div>
-                        <div class="coin-pulse"></div>
+                        <div class="click-stats">
+                            <div class="click-stat">
+                                <span>За клик:</span>
+                                <strong id="per-click">1</strong> ₮
+                            </div>
+                            <div class="click-stat">
+                                <span>В секунду:</span>
+                                <strong id="per-second">0</strong> ₮
+                            </div>
+                        </div>
                     </div>
-                    <p class="click-hint">Нажми на монету, чтобы получить тугрики</p>
-                    <div class="autoclicker-info">
-                        <div class="autoclicker-progress">
-                            <div class="progress-bar" id="autoclicker-progress"></div>
+                    
+                    <div class="upgrades-btn-container">
+                        <button class="btn-primary" id="open-upgrades">
+                            <i class="fas fa-arrow-up"></i> Улучшения
+                        </button>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="hourly-bonus">
+                            <button class="bonus-btn" id="hourly-bonus-btn" disabled>
+                                <i class="fas fa-gift"></i>
+                                <span>+100 ₮</span>
+                            </button>
+                            <div class="bonus-timer" id="hourly-timer">01:00:00</div>
                         </div>
-                        <span id="autoclicker-timer">Авто-доход через: 3с</span>
                     </div>
                 </div>
-            </div>
+            </section>
 
-            <section class="upgrades-section">
-                <h2><i class="fas fa-chart-line"></i> Улучшения казны</h2>
-                <div class="upgrades-grid">
-                    <div class="upgrade-card" id="upgrade1">
-                        <div class="upgrade-header">
-                            <h3>Усиленная печать</h3>
-                            <span class="upgrade-price">50 ₮</span>
+            <!-- Раздел мини-игр -->
+            <section id="games-screen" class="screen">
+                <div class="games-container">
+                    <h2 class="screen-title"><i class="fas fa-gamepad"></i> Мини-игры</h2>
+                    
+                    <div class="games-grid">
+                        <!-- Игра 2048 -->
+                        <div class="game-card" id="game-2048-card">
+                            <div class="game-card-header">
+                                <h3>2048 Тугрик Edition</h3>
+                                <span class="game-badge" id="2048-badge">Рекорд: 0</span>
+                            </div>
+                            <div class="game-card-body">
+                                <div class="game-preview">
+                                    <div class="game-2048-preview">
+                                        <div class="preview-row">
+                                            <div class="preview-tile tile-2">2</div>
+                                            <div class="preview-tile tile-4">4</div>
+                                            <div class="preview-tile tile-8">8</div>
+                                            <div class="preview-tile tile-16">16</div>
+                                        </div>
+                                        <div class="preview-row">
+                                            <div class="preview-tile tile-32">32</div>
+                                            <div class="preview-tile tile-64">64</div>
+                                            <div class="preview-tile tile-128">128</div>
+                                            <div class="preview-tile tile-256">256</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="game-description">
+                                    Собери плитку 256 и получи 10.000 ₮!
+                                </p>
+                                <button class="btn-primary" id="play-2048-btn">
+                                    <i class="fas fa-play"></i> Играть
+                                </button>
+                            </div>
                         </div>
-                        <p class="upgrade-desc">Новые чернила для печатного станка.</p>
-                        <p class="upgrade-effect">Эффект: +1 ₮ за клик</p>
-                        <button class="buy-btn" data-id="1">Купить</button>
+                        
+                        <!-- Игра Рулетка -->
+                        <div class="game-card" id="roulette-card">
+                            <div class="game-card-header">
+                                <h3>Быстрая рулетка</h3>
+                                <span class="game-badge free-spin" id="roulette-badge">Бесплатный спин</span>
+                            </div>
+                            <div class="game-card-body">
+                                <div class="roulette-preview">
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">₮</div>
+                                        <div class="roulette-symbol">⭐</div>
+                                        <div class="roulette-symbol">🎁</div>
+                                    </div>
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">🎁</div>
+                                        <div class="roulette-symbol">₮</div>
+                                        <div class="roulette-symbol">⭐</div>
+                                    </div>
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">⭐</div>
+                                        <div class="roulette-symbol">🎁</div>
+                                        <div class="roulette-symbol">₮</div>
+                                    </div>
+                                </div>
+                                <p class="game-description">
+                                    Крути раз в 2 часа или за 500 ₮
+                                </p>
+                                <div class="roulette-actions">
+                                    <button class="btn-secondary" id="free-spin-btn" disabled>
+                                        Бесплатно
+                                    </button>
+                                    <button class="btn-primary" id="paid-spin-btn">
+                                        500 ₮
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </section>
 
-                    <div class="upgrade-card" id="upgrade2">
-                        <div class="upgrade-header">
-                            <h3>Национальный банк</h3>
-                            <span class="upgrade-price">150 ₮</span>
+            <!-- Раздел мультиплеер -->
+            <section id="multiplayer-screen" class="screen">
+                <div class="multiplayer-container">
+                    <h2 class="screen-title"><i class="fas fa-users"></i> Мультиплеер</h2>
+                    
+                    <div class="multiplayer-actions">
+                        <button class="btn-primary btn-large" id="create-room-btn">
+                            <i class="fas fa-plus-circle"></i> Создать комнату
+                        </button>
+                        
+                        <div class="divider">
+                            <span>или</span>
                         </div>
-                        <p class="upgrade-desc">Запускает авто-печать тугриков.</p>
-                        <p class="upgrade-effect">Эффект: +2 ₮ каждые 3 секунды</p>
-                        <button class="buy-btn" data-id="2">Купить</button>
+                        
+                        <div class="join-room">
+                            <input type="text" id="room-code" placeholder="Введите код комнаты (6 цифр)" maxlength="6">
+                            <button class="btn-secondary" id="join-room-btn">
+                                <i class="fas fa-sign-in-alt"></i> Присоединиться
+                            </button>
+                        </div>
                     </div>
-
-                    <div class="upgrade-card" id="upgrade3">
-                        <div class="upgrade-header">
-                            <h3>Финансовый гений</h3>
-                            <span class="upgrade-price">500 ₮</span>
+                    
+                    <!-- Активная комната -->
+                    <div class="active-room" id="active-room" style="display: none;">
+                        <div class="room-header">
+                            <h3>Комната <span id="current-room-code">000000</span></h3>
+                            <button class="icon-btn small" id="share-room-btn">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
                         </div>
-                        <p class="upgrade-desc">Оптимизирует денежную массу.</p>
-                        <p class="upgrade-effect">Эффект: x2 доход за клик</p>
-                        <button class="buy-btn" data-id="3">Купить</button>
+                        
+                        <div class="room-players">
+                            <div class="player" id="player1">
+                                <div class="player-avatar">👑</div>
+                                <div class="player-info">
+                                    <div class="player-name">Вы</div>
+                                    <div class="player-status ready">Готов</div>
+                                </div>
+                            </div>
+                            <div class="player" id="player2">
+                                <div class="player-avatar">?</div>
+                                <div class="player-info">
+                                    <div class="player-name">Ожидание...</div>
+                                    <div class="player-status waiting">Не подключен</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="room-game" id="click-race-game" style="display: none;">
+                            <h4>Кто быстрее кликнет 100 раз</h4>
+                            <div class="race-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="player1-progress" style="width: 0%"></div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="player2-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="race-clicks">
+                                <div class="player-clicks" id="player1-clicks">0/100</div>
+                                <div class="player-clicks" id="player2-clicks">0/100</div>
+                            </div>
+                            <button class="btn-primary" id="start-race-btn">Начать гонку!</button>
+                        </div>
+                        
+                        <div class="room-chat">
+                            <div class="chat-messages" id="chat-messages"></div>
+                            <div class="chat-quick-phrases">
+                                <button class="phrase-btn" data-phrase="Привет!">Привет!</button>
+                                <button class="phrase-btn" data-phrase="Готов играть!">Готов играть!</button>
+                                <button class="phrase-btn" data-phrase="Удачи!">Удачи!</button>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="upgrade-card" id="upgrade4">
-                        <div class="upgrade-header">
-                            <h3>Экономическое чудо</h3>
-                            <span class="upgrade-price">1200 ₮</span>
+                    
+                    <!-- Таблица лидеров -->
+                    <div class="leaderboard">
+                        <h3><i class="fas fa-trophy"></i> Таблица лидеров</h3>
+                        <div class="leaderboard-list" id="leaderboard-list">
+                            <!-- Заполняется скриптом -->
                         </div>
-                        <p class="upgrade-desc">Стратегический прорыв в экономике.</p>
-                        <p class="upgrade-effect">Эффект: x2 скорость авто-дохода</p>
-                        <button class="buy-btn" data-id="4">Купить</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел бонусов и уровней -->
+            <section id="bonuses-screen" class="screen">
+                <div class="bonuses-container">
+                    <h2 class="screen-title"><i class="fas fa-gift"></i> Бонусы и уровни</h2>
+                    
+                    <!-- Прогресс уровня -->
+                    <div class="level-progress-card">
+                        <div class="level-info">
+                            <div class="level-icon">
+                                <i class="fas fa-crown"></i>
+                                <span id="current-level">1</span>
+                            </div>
+                            <div class="level-details">
+                                <h3>Уровень <span id="level-number">1</span></h3>
+                                <div class="level-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="level-progress-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="progress-text">
+                                        <span id="current-xp">0</span> / <span id="next-level-xp">10,000</span> ₮
+                                    </div>
+                                </div>
+                                <div class="level-bonus" id="level-bonus-text">Базовый доход</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Ежедневные бонусы -->
+                    <div class="daily-bonuses">
+                        <h3><i class="fas fa-calendar-alt"></i> Ежедневный бонус</h3>
+                        <div class="bonus-calendar" id="bonus-calendar">
+                            <!-- Заполняется скриптом -->
+                        </div>
+                        <div class="streak-info">
+                            <span>Серия: <strong id="login-streak">0</strong> дней</span>
+                            <span>Следующий бонус: <strong id="next-bonus-time">24ч</strong></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Бонусы за уровни -->
+                    <div class="level-rewards">
+                        <h3><i class="fas fa-medal"></i> Награды за уровни</h3>
+                        <div class="rewards-grid">
+                            <div class="reward-card unlocked">
+                                <div class="reward-level">Уровень 1</div>
+                                <div class="reward-desc">Базовый доход</div>
+                                <div class="reward-status"><i class="fas fa-check"></i> Открыто</div>
+                            </div>
+                            <div class="reward-card" id="level2-reward">
+                                <div class="reward-level">Уровень 2</div>
+                                <div class="reward-desc">+10% к клику</div>
+                                <div class="reward-status">Откроется при 10,000 ₮</div>
+                            </div>
+                            <div class="reward-card" id="level3-reward">
+                                <div class="reward-level">Уровень 3</div>
+                                <div class="reward-desc">+20% к клику, рулетка</div>
+                                <div class="reward-status">Откроется при 50,000 ₮</div>
+                            </div>
+                            <div class="reward-card" id="level4-reward">
+                                <div class="reward-level">Уровень 4</div>
+                                <div class="reward-desc">+35% к клику, все игры</div>
+                                <div class="reward-status">Откроется при 200,000 ₮</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел промокодов и настроек -->
+            <section id="settings-screen" class="screen">
+                <div class="settings-container">
+                    <h2 class="screen-title"><i class="fas fa-cog"></i> Настройки</h2>
+                    
+                    <!-- Промокоды -->
+                    <div class="promo-section">
+                        <h3><i class="fas fa-ticket-alt"></i> Промокоды</h3>
+                        <div class="promo-input-group">
+                            <input type="text" id="promo-code" placeholder="Введите промокод">
+                            <button class="btn-primary" id="activate-promo-btn">
+                                Активировать
+                            </button>
+                        </div>
+                        <div class="promo-hint">
+                            Попробуйте: <code>START777</code>, <code>BONUS2024</code>, <code>swqSPB777</code>
+                        </div>
+                        <div class="used-promocodes" id="used-promocodes">
+                            <h4>Использованные промокоды:</h4>
+                            <div id="promocodes-list"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Настройки -->
+                    <div class="settings-section">
+                        <h3><i class="fas fa-sliders-h"></i> Настройки игры</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Звуки</span>
+                                <small>Включить звуковые эффекты</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Вибрация</span>
+                                <small>Включить вибрацию при кликах</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="vibration-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Темная тема</span>
+                                <small>Использовать темную тему</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Статистика -->
+                    <div class="stats-section">
+                        <h3><i class="fas fa-chart-bar"></i> Статистика</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-mouse-pointer"></i></div>
+                                <div class="stat-value" id="total-clicks">0</div>
+                                <div class="stat-label">Всего кликов</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                                <div class="stat-value" id="total-earned">0</div>
+                                <div class="stat-label">Заработано</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                                <div class="stat-value" id="play-time">0ч</div>
+                                <div class="stat-label">Время в игре</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="stat-value" id="games-won">0</div>
+                                <div class="stat-label">Побед</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Сброс прогресса -->
+                    <div class="danger-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Опасная зона</h3>
+                        <button class="btn-danger" id="reset-progress-btn">
+                            <i class="fas fa-trash-alt"></i> Сбросить прогресс
+                        </button>
+                        <p class="danger-warning">
+                            Это действие удалит весь ваш прогресс, включая тугрики, улучшения и достижения!
+                        </p>
                     </div>
                 </div>
             </section>
         </main>
 
-        <footer>
-            <button id="reset-btn"><i class="fas fa-trash-alt"></i> Обнулить казну</button>
-            <p class="game-info">Кликер-Тугрик v1.0 | Национальная валюта</p>
-        </footer>
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-screen="home">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </button>
+            <button class="nav-btn" data-screen="games">
+                <i class="fas fa-gamepad"></i>
+                <span>Игры</span>
+            </button>
+            <button class="nav-btn" data-screen="multiplayer">
+                <i class="fas fa-users"></i>
+                <span>Мультиплеер</span>
+            </button>
+            <button class="nav-btn" data-screen="bonuses">
+                <i class="fas fa-gift"></i>
+                <span>Бонусы</span>
+            </button>
+            <button class="nav-btn" data-screen="settings">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </button>
+        </nav>
 
-        <!-- Попап для отображения полученных тугриков -->
-        <div id="popup" class="popup">+1 ₮</div>
+        <!-- Модальное окно улучшений -->
+        <div class="modal" id="upgrades-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-arrow-up"></i> Улучшения</h2>
+                    <button class="close-btn" id="close-upgrades">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="upgrades-list" id="upgrades-list">
+                        <!-- Заполняется скриптом -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно игры 2048 -->
+        <div class="modal" id="game-2048-modal">
+            <div class="modal-content game-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-th"></i> 2048 Тугрик Edition</h2>
+                    <button class="close-btn" id="close-2048">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-2048-container">
+                        <div class="game-2048-header">
+                            <div class="2048-score">
+                                <span>Счет: </span>
+                                <strong id="2048-score">0</strong>
+                            </div>
+                            <div class="2048-best">
+                                <span>Рекорд: </span>
+                                <strong id="2048-best">0</strong>
+                            </div>
+                            <button class="btn-secondary" id="new-2048-game">Новая игра</button>
+                        </div>
+                        <div class="game-2048-board" id="2048-board">
+                            <!-- Игровое поле 4x4 -->
+                        </div>
+                        <div class="game-2048-instructions">
+                            <p>Используйте свайпы для объединения одинаковых плиток. Соберите 256 для награды!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно рулетки -->
+        <div class="modal" id="roulette-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-dice"></i> Быстрая рулетка</h2>
+                    <button class="close-btn" id="close-roulette">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="roulette-container">
+                        <div class="roulette-wheel">
+                            <div class="reels-container">
+                                <div class="reel" id="reel1">
+                                    <div class="reel-item">₮</div>
+                                    <div class="reel-item">⭐</div>
+                                    <div class="reel-item">🎁</div>
+                                </div>
+                                <div class="reel" id="reel2">
+                                    <div class="reel-item">🎁</div>
+                                    <div class="reel-item">₮</div>
+                                    <div class="reel-item">⭐</div>
+                                </div>
+                                <div class="reel" id="reel3">
+                                    <div class="reel-item">⭐</div>
+                                    <div class="reel-item">🎁</div>
+                                    <div class="reel-item">₮</div>
+                                </div>
+                            </div>
+                            <div class="reel-line"></div>
+                        </div>
+                        
+                        <div class="roulette-result" id="roulette-result">
+                            <div class="result-placeholder">Крутите рулетку!</div>
+                        </div>
+                        
+                        <div class="roulette-controls">
+                            <button class="btn-primary btn-large" id="spin-roulette-btn" disabled>
+                                <i class="fas fa-redo"></i> Крутить рулетку
+                            </button>
+                            <div class="roulette-timer" id="roulette-timer">
+                                Следующий бесплатный спин: <span>02:00:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="roulette-odds">
+                            <h4>Шансы:</h4>
+                            <ul>
+                                <li>70% - Мелкий выигрыш (100-1000 ₮)</li>
+                                <li>20% - Средний выигрыш (2000-5000 ₮)</li>
+                                <li>10% - Джекпот (уникальное улучшение)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Всплывающие уведомления -->
+        <div id="notification" class="notification"></div>
+        
+        <!-- Частицы для кликов -->
+        <div id="particles-container"></div>
     </div>
 
+    <!-- Скрипты -->
     <script src="script.js"></script>
+    <script src="game2048.js"></script>
+    <script src="multiplayer.js"></script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Тугрик Кликер Pro</title>
+    
+    <!-- Telegram WebApp SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <!-- Шрифты и иконки -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Стили -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Иконка для Telegram -->
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAFASURBVHgB7ZbBDYJAEIVnE9ISLMFLbVASLMEWkAS8aQNJwJt6ogUswYNJABLIiXGZ3QG5Z9jjTybZsN++BWaZplIIwYlC5E5hghP6lJ6z5xEAfT/LFJ3B9hPEMjYpEGAT89RkL8Dxgv4lR5dYG6mMqwSsCIwADx45/hM4cBQ1dFd0SoAJagHut0A1NRGaoCkKJ8Fj2y2RlMCoM/cB9fJ9gBOQCGgdKjYIKoxfEzEBq8CB/0lNNGwSFJ2A1qFqg6CC/mA0JqBLgBPwDlVtEFS8b74EEwKcgHqoaoOgAu2BuQScACegH6raIKioB1F9MhGgCJwAjaB3qNggqLh7eK9MEqAIjICN4MQGQQUNBz+ZCtAETsBGcGqDoIL8RmQlwBHMCXAETgAUm/40xRXAExTigQAAAABJRU5ErkJggg==">
+</head>
+<body>
+    <!-- Контейнер приложения -->
+    <div class="app-container">
+        <!-- Статус бар (как заголовок Telegram) -->
+        <header class="status-bar">
+            <div class="status-left">
+                <div class="player-level">
+                    <i class="fas fa-crown"></i>
+                    <span id="player-level">1</span>
+                </div>
+                <div class="player-name" id="player-name">Игрок</div>
+            </div>
+            <div class="status-center">
+                <div class="balance">
+                    <i class="fas fa-coins"></i>
+                    <span id="balance">0</span> ₮
+                </div>
+            </div>
+            <div class="status-right">
+                <button class="icon-btn" id="settings-btn">
+                    <i class="fas fa-cog"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Основной контент -->
+        <main class="main-content">
+            <!-- Главный экран (кликер) -->
+            <section id="home-screen" class="screen active">
+                <div class="clicker-container">
+                    <div class="coin-wrapper">
+                        <div class="coin" id="main-coin">
+                            <div class="coin-inner">
+                                <span class="coin-symbol">₮</span>
+                                <div class="coin-shine"></div>
+                            </div>
+                            <div class="coin-pulse"></div>
+                        </div>
+                        <div class="click-stats">
+                            <div class="click-stat">
+                                <span>За клик:</span>
+                                <strong id="per-click">1</strong> ₮
+                            </div>
+                            <div class="click-stat">
+                                <span>В секунду:</span>
+                                <strong id="per-second">0</strong> ₮
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="upgrades-btn-container">
+                        <button class="btn-primary" id="open-upgrades">
+                            <i class="fas fa-arrow-up"></i> Улучшения
+                        </button>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="hourly-bonus">
+                            <button class="bonus-btn" id="hourly-bonus-btn" disabled>
+                                <i class="fas fa-gift"></i>
+                                <span>+100 ₮</span>
+                            </button>
+                            <div class="bonus-timer" id="hourly-timer">01:00:00</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел мини-игр -->
+            <section id="games-screen" class="screen">
+                <div class="games-container">
+                    <h2 class="screen-title"><i class="fas fa-gamepad"></i> Мини-игры</h2>
+                    
+                    <div class="games-grid">
+                        <!-- Игра 2048 -->
+                        <div class="game-card" id="game-2048-card">
+                            <div class="game-card-header">
+                                <h3>2048 Тугрик Edition</h3>
+                                <span class="game-badge" id="2048-badge">Рекорд: 0</span>
+                            </div>
+                            <div class="game-card-body">
+                                <div class="game-preview">
+                                    <div class="game-2048-preview">
+                                        <div class="preview-row">
+                                            <div class="preview-tile tile-2">2</div>
+                                            <div class="preview-tile tile-4">4</div>
+                                            <div class="preview-tile tile-8">8</div>
+                                            <div class="preview-tile tile-16">16</div>
+                                        </div>
+                                        <div class="preview-row">
+                                            <div class="preview-tile tile-32">32</div>
+                                            <div class="preview-tile tile-64">64</div>
+                                            <div class="preview-tile tile-128">128</div>
+                                            <div class="preview-tile tile-256">256</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p class="game-description">
+                                    Собери плитку 256 и получи 10.000 ₮!
+                                </p>
+                                <button class="btn-primary" id="play-2048-btn">
+                                    <i class="fas fa-play"></i> Играть
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Игра Рулетка -->
+                        <div class="game-card" id="roulette-card">
+                            <div class="game-card-header">
+                                <h3>Быстрая рулетка</h3>
+                                <span class="game-badge free-spin" id="roulette-badge">Бесплатный спин</span>
+                            </div>
+                            <div class="game-card-body">
+                                <div class="roulette-preview">
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">₮</div>
+                                        <div class="roulette-symbol">⭐</div>
+                                        <div class="roulette-symbol">🎁</div>
+                                    </div>
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">🎁</div>
+                                        <div class="roulette-symbol">₮</div>
+                                        <div class="roulette-symbol">⭐</div>
+                                    </div>
+                                    <div class="roulette-reel">
+                                        <div class="roulette-symbol">⭐</div>
+                                        <div class="roulette-symbol">🎁</div>
+                                        <div class="roulette-symbol">₮</div>
+                                    </div>
+                                </div>
+                                <p class="game-description">
+                                    Крути раз в 2 часа или за 500 ₮
+                                </p>
+                                <div class="roulette-actions">
+                                    <button class="btn-secondary" id="free-spin-btn" disabled>
+                                        Бесплатно
+                                    </button>
+                                    <button class="btn-primary" id="paid-spin-btn">
+                                        500 ₮
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел мультиплеер -->
+            <section id="multiplayer-screen" class="screen">
+                <div class="multiplayer-container">
+                    <h2 class="screen-title"><i class="fas fa-users"></i> Мультиплеер</h2>
+                    
+                    <div class="multiplayer-actions">
+                        <button class="btn-primary btn-large" id="create-room-btn">
+                            <i class="fas fa-plus-circle"></i> Создать комнату
+                        </button>
+                        
+                        <div class="divider">
+                            <span>или</span>
+                        </div>
+                        
+                        <div class="join-room">
+                            <input type="text" id="room-code" placeholder="Введите код комнаты (6 цифр)" maxlength="6">
+                            <button class="btn-secondary" id="join-room-btn">
+                                <i class="fas fa-sign-in-alt"></i> Присоединиться
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Активная комната -->
+                    <div class="active-room" id="active-room" style="display: none;">
+                        <div class="room-header">
+                            <h3>Комната <span id="current-room-code">000000</span></h3>
+                            <button class="icon-btn small" id="share-room-btn">
+                                <i class="fas fa-share-alt"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="room-players">
+                            <div class="player" id="player1">
+                                <div class="player-avatar">👑</div>
+                                <div class="player-info">
+                                    <div class="player-name">Вы</div>
+                                    <div class="player-status ready">Готов</div>
+                                </div>
+                            </div>
+                            <div class="player" id="player2">
+                                <div class="player-avatar">?</div>
+                                <div class="player-info">
+                                    <div class="player-name">Ожидание...</div>
+                                    <div class="player-status waiting">Не подключен</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="room-game" id="click-race-game" style="display: none;">
+                            <h4>Кто быстрее кликнет 100 раз</h4>
+                            <div class="race-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="player1-progress" style="width: 0%"></div>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" id="player2-progress" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <div class="race-clicks">
+                                <div class="player-clicks" id="player1-clicks">0/100</div>
+                                <div class="player-clicks" id="player2-clicks">0/100</div>
+                            </div>
+                            <button class="btn-primary" id="start-race-btn">Начать гонку!</button>
+                        </div>
+                        
+                        <div class="room-chat">
+                            <div class="chat-messages" id="chat-messages"></div>
+                            <div class="chat-quick-phrases">
+                                <button class="phrase-btn" data-phrase="Привет!">Привет!</button>
+                                <button class="phrase-btn" data-phrase="Готов играть!">Готов играть!</button>
+                                <button class="phrase-btn" data-phrase="Удачи!">Удачи!</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Таблица лидеров -->
+                    <div class="leaderboard">
+                        <h3><i class="fas fa-trophy"></i> Таблица лидеров</h3>
+                        <div class="leaderboard-list" id="leaderboard-list">
+                            <!-- Заполняется скриптом -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел бонусов и уровней -->
+            <section id="bonuses-screen" class="screen">
+                <div class="bonuses-container">
+                    <h2 class="screen-title"><i class="fas fa-gift"></i> Бонусы и уровни</h2>
+                    
+                    <!-- Прогресс уровня -->
+                    <div class="level-progress-card">
+                        <div class="level-info">
+                            <div class="level-icon">
+                                <i class="fas fa-crown"></i>
+                                <span id="current-level">1</span>
+                            </div>
+                            <div class="level-details">
+                                <h3>Уровень <span id="level-number">1</span></h3>
+                                <div class="level-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="level-progress-fill" style="width: 0%"></div>
+                                    </div>
+                                    <div class="progress-text">
+                                        <span id="current-xp">0</span> / <span id="next-level-xp">10,000</span> ₮
+                                    </div>
+                                </div>
+                                <div class="level-bonus" id="level-bonus-text">Базовый доход</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Ежедневные бонусы -->
+                    <div class="daily-bonuses">
+                        <h3><i class="fas fa-calendar-alt"></i> Ежедневный бонус</h3>
+                        <div class="bonus-calendar" id="bonus-calendar">
+                            <!-- Заполняется скриптом -->
+                        </div>
+                        <div class="streak-info">
+                            <span>Серия: <strong id="login-streak">0</strong> дней</span>
+                            <span>Следующий бонус: <strong id="next-bonus-time">24ч</strong></span>
+                        </div>
+                    </div>
+                    
+                    <!-- Бонусы за уровни -->
+                    <div class="level-rewards">
+                        <h3><i class="fas fa-medal"></i> Награды за уровни</h3>
+                        <div class="rewards-grid">
+                            <div class="reward-card unlocked">
+                                <div class="reward-level">Уровень 1</div>
+                                <div class="reward-desc">Базовый доход</div>
+                                <div class="reward-status"><i class="fas fa-check"></i> Открыто</div>
+                            </div>
+                            <div class="reward-card" id="level2-reward">
+                                <div class="reward-level">Уровень 2</div>
+                                <div class="reward-desc">+10% к клику</div>
+                                <div class="reward-status">Откроется при 10,000 ₮</div>
+                            </div>
+                            <div class="reward-card" id="level3-reward">
+                                <div class="reward-level">Уровень 3</div>
+                                <div class="reward-desc">+20% к клику, рулетка</div>
+                                <div class="reward-status">Откроется при 50,000 ₮</div>
+                            </div>
+                            <div class="reward-card" id="level4-reward">
+                                <div class="reward-level">Уровень 4</div>
+                                <div class="reward-desc">+35% к клику, все игры</div>
+                                <div class="reward-status">Откроется при 200,000 ₮</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Раздел промокодов и настроек -->
+            <section id="settings-screen" class="screen">
+                <div class="settings-container">
+                    <h2 class="screen-title"><i class="fas fa-cog"></i> Настройки</h2>
+                    
+                    <!-- Промокоды -->
+                    <div class="promo-section">
+                        <h3><i class="fas fa-ticket-alt"></i> Промокоды</h3>
+                        <div class="promo-input-group">
+                            <input type="text" id="promo-code" placeholder="Введите промокод">
+                            <button class="btn-primary" id="activate-promo-btn">
+                                Активировать
+                            </button>
+                        </div>
+                        <div class="promo-hint">
+                            Попробуйте: <code>START777</code>, <code>BONUS2024</code>, <code>swqSPB777</code>
+                        </div>
+                        <div class="used-promocodes" id="used-promocodes">
+                            <h4>Использованные промокоды:</h4>
+                            <div id="promocodes-list"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Настройки -->
+                    <div class="settings-section">
+                        <h3><i class="fas fa-sliders-h"></i> Настройки игры</h3>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Звуки</span>
+                                <small>Включить звуковые эффекты</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="sound-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Вибрация</span>
+                                <small>Включить вибрацию при кликах</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="vibration-toggle" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <span>Темная тема</span>
+                                <small>Использовать темную тему</small>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <!-- Статистика -->
+                    <div class="stats-section">
+                        <h3><i class="fas fa-chart-bar"></i> Статистика</h3>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-mouse-pointer"></i></div>
+                                <div class="stat-value" id="total-clicks">0</div>
+                                <div class="stat-label">Всего кликов</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-coins"></i></div>
+                                <div class="stat-value" id="total-earned">0</div>
+                                <div class="stat-label">Заработано</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                                <div class="stat-value" id="play-time">0ч</div>
+                                <div class="stat-label">Время в игре</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                                <div class="stat-value" id="games-won">0</div>
+                                <div class="stat-label">Побед</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Сброс прогресса -->
+                    <div class="danger-section">
+                        <h3><i class="fas fa-exclamation-triangle"></i> Опасная зона</h3>
+                        <button class="btn-danger" id="reset-progress-btn">
+                            <i class="fas fa-trash-alt"></i> Сбросить прогресс
+                        </button>
+                        <p class="danger-warning">
+                            Это действие удалит весь ваш прогресс, включая тугрики, улучшения и достижения!
+                        </p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Нижняя навигация -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" data-screen="home">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </button>
+            <button class="nav-btn" data-screen="games">
+                <i class="fas fa-gamepad"></i>
+                <span>Игры</span>
+            </button>
+            <button class="nav-btn" data-screen="multiplayer">
+                <i class="fas fa-users"></i>
+                <span>Мультиплеер</span>
+            </button>
+            <button class="nav-btn" data-screen="bonuses">
+                <i class="fas fa-gift"></i>
+                <span>Бонусы</span>
+            </button>
+            <button class="nav-btn" data-screen="settings">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </button>
+        </nav>
+
+        <!-- Модальное окно улучшений -->
+        <div class="modal" id="upgrades-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-arrow-up"></i> Улучшения</h2>
+                    <button class="close-btn" id="close-upgrades">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="upgrades-list" id="upgrades-list">
+                        <!-- Заполняется скриптом -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно игры 2048 -->
+        <div class="modal" id="game-2048-modal">
+            <div class="modal-content game-modal">
+                <div class="modal-header">
+                    <h2><i class="fas fa-th"></i> 2048 Тугрик Edition</h2>
+                    <button class="close-btn" id="close-2048">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="game-2048-container">
+                        <div class="game-2048-header">
+                            <div class="2048-score">
+                                <span>Счет: </span>
+                                <strong id="2048-score">0</strong>
+                            </div>
+                            <div class="2048-best">
+                                <span>Рекорд: </span>
+                                <strong id="2048-best">0</strong>
+                            </div>
+                            <button class="btn-secondary" id="new-2048-game">Новая игра</button>
+                        </div>
+                        <div class="game-2048-board" id="2048-board">
+                            <!-- Игровое поле 4x4 -->
+                        </div>
+                        <div class="game-2048-instructions">
+                            <p>Используйте свайпы для объединения одинаковых плиток. Соберите 256 для награды!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Модальное окно рулетки -->
+        <div class="modal" id="roulette-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2><i class="fas fa-dice"></i> Быстрая рулетка</h2>
+                    <button class="close-btn" id="close-roulette">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="roulette-container">
+                        <div class="roulette-wheel">
+                            <div class="reels-container">
+                                <div class="reel" id="reel1">
+                                    <div class="reel-item">₮</div>
+                                    <div class="reel-item">⭐</div>
+                                    <div class="reel-item">🎁</div>
+                                </div>
+                                <div class="reel" id="reel2">
+                                    <div class="reel-item">🎁</div>
+                                    <div class="reel-item">₮</div>
+                                    <div class="reel-item">⭐</div>
+                                </div>
+                                <div class="reel" id="reel3">
+                                    <div class="reel-item">⭐</div>
+                                    <div class="reel-item">🎁</div>
+                                    <div class="reel-item">₮</div>
+                                </div>
+                            </div>
+                            <div class="reel-line"></div>
+                        </div>
+                        
+                        <div class="roulette-result" id="roulette-result">
+                            <div class="result-placeholder">Крутите рулетку!</div>
+                        </div>
+                        
+                        <div class="roulette-controls">
+                            <button class="btn-primary btn-large" id="spin-roulette-btn" disabled>
+                                <i class="fas fa-redo"></i> Крутить рулетку
+                            </button>
+                            <div class="roulette-timer" id="roulette-timer">
+                                Следующий бесплатный спин: <span>02:00:00</span>
+                            </div>
+                        </div>
+                        
+                        <div class="roulette-odds">
+                            <h4>Шансы:</h4>
+                            <ul>
+                                <li>70% - Мелкий выигрыш (100-1000 ₮)</li>
+                                <li>20% - Средний выигрыш (2000-5000 ₮)</li>
+                                <li>10% - Джекпот (уникальное улучшение)</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Всплывающие уведомления -->
+        <div id="notification" class="notification"></div>
+        
+        <!-- Частицы для кликов -->
+        <div id="particles-container"></div>
+    </div>
+
+    <!-- Скрипты -->
+    <script src="script.js"></script>
+    <script src="game2048.js"></script>
+    <script src="multiplayer.js"></script>
 </body>
 </html>
